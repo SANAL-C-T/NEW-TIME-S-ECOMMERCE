@@ -1,0 +1,217 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container  m-3 ">
+ 
+    <div class="table-responsive mt-3 ">
+      
+
+        <h5 class="text-center ">SALES REPORT</h5>
+          <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width:100%">
+              <thead>
+                  <tr>
+                    
+                      <th>SL No</th>
+                      <th>USERNAME</th>
+                      <th>INVOICE DATE</th>
+                      <th>INVOICE AMOUNT</th>
+                      <th>PAYMENT METHOD</th>
+                      
+                  </tr>
+              </thead>
+              <tbody>
+                <% orders.forEach((order, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= order.userid?.username %></td>
+                        <td><%= order?.OrderDate %></td>
+                        <td><%= order?.OrderTotalPrice %></td>
+                        <td><%= order?.paymentMethod %></td>
+                    </tr>
+                <% }); %>
+                
+    
+              </tbody>
+          </table>
+      
+  </div>
+
+<div class="d-flex  justify-content-between mt-5 ">
+    <button id="downloadBtn">DOWNLOAD EXCEL FILE</button>
+
+   <button id="downloadBtnpdf">DOWNLOAD PDF FILE</button>
+
+</div>
+
+
+<div class="table-responsive mt-3">
+  <h5 class="text-center">REVENUE DETAILS</h5>
+  <table id="example2" style="width:100%">
+    <thead>
+      <tr>
+        <th>GENERATED AMOUNT</th>
+        <th>WALLET</th>
+        <th>CASH ON DELIVERY</th>
+        <th>ONLINE PAYMENT</th>
+        <th>AMOUNT RETURNED</th>
+        <th>AMOUNT DISCOUNTED BY COUPON</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>₹ <%=revenue%></td>
+        <td>₹ <%=walletss %></td>
+        <td>₹ <%=cod%></td>
+        <td>₹ <%=raz%></td>
+        <td>₹ <%=returned%></td>
+        <td>₹ <%=totalcouponDiscount%></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-responsive mt-3">
+  <h5 class="text-center">COUNT DETAILS</h5>
+  <table id="example3" style="width:100%">
+    <thead>
+      <tr>
+        <th>SALE COUNT</th>
+        <th>RETURN COUNT</th>
+        <th>DELIVERED COUNT</th>
+        <th>DISCOUNTED COUNT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><!-- Populate with sale count --></td>
+        <td><!-- Populate with return count --></td>
+        <td><!-- Populate with delivered count --></td>
+        <td><!-- Populate with discounted count --></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="d-flex justify-content-between">
+  <a href="/admin/downloadrevenue"><button>DOWNLOAD REVENUE DETAILS IN EXCEL FILE</button></a>
+  <a href="/admin/downloadrevenuepdf"><button>DOWNLOAD REVENUE DETAILS IN PDF</button></a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+<%- include("../partials/adminfooter.ejs") %>
+
+  
+
+<script>
+  new DataTable("#example", {
+    ordering: false // Disable sorting
+});
+
+
+
+    
+    const table = document.getElementById('example');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    downloadBtn.addEventListener('click', function() {
+        const tableData = [];
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+            const rowData = [];
+            const cells = row.querySelectorAll('td');
+            cells.forEach(cell => {
+                rowData.push(cell.innerText);
+            });
+            tableData.push(rowData);
+        });
+
+        // Send tableData to the server
+        fetch('/admin/convertToExcel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tableData })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'table_data.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+
+
+
+
+
+    const downloadBtnpdf = document.getElementById('downloadBtnpdf');
+
+downloadBtnpdf.addEventListener('click', function() {
+    const table = document.getElementById('example');
+    const tableData = [];
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+        const rowData = [];
+        const cells = row.querySelectorAll('td');
+        cells.forEach(cell => {
+            rowData.push(cell.innerText);
+        });
+        tableData.push(rowData);
+    });
+
+    // Send tableData to the server
+    fetch('/admin/convertToPDF', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tableData })
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'table_data.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+
+
+
+
+
+</script>
+<style>
+  th {
+    background-color: #88a1e0;
+    color: rgb(254, 254, 254);
+}
+</style>

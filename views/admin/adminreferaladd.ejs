@@ -1,0 +1,98 @@
+<%- include("../partials/adminheader.ejs") %>
+
+    <div class="container mt-3">
+
+        <div class="mt-4">
+            <a href="/admin/listCoupon">
+                <button>LIST COUPON</button>
+            </a>
+
+          
+        </div>
+        <br>
+
+        <a href="/admin/Offercategory" class="btn btn-primary ">CATEGORY BASED</a>
+        <a href="/admin/offerreferral" class="btn btn-success">REFERRAL BASED</a>
+
+
+
+<hr>
+
+<h4 class="mb-3 mt-3  ">Current avaliable bonus for new users.</h4>
+
+<h5> Upon signup, User will receive a generous bonus of <b>₹ <%=bonusavalible%></b> credits as a warm welcome to this platform.</h5>
+
+
+<hr>
+        <h4 class="mb-3 mt-3  ">Update bonus for new users.</h4>
+
+        <form  onsubmit="return validate()"  action="/admin/referOfferAdd" method="POST">
+
+            <div class="mb-3">
+                <label for="bonus">Enter bonus amount:</label>
+                <input type="tel" id="bonus" name="bonus"  class="form-control input-group" placeholder="Enter offer amount">
+                <div id="errMessage1" class="text-danger m-3 "></div>
+            </div>
+
+            <div class="mb-3 d-flex justify-content-between ">
+                <label for="refferCreatedDate">Created Date:</label>
+                <input type="date" id="refferCreatedDate" name="refferCreatedDate">
+                <div id="errMessage2" class="text-danger m-3 "></div>
+
+
+                <label for="refferExpiryDate">Expiry Date:</label>
+                <input type="date" id="refferExpiryDate" name="refferExpiryDate">
+                <div id="errMessage3" class="text-danger m-3 "></div>
+            </div>
+
+            <button class="btn btn-success ">UPDATE</button>
+
+        </form>
+
+
+
+
+
+    </div>
+
+
+    <script>
+
+        function validate() {
+            const bonusS = document.getElementById('bonus');
+            const createdDateval = document.getElementById('refferCreatedDate');
+            const expiryDateval = document.getElementById('refferExpiryDate');
+            const errMessage1 = document.getElementById('errMessage1');
+            const errMessage2 = document.getElementById('errMessage2');
+            const errMessage3 = document.getElementById('errMessage3');
+        
+            if (bonusS.value.trim() === "") {
+                errMessage1.innerText = "Value cannot be empty";
+                return false;
+            } else if (isNaN(bonusS.value.trim()) || parseFloat(bonusS.value.trim()) < 0) {
+                errMessage1.innerText = "Value must be a non-negative number";
+                return false;
+            } else {
+                errMessage1.innerText = "";
+            }
+        
+            if (createdDateval.value.trim() === '') {
+                errMessage2.innerText = "Date cannot be empty";
+                return false;
+            } else {
+                errMessage2.innerText = "";
+            }
+        
+            if (expiryDateval.value.trim() === '') {
+                errMessage3.innerText = "Date cannot be empty";
+                return false;
+            } else {
+                errMessage3.innerText = "";
+            }
+        
+            return true;
+        }
+        
+      
+        
+    </script>

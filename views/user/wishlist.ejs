@@ -1,0 +1,186 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+
+<div class="container-fluid  d-flex ">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+  
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 d-flex flex-column mx-3">
+        <h5 class="text-center mt-2">Wishlist</h5>
+        <div id="wishContainer">
+            <table id="example" class="table table-bordered table-hover table-sm table-responsive">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th> 
+                        <th></th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (wishList && wishList.list && wishList.list.length) { %>
+                        <% wishList.list.forEach(wishItem => { %>
+                            <tr>
+                                <td>
+                                    <img src="<%= wishItem.productImage[0].image1 %>" style="width: 90px; height: 80px;">
+                                </td>
+                                <td><%= wishItem.productName %></td>
+                                <td>₹ <%= wishItem.productPrice %></td>
+                                <% if (wishItem.stockCount > 0) { %>
+                                    <td><h6 class="text-success">In stock</h6></td>
+                                <% } else { %>
+                                    <td><h6 class="text-danger">Out of stock</h6></td>
+                                <% } %>
+                               
+
+                                <% if (wishItem.stockCount > 0) { %>
+                                   
+                                    <td>
+                                        <a href="/cart/<%= wishItem._id %>">
+                                            <button class="btn btn-warning btn-sm" onclick="removeFromWish('<%= wishItem._id %>')">ADD TO CART</button>
+                                        </a>
+                                    </td>
+                                    
+                                <% } else { %>
+                                    <td></td>
+                                <% } %>
+                                <td><button class="btn btn-danger btn-sm" onclick="removeFromWish('<%= wishItem._id %>')">REMOVE</button></td>
+                               
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        
+                
+
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+
+<!-- .......... -->
+</div>
+</div>
+<%-include("../partials/footer.ejs")%>
+
+<script>
+    new DataTable("#example");
+    
+
+
+    function removeFromWish(productId) {
+
+        fetch("/removeFromWishList", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ productId: productId })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('response is not ok');
+            }
+            return response.json(); 
+        })
+        .then(data => {
+           
+            console.log('Product removed from wishlist:', data);
+        
+        })
+        .catch(error => {
+            console.error('Error in removing product from wishlist:', error);
+   
+        });
+    }
+    
+
+
+  </script>
+
+
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(242, 239, 239);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding:0px;
+    }
+}
+
+
+#example_filter {
+    text-align: right;
+  }
+
+
+
+    </style>
+

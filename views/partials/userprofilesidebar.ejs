@@ -1,0 +1,83 @@
+<div class=" row">
+    <nav class="sidebar">
+        <ul>
+            <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">My profile</span></a></li>
+            <li><a href="/profileEdits"><i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Edit profile</span></a></li>
+            <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Set password</span></a></li>
+            <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wallet</span></a></li>
+            <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+            <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Order history</span></a></li>
+            <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Saved address</span></a></li>
+            
+    
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar ul li a {
+        text-decoration: none; 
+        color: #fff;
+        display: block;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(242, 239, 239);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+
+@media (max-width: 768px) {
+    #firstline, #secondline, #thirdline, #fourthline {
+        width: 100%; 
+        flex-direction: column;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding: 0%;
+    }
+}
+</style>

@@ -1,0 +1,1109 @@
+<%- include("../partials/adminheader.ejs") %>
+
+
+
+    <div class="container mt-3 ">
+
+
+        <div class="align-right">
+            <select id="selectOption">
+                <option value="overall"> OVERALL DATA </option>
+                <option value="daywise"> TODAYS DATA </option>
+                <option value="monthwise"> MONTHLY DATA </option>
+                <option value="yearwise"> YEARLY DATA </option>
+            </select>
+        </div>
+
+
+        <div id="Allgraphs">
+            <h3>Overall Order Statistics</h3>
+            <hr>
+
+            <div class="d-flex">
+                <div class="mb-5" id="graphs">
+                    <canvas id="myChart" width="700" height="200"></canvas>
+                </div>
+                <div id="pichartGraph">
+                    <canvas id="myChart2" width="200" height="200"></canvas>
+                </div>
+            </div>
+            <hr>
+
+            <h3>Overall Sales Statistics</h3>
+            <div class="d-flex">
+                <div class="mb-5" id="graphs" style="width: 100%;">
+                    <canvas id="myChart3" width="800" height="200"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="monthwiseGraph">
+            <h3>Month-wise data</h3>
+            <hr>
+            <br>
+            <h5> Month-wise sales status</h5>
+            <canvas id="myChartMonthwise" width="700" height="200"></canvas>
+
+            <hr>
+            <h5> Month-wise sales count</h5>
+            <canvas id="myChartMonthwisesalesCount" width="700" height="200"></canvas>
+            <hr>
+            <h5> Month-wise payment method</h5>
+            <canvas id="myChartMonthwisesalespayment" width="700" height="200"></canvas>
+
+        </div>
+
+
+
+        <div id="yearwiseGraph">
+            <h3>Year-wise data</h3>
+            <hr>
+            <br>
+            <h5> Year-wise sales status</h5>
+            <canvas id="myChartyear" width="700" height="200"></canvas>
+
+            <hr>
+
+            <h5> Year-wise sales count</h5>
+            <canvas id="myChartyearwisesalesCount" width="700" height="200"></canvas>
+            
+            <hr>
+
+            <h5> Year-wise payment method</h5>
+            <canvas id="myChartyearwisesalespayment" width="700" height="200"></canvas>
+
+        </div>
+
+
+
+        <hr>
+
+
+        <!--  COUNT AND REVENUE DETAILS -->
+        <div class="d-flex mb-5 justify-content-between">
+            <div class="px-2 box justify-content-between ">
+                <h6>Total revenue:</h6>
+                <h5 id="totalRevenue">₹ <%= urlData.revenue[0].totalAmount %>
+                </h5>
+            </div>
+            <div class="px-2 box justify-content-between">
+                <h6>Order count:</h6>
+                <h5 id="orderCount">
+                    <%= urlData. order %>
+                </h5>
+            </div>
+            <div class="px-2 box justify-content-between">
+                <h6>Total Users:</h6>
+                <h5 id="total users">
+                    <%= urlData.userCount[0].totalUser %>
+                </h5>
+            </div>
+
+        </div>
+        <hr>
+
+
+        <h3>Top 10 Best selling products</h3>
+        <div class=" mb-5">
+            <% for (let i=0; i < 10 && i < urlData.bestseller.length; i++) { %>
+                <div class=" m-3" id="bestSeller">
+                    <%= urlData.bestseller[i]._id %>
+                </div>
+                <% } %>
+        </div>
+
+        <hr>
+        <h3>Top Best selling Category</h3>
+        <div class="mb-5" id="bestSellerContainer">
+            <% for (let i = 0; i < 3 && i < urlData.bestSellercategory.length; i++) { %>
+                <div class="m-3 bestSellerItem">
+                    <%= urlData.bestSellercategory[i]._id %>
+                </div>
+            <% } %>
+        </div>
+        
+
+    </div>
+
+
+
+    <!-- padding data to the chart -->
+    <input type="text" id="paymentObject" value="<%= JSON.stringify(urlData.paymentMethod) %>" hidden>
+    <input type="text" id="statusObject" value="<%= JSON.stringify(urlData.StatusCount) %>" hidden>
+    <input type="text" id="daywiseSoldItemsObject" value="<%= JSON.stringify(urlData.daywiseSoldItems) %>" hidden>
+    <!-- ...................... -->
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+    <script>
+
+
+        const encodedstatusCount = document.getElementById("statusObject").value;
+        const statusCount = JSON.parse(encodedstatusCount);
+
+        salesStatusGraph(statusCount)
+        var myChart
+        function salesStatusGraph(statusCount) {
+            // Extracting labels and data points from paymentMethodData
+            const statusCountLabels = Object.keys(statusCount);
+            const statusCountDataPoints = Object.values(statusCount);
+
+            // below a bar chart using Chart.js
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            if (myChart) {
+                // Destroy existing chart instance
+                myChart.destroy();
+            }
+
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: statusCountLabels,
+                    datasets: [{
+                        label: 'Order details',
+                        data: statusCountDataPoints,
+                        backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(0, 128, 0, 0.6)', 'rgba(54, 162, 235, 0.6)'],
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1,
+                        barThickness: 50
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: {
+                                color: 'black',
+                                font: {
+                                    size: 11,
+                                    family: "'Arial', sans-serif",
+                                    style: ''
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                color: 'black',
+                                font: {
+                                    size: 11,
+                                    family: "'Arial', sans-serif",
+                                    style: ''
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Order Status',
+                            font: {
+                                size: 14,
+                                family: "'Arial', sans-serif",
+                                weight: 'bold'
+                            },
+                            color: 'black'
+                        },
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    weight: 'normal'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+
+                            titleFont: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            }
+
+                        }
+                    }
+                }
+
+            });
+        }
+
+
+
+
+
+        //...............................................................................
+
+
+        //payment methode 
+        const encodedPaymentData = document.getElementById("paymentObject").value;
+        const paymentMethodData = JSON.parse(encodedPaymentData);
+
+        doughnutGraphOfPaymentMethod(paymentMethodData);
+
+
+
+        // Define a variable to store the Chart.js instance
+        var myPieChart;
+
+        // Function to create a doughnut chart
+        function doughnutGraphOfPaymentMethod(paymentMethodData) {
+            const labels = Object.keys(paymentMethodData);
+            const dataPoints = Object.values(paymentMethodData);
+
+            // Get canvas element
+            const ctxPieChart = document.getElementById('myChart2').getContext('2d');
+
+            // Check if a chart instance already exists
+            if (myPieChart) {
+                // Destroy existing chart instance
+                myPieChart.destroy();
+            }
+
+            // Create new chart
+            myPieChart = new Chart(ctxPieChart, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sales by Payment Method',
+                        data: dataPoints,
+                        backgroundColor: [
+                            'rgba(255, 165, 0, 0.6)',
+                            'rgba(57, 255, 20, 0.6)',
+                            'rgba(255, 115, 125, 0.6)'
+                        ],
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Payment Mode',
+                        font: {
+                            size: 14,
+                            family: "'Arial', sans-serif",
+                            weight: 'bold'
+                        },
+                        color: 'black'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            fontColor: 'black'
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+        //....................................................................
+
+        // Sales quantity chart
+        const encodedSalesCount = document.getElementById("daywiseSoldItemsObject").value;
+        const salesCount = JSON.parse(encodedSalesCount);
+
+        // Calling the lineGraph function with the sales count data
+        lineGraph(salesCount);
+
+        // Variable to store the chart instance
+        var myLineChart;
+
+        // Function to render the line graph showing sales count per day
+        function lineGraph(salesCount) {
+            var salesCountLabels = Object.keys(salesCount);
+            var salesCountDataPoints = Object.values(salesCount);
+
+            const ctx = document.getElementById('myChart3').getContext('2d');
+
+            // Check if a chart instance already exists
+            if (myLineChart) {
+                // Destroy existing chart instance
+                myLineChart.destroy();
+            }
+
+            // Create new chart
+            myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: salesCountLabels,
+                    datasets: [{
+                        label: 'Order details',
+                        data: salesCountDataPoints,
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        barThickness: 80
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: {
+                                color: 'black',
+                                font: {
+                                    size: 11,
+                                    family: "'Arial', sans-serif",
+                                    style: ''
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                color: 'black',
+                                font: {
+                                    size: 11,
+                                    family: "'Arial', sans-serif",
+                                    style: ''
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sales per day',
+                            font: {
+                                size: 14,
+                                family: "'Arial', sans-serif",
+                                weight: 'bold'
+                            },
+                            color: 'black'
+                        },
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12,
+                                    weight: 'normal'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+
+                            titleFont: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            }
+
+                        }
+                    }
+                }
+
+            });
+        }
+
+
+        // hiding un wanted for the mommnt......................
+
+        const monthwiseGraph = document.getElementById("monthwiseGraph");
+        monthwiseGraph.style.display = "none";
+
+
+        const yearwiseGraphs = document.getElementById("yearwiseGraph");
+        yearwiseGraphs.style.display = "none";
+
+
+
+        //...................................................................
+
+        // fetching the data as per daywise, weekwise , yearwise.. 
+
+        document.getElementById('selectOption').addEventListener('change', function () {
+            var selectedValue = this.value;
+            fetch("/admin/adjustGraph", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ selectedValue })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Response data:", data);
+                    let paymentMethodData = data.paymentMethod;
+                    let daywiseSoldItem = data.daywiseSoldItems;
+                    let daywiseStatus = data.StatusCount;
+                    let receivedTotalRevenue = data.revenue;
+                    let receivedorderCount = data.order;
+
+                    //................daywise data...............
+                    if (data.Choice == "daywise") {
+                        //graph updation
+                        doughnutGraphOfPaymentMethod(paymentMethodData);
+                        lineGraph(daywiseSoldItem);
+                        salesStatusGraph(daywiseStatus);
+
+                        let revenuez=document.getElementById("totalRevenue");
+                        revenuez.innerText=`${receivedTotalRevenue[0].totalAmount}`
+
+                        const monthwiseGraph = document.getElementById("monthwiseGraph");
+                        monthwiseGraph.style.display = "none";
+                        const yearwiseGraphs = document.getElementById("yearwiseGraph");
+                        yearwiseGraphs.style.display = "none";
+
+                    } else {
+                        //...............monthwise data..........................
+                        if (data.Choice == "monthwise") {
+                            // To hide the overallGraph
+
+
+                            const monthwiseGraph = document.getElementById("monthwiseGraph");
+                            monthwiseGraph.style.display = "block";
+
+                            const yearwiseGraphs = document.getElementById("yearwiseGraph");
+                            yearwiseGraphs.style.display = "none";
+
+                            const Allgraphs = document.getElementById("Allgraphs");
+                            Allgraphs.style.display = "none";
+
+
+                            //sales status graph........
+                            let allStatuses = [];
+                            Object.values(data.StatusCount).forEach(monthData => {
+                                Object.keys(monthData).forEach(status => {
+                                    if (!allStatuses.includes(status)) {
+                                        allStatuses.push(status);
+                                    }
+                                });
+                            }); // Get all unique statuses
+
+                            console.log("allStatuses:", allStatuses)
+
+                            const months = Object.keys(data.StatusCount); // Get the months
+
+                            const datasets = allStatuses.map(status => ({
+                                label: status,
+                                data: months.map(month => (data.StatusCount[month][status] ? data.StatusCount[month][status] : 0)), // Map status counts to each month
+                                backgroundColor: {
+                                    'Returned': 'rgba(255, 99, 132, 0.6)',
+                                    'delivered': 'rgba(54, 162, 235, 0.6)',
+                                    'pending': 'rgba(255, 206, 86, 0.6)',
+                                    'Cancelled': 'rgba(105, 206, 86, 0.6)',
+                                    'User cancelled': 'rgba(955, 206, 86, 0.6)'
+                                }[status],
+                                borderColor: 'rgba(0, 0, 0, 1)',
+                                borderWidth: 1
+                            }));
+
+
+
+                            const ctxmonthwise = document.getElementById('myChartMonthwise').getContext('2d');
+                            const myChartMonthwise = new Chart(ctxmonthwise, {
+                                type: 'bar',
+                                data: {
+                                    labels: months,
+                                    datasets: datasets
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Count', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        },
+                                        x: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+
+
+
+                            //sales payment method graph
+
+
+                            let allpayment = [];
+                            Object.values(data.paymentMethod).forEach(obj => {
+                                Object.keys(obj).forEach(key => {
+                                    if (!allpayment.includes(key)) {
+                                        allpayment.push(key)
+                                    }
+
+                                });
+                            });
+
+                            console.log("allpayment:", allpayment)
+
+                            const paymentMonth = Object.keys(data.paymentMethod);
+
+                            const paymentModeData = allpayment.map(mode => ({
+                                label: mode,
+                                data: paymentMonth.map(month => (data.paymentMethod[month][mode] ? data.paymentMethod[month][mode] : 0)), // Map status counts to each month
+                                backgroundColor: {
+                                    'COD': 'rgba(255, 159, 64, 0.6)',
+                                    'MyWallet': 'rgba(75, 192, 192, 0.6)',
+                                    'razorpay': 'rgba(153, 102, 255, 0.6)',
+
+                                }[mode],
+                                borderColor: 'rgba(0, 0, 0, 1)',
+                                borderWidth: 1
+                            }));
+
+
+
+                            const ctxPaymentMode = document.getElementById('myChartMonthwisesalespayment').getContext('2d');
+                            const myChartMonthwisePaymentMode = new Chart(ctxPaymentMode, {
+                                type: 'bar',
+                                data: {
+                                    labels: months,
+                                    datasets: paymentModeData
+                                },
+
+
+                                options: {
+                                    title: {
+                                        display: true,
+                                        text: 'Payment Mode',
+                                        font: {
+                                            size: 14,
+                                            family: "'Arial', sans-serif",
+                                            weight: 'bold'
+                                        },
+                                        color: 'black'
+                                    },
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                        labels: {
+                                            fontColor: 'black'
+                                        }
+                                    },
+
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Count', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        },
+                                        x: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        }
+                                    }
+                                }
+
+
+
+                            });
+
+
+                            //sales count per month....
+
+                            //monthwiseSoldItems
+                            const monthwiseSalesCountLabels = Object.keys(data.monthwiseSoldItems);
+                            const monthwiseSalesCountDataPoints = Object.values(data.monthwiseSoldItems);
+
+                            const ctxsalesCount = document.getElementById('myChartMonthwisesalesCount').getContext('2d');
+
+                            // Check if a chart instance already exists
+                            if (myLineChart) {
+                                // Destroy existing chart instance
+                                myLineChart.destroy();
+                            }
+
+                            // Create new chart
+                            myLineChart = new Chart(ctxsalesCount, {
+                                type: 'line',
+                                data: {
+                                    labels: monthwiseSalesCountLabels,
+                                    datasets: [{
+                                        label: 'Order details',
+                                        data: monthwiseSalesCountDataPoints,
+                                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 2,
+                                        barThickness: 80
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Count', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        },
+                                        x: {
+                                            title: {
+                                                display: true,
+                                                text: 'Month', // Set the label for the y-axis
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: 'Sales per month',
+                                            font: {
+                                                size: 14,
+                                                family: "'Arial', sans-serif",
+                                                weight: 'bold'
+                                            },
+                                            color: 'black'
+                                        },
+                                        legend: {
+                                            display: false,
+                                            position: 'bottom',
+                                            labels: {
+                                                font: {
+                                                    size: 12,
+                                                    weight: 'normal'
+                                                }
+                                            }
+                                        },
+                                        tooltip: {
+                                            enabled: true,
+
+                                            titleFont: {
+                                                size: 12,
+                                                weight: 'bold'
+                                            },
+                                            bodyFont: {
+                                                size: 12
+                                            }
+
+                                        },
+
+                                    }
+                                }
+
+                            });
+
+
+
+
+                        } else if (data.Choice == "weekwise") {
+
+                        }
+
+                        //...............................yearwise data....................
+                        else if (data.Choice == "yearwise") {
+
+                            const yearwiseGraphs = document.getElementById("yearwiseGraph");
+                            yearwiseGraphs.style.display = "block";
+
+                            const Allgraphs = document.getElementById("Allgraphs");
+                            Allgraphs.style.display = "none";
+
+                            const monthwiseGraph = document.getElementById("monthwiseGraph");
+                            monthwiseGraph.style.display = "none";
+
+                            const years = Object.keys(data.paymentMethod);
+
+
+                            let allpayment = [];
+                            Object.values(data.paymentMethod).forEach(obj => {
+                                Object.keys(obj).forEach(key => {
+                                    if (!allpayment.includes(key)) {
+                                        allpayment.push(key)
+                                    }
+
+                                });
+                            });
+
+                            console.log("allpayment:", allpayment)
+
+                            const paymentYear = Object.keys(data.paymentMethod);
+                            console.log(paymentYear)
+
+
+
+                            const paymentModeData = allpayment.map(mode => ({
+                                label: mode,
+                                data: paymentYear.map(year => (data.paymentMethod[year][mode] ? data.paymentMethod[year][mode] : 0)), // Map status counts to each month
+                                backgroundColor: {
+                                    'COD': 'rgba(229, 202, 226, 0.8)',
+                                    'MyWallet': 'rgba(255, 215, 0, 0.8)',
+                                    'razorpay': 'rgba(170, 204, 255, 0.7)',
+
+                                }[mode],
+                                borderColor: 'rgba(0, 0, 0, 1)',
+                                borderWidth: 1
+                            }));
+
+
+
+                            const ctxPaymentModesyear = document.getElementById('myChartyearwisesalespayment').getContext('2d');
+                            const myChartYearPaymentMode = new Chart(ctxPaymentModesyear, {
+                                type: 'bar',
+                                data: {
+                                    labels: years,
+                                    datasets: paymentModeData
+                                },
+
+
+                                options: {
+                                    title: {
+                                        display: true,
+                                        text: 'Payment Mode',
+                                        font: {
+                                            size: 14,
+                                            family: "'Arial', sans-serif",
+                                            weight: 'bold'
+                                        },
+                                        color: 'black'
+                                    },
+                                    legend: {
+                                        display: true,
+                                        position: 'bottom',
+                                        labels: {
+                                            fontColor: 'black'
+                                        }
+                                    },
+
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Count',
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        },
+                                        x: {
+                                            title: {
+                                                display: true,
+                                                text: 'Years',
+                                                font: {
+                                                    size: 14,
+                                                    family: "'Arial', sans-serif",
+                                                    weight: 'bold'
+                                                },
+                                                color: 'black'
+                                            }
+                                        }
+                                    }
+                                }
+
+
+
+                            });
+
+
+//.......
+let allStatuses = [];
+Object.values(data.StatusCount).forEach(monthData => {
+    Object.keys(monthData).forEach(status => {
+        if (!allStatuses.includes(status)) {
+            allStatuses.push(status);
+        }
+    });
+}); // Get all unique statuses
+
+console.log("allStatuses:", allStatuses)
+
+
+
+const datasets = allStatuses.map(status => ({
+    label: status,
+    data: years.map(year => (data.StatusCount[year][status] ? data.StatusCount[year][status] : 0)), // Map status counts to each month
+    backgroundColor: {
+        'Returned': 'rgba(255, 99, 132, 0.6)',
+        'delivered': 'rgba(54, 162, 235, 0.6)',
+        'pending': 'rgba(255, 206, 86, 0.6)',
+        'Cancelled': 'rgba(105, 206, 86, 0.6)',
+        'User cancelled': 'rgba(955, 206, 86, 0.6)'
+    }[status],
+    borderColor: 'rgba(0, 0, 0, 1)',
+    borderWidth: 1
+}));
+
+
+
+const ctxYearwise = document.getElementById('myChartyear').getContext('2d');
+const myChartMonthwise = new Chart(ctxYearwise, {
+    type: 'bar',
+    data: {
+        labels: years,
+        datasets: datasets
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Count', // Set the label for the y-axis
+                    font: {
+                        size: 14,
+                        family: "'Arial', sans-serif",
+                        weight: 'bold'
+                    },
+                    color: 'black'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Years', // Set the label for the y-axis
+                    font: {
+                        size: 14,
+                        family: "'Arial', sans-serif",
+                        weight: 'bold'
+                    },
+                    color: 'black'
+                }
+            }
+        }
+    }
+});
+
+
+
+
+//...........
+const yearwiseSalesCountLabels = Object.keys(data.yearwiseSoldItems);
+const yearwiseSalesCountDataPoints = Object.values(data.yearwiseSoldItems);
+
+const ctxsalesCount = document.getElementById('myChartyearwisesalesCount').getContext('2d');
+
+// Check if a chart instance already exists
+if (myLineChart) {
+    // Destroy existing chart instance
+    myLineChart.destroy();
+}
+
+// Create new chart
+myLineChart = new Chart(ctxsalesCount, {
+    type: 'line',
+    data: {
+        labels: yearwiseSalesCountLabels,
+        datasets: [{
+            label: 'Order details',
+            data: yearwiseSalesCountDataPoints,
+            backgroundColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            barThickness: 80
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Count', // Set the label for the y-axis
+                    font: {
+                        size: 14,
+                        family: "'Arial', sans-serif",
+                        weight: 'bold'
+                    },
+                    color: 'black'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Years', // Set the label for the y-axis
+                    font: {
+                        size: 14,
+                        family: "'Arial', sans-serif",
+                        weight: 'bold'
+                    },
+                    color: 'black'
+                }
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Sales per year',
+                font: {
+                    size: 14,
+                    family: "'Arial', sans-serif",
+                    weight: 'bold'
+                },
+                color: 'black'
+            },
+            legend: {
+                display: false,
+                position: 'bottom',
+                labels: {
+                    font: {
+                        size: 12,
+                        weight: 'normal'
+                    }
+                }
+            },
+            tooltip: {
+                enabled: true,
+
+                titleFont: {
+                    size: 12,
+                    weight: 'bold'
+                },
+                bodyFont: {
+                    size: 12
+                }
+
+            },
+
+        }
+    }
+
+});
+
+
+
+
+
+
+                        }
+
+
+
+
+                    }
+
+
+
+
+
+
+                })
+                .catch(error => {
+
+                    console.error('Fetch error:', error);
+                });
+
+        });
+
+
+    </script>
+
+    <style>
+        .box {
+            margin: 10px;
+            width: 250px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(249, 238, 214);
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #myChart,
+        #myChart2,
+        #myChart3 {
+            background-color: #ffffff;
+            border-radius: 4px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            margin: 5px;
+        }
+
+
+
+        .align-right {
+            text-align: right;
+        }
+
+
+
+        #bestSeller {
+            background-color: #eff7d3;
+            box-shadow: 2px 2px 8px rgba(0.1, 0.1, 0.1, 0.2);
+            padding: 10px;
+            justify-content:space-evenly
+
+        }
+        .bestSellerItem {
+            background-color: #b7dbf0;
+            box-shadow: 2px 2px 8px rgba(0.1, 0.1, 0.1, 0.2);
+            padding: 10px;
+        }
+        
+    </style>

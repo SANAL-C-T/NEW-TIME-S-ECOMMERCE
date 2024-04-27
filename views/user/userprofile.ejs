@@ -1,0 +1,220 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+
+
+
+
+<div class="container-fluid  d-flex " id="backgrounImg">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 d-flex flex-column mx-3">
+        <!-- First line -->
+        <div class="d-flex justify-content-between my-4" id="firstline">
+            <div class="mb-3 mx-4">
+                <h4>NAME: <%= udata.first_name %> <%=udata.Last_name%></h4>
+            </div>
+            <div>
+                <img src="<%= udata.profileImage %>" style="width: 150px;" alt="Profile Image">
+            </div>
+        </div>
+    
+        <!-- Second line - Contact details -->
+        <h3 class="mx-4 mb-5">Contact details</h3>
+        <div class="d-flex my-4" id="secondline">
+            <div class="mb-3 mx-4">
+                <h5><i class="fa-solid fa-phone mx-3 " style="color: #010f1a;"></i>  <%= udata.phone %></h5>
+            </div>
+            <div class="mb-3 mx-4">
+                <h5><i class="fa-solid fa-envelope mx-3" style="color: #01090f;"></i>  <%= udata.email %></h5>
+            </div>
+        </div>
+    
+        <!-- Third line - Address details -->
+        <h3 class="mx-4 mb-5">Primary Address</h3>
+        <div class="d-flex my-4" id="thirdline">
+            <%if(udata.Address.length>0) {%>
+            <div class="mb-3 mx-4">
+             
+                    <ul>
+                        <li><strong>House:</strong> <%= udata.Address[0].houseNo %> </li>
+                        <li><strong>Street:</strong> <%= udata.Address[0].street %> </li>
+                        <li><strong>Location:</strong> <%= udata.Address[0].location %> </li>
+                        <li><strong>Landmark:</strong> <%= udata.Address[0].landmark %> </li>
+                    </ul>
+              
+             
+            </div>
+            <div class="ml-4">
+                
+                <ul>
+                    <li><strong>City:</strong> <%= udata.Address[0].city %> </li>
+                    <li><strong>State:</strong> <%= udata.Address[0].state %> </li>
+                    <li><strong>Country:</strong> <%= udata.Address[0].country %> </li>
+                    <li><strong>Pincode:</strong> <%= udata.Address[0].pincode %> </li>
+                </ul>
+            </div>
+        </div>
+        <%} %> 
+        
+        
+
+<div class="text-center ">Sharing the code below with your network, you can unlock cash rewards</div>
+
+        <div class="input-group mb-3 mt-2 ">
+            <input type="text" class="form-control" id="input-field" value="<%=udata.My_promotionalCode%>">
+            <button class="btn btn-primary copy-btn" onclick="copyInputValue()">Copy</button>
+          </div>
+
+    </main>
+    
+
+
+
+
+</div>
+</div>
+<%-include("../partials/footer.ejs")%>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2efef;
+      
+    }
+    
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+@media (max-width: 768px) {
+    #firstline, #secondline, #thirdline, #fourthline {
+        width: 100%; 
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding:0px;
+    }
+}
+
+
+
+
+
+    main {
+        padding: 20px;
+     
+        flex-grow: 1;
+
+        background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.5)), url("/image/Group1.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    #firstline {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        color: #4875a6;
+        margin-bottom: 0;
+    }
+
+
+    #secondline, #thirdline {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        color: #4b8bcf;
+    }
+
+    h5 {
+        margin-bottom: 10px;
+    }
+
+
+    .input-container {
+        position: relative;
+      
+      }
+  
+      button {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+      }
+     
+
+
+    </style>
+
+    <script>
+        function copyInputValue() {
+          var inputField = document.getElementById("input-field");
+          inputField.select();
+          document.execCommand("copy");
+         
+        }
+      </script>

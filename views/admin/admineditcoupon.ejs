@@ -1,0 +1,132 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container mt-3">
+  <div class="mt-4">
+    <a href="/admin/coupon">
+      <button>ADD COUPON</button>
+    </a>
+  </div>
+  <br>
+
+  <div class="container mt-3">
+    <form onsubmit="return validateForm()" method="POST" action="/admin/editcoupon/<%=urlData.code[0]._id%>">
+      <label for="couponCode">COUPON CODE</label>
+      <input type="text" id="couponCode" name="couponCode" placeholder="Enter the Code" class="form-control" value="<%=urlData.code[0].couponCode%>">
+      <div id="couponCodeValueError" class="text-danger m-3"></div>
+      <br>
+
+      <div class="form-group">
+        <label for="offerType" class="font-weight-bold">OFFER TYPE</label>
+        <select id="offerType" name="offerType" class="form-control">
+          <option value="Percentage">PERCENTAGE</option>
+          <option value="fixedPrice">FIXED AMOUNT</option>
+        </select>
+      </div>
+
+      <br>
+
+      <div>
+        <label for="couponValue">CODE VALUE</label>
+        <input type="text" id="couponValue" name="couponValue" placeholder="Enter Code Value" class="form-control" value="<%=urlData.code[0].discount%>">
+        <div id="couponValueError" class="text-danger m-3"></div>
+      </div>
+
+      <br>
+
+      <label for="couponCodeDescription">OFFER DESCRIPTION</label>
+      <input type="text" id="couponCodeDescription" name="couponCodeDescription" placeholder="Enter Description" class="form-control" value="<%=urlData.code[0].OfferDescription%>">
+      <div id="couponCodeDescriptionValueError" class="text-danger m-3"></div>
+      <br>
+
+      <label for="addDate">OFFER ADDED DATE</label>
+      <input type="text" class="text-danger mx-3" id="addDate1" name="addDate1" placeholder="Enter the Code" class="form-control" value="<%=urlData.code[0].createdDate%>">
+      <input type="date" id="addDate" name="addDate" class="form-control">
+      <div id="addDate1ValueError" class="text-danger m-3"></div>
+      <br>
+
+      <label for="ExpiryDate">OFFER EXPIRY DATE</label>
+      <input type="text" class="text-danger mx-3" id="ExpiryDate1" name="ExpiryDate1" placeholder="Enter the Code" class="form-control" value="<%=urlData.code[0].expiryDate%>">
+      <input type="date" id="ExpiryDate" name="ExpiryDate" class="form-control">
+      <div id="ExpiryDate1ValueError" class="text-danger m-3"></div>
+      <br>
+
+      <button type="submit" class="btn btn-success px-5">SAVE</button>
+
+  
+
+
+    </form>
+
+
+    <% if (locals.errorMessage) { %>
+      <div id="errorAlert" class="alert alert-danger" role="alert">
+          <%= locals.errorMessage %>
+      </div>
+      
+  <% } %>
+  </div>
+</div>
+
+<%- include("../partials/adminfooter.ejs") %>
+
+<script>
+  new DataTable("#example");
+
+  function validateForm() {
+    const couponCode = document.getElementById("couponCode").value;
+    const offerType = document.getElementById("offerType").value;
+    const couponValue = document.getElementById("couponValue").value;
+    const couponCodeDescription = document.getElementById("couponCodeDescription").value;
+    const addDate = document.getElementById("addDate").value;
+    const expiryDate = document.getElementById("ExpiryDate").value;
+
+    let couponValueError = document.getElementById("couponValueError");
+    let couponCodeValueError = document.getElementById("couponCodeValueError");
+    let couponCodeDescriptionValueError = document.getElementById("couponCodeDescriptionValueError");
+    let addDate1ValueError = document.getElementById("addDate1ValueError");
+    let ExpiryDate1ValueError = document.getElementById("ExpiryDate1ValueError");
+  
+
+    let isValid = true;
+
+    if (couponValue.trim() === "") {
+      couponValueError.innerHTML = "Code value cannot be empty";
+      isValid = false;
+      return isValid
+    } else {
+      couponValueError.innerHTML = "";
+    }
+
+    if (expiryDate.trim() === "") {
+        ExpiryDate1ValueError.innerHTML = "Offer expiry date cannot be empty";
+        isValid = false;
+        return isValid
+    } else {
+        ExpiryDate1ValueError.innerHTML= "";
+    }
+
+    if (addDate.trim() === "") {
+        addDate1ValueError.innerHTML = "Offer Add date cannot be empty";
+        isValid = false;
+        return isValid
+    } else {
+        addDate1ValueError.innerHTML= "";
+    }
+
+    if (couponCodeDescription.trim() === "") {
+        couponCodeDescriptionValueError.innerHTML = "value cannot be empty";
+        isValid = false;
+        return isValid
+      } else {
+        couponCodeDescriptionValueError.innerHTML = "";
+      }
+    
+   
+
+
+
+  }
+
+
+
+</script>

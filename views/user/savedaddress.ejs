@@ -1,0 +1,162 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+
+<div class="container-fluid  d-flex ">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+  
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 d-flex flex-column  mx-3 ">
+ 
+<h5 class="text-center mt-3 ">ALL SAVED ADDRESS</h5>
+<table id="example" class="table table-bordered table-hover table-sm table-responsive">
+    <thead>
+        <tr>
+            <th>SL NO</th>
+            <th>ADDRESS</th>
+            <th>ACTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% database.userdata.Address.forEach((x, index) => { %>
+            <tr>
+                <td><%= index + 1 %></td>
+                <td>
+                    <label for="fromDbAddressRadio<%= index %>" class="custom-radio-label">
+                        HouseNo: <%= x.houseNo %>, Street: <%= x.street %>, Location: <%= x.location %>, Landmark: <%= x.landmark %>, City: <%= x.city %>, State: <%= x.state %>, Country: <%= x.country %>, Pincode: <%= x.pincode %>, PhoneNo: <%= x.phoneNo %>
+                    </label>
+                </td>
+                <td>
+                    <form id="deleteAddress<%= index %>" action="/deleteAddress/<%= index %>" method="POST">
+                        <input type="hidden" name="index" value="<%= index %>">
+                        <button type="button" class="btn btn-danger btn-sm " onclick="showCancelConfirmation(<%= index %>)">DELETE</button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
+
+</main>
+    </div>
+</div>
+<%-include("../partials/footer.ejs")%>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(250, 245, 245);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding:0px;
+    }
+}
+
+
+#addressbox{
+    border: solid 2px black;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+
+#example_filter {
+    float: right;
+}
+
+
+
+#example thead th {
+    background-color: #3d3d3d; /* Set background color for header cells */
+    color: #fff; /* Set text color for header cells */
+}
+
+#example tbody td {
+    background-color: #ffffff; /* Set background color for body cells */
+    color: #333; /* Set text color for body cells */
+    border:  solid 1px black;
+}
+
+    </style>
+
+    <script>
+        new DataTable("#example");
+
+
+
+        function showCancelConfirmation(index) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    document.getElementById(`deleteAddress${index}`).submit();
+                }
+            });
+        }
+    </script>

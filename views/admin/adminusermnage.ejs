@@ -1,0 +1,71 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container">
+    <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width:100%">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% urlData.userdetails.forEach(user => { %>
+                <tr>
+                    <td><%= user._id %></td>
+                    <td><%= user.username %></td>
+                    <td><%= user.email %></td>
+                    <td><%= user.status ? 'Active' : 'Inactive' %></td>
+                    <td>
+                        <% if (user.status==true) { %>
+                            <!-- If user is active, display block button with SweetAlert confirmation -->
+                            <form action="/admin/blockUser/<%= user._id %>" method="post" class="block-form">
+                                <button class="btn btn-danger" type="submit">Block User</button>
+                            </form>
+                        <% } else { %>
+                            <!-- If user is inactive, display unblock button with SweetAlert confirmation -->
+                            <form action="/admin/unblockUser/<%= user._id %>" method="post" class="unblock-form">
+                                <button class="btn btn-success" type="submit">Unblock User</button>
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            new DataTable('#example');
+
+            // Add SweetAlert confirmation
+            document.querySelectorAll('.block-form, .unblock-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const actionText = this.classList.contains('block-form') ? 'block' : 'unblock';
+                    
+                    Swal.fire({
+                        title: `Are you sure you want to ${actionText} this user?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: `#${actionText === 'block' ? 'd33' : '28a745'}`,
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: `Yes, ${actionText} it!`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If confirmed, submit the form
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+<%- include("../partials/adminfooter.ejs") %>

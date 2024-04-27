@@ -1,0 +1,939 @@
+<%- include("../partials/userloggedheder.ejs") %>
+
+  <div class="container-fluid d-flex cartpage">
+    <div id="leftside" class="" style="width: 80%; min-height: 50vh ">
+      <h5 class="text-center mt-4 "><strong>Provide Shipping Address</strong></h5>
+      <br>
+      <form id="checkoutForm">
+
+
+        <div class="accordion" id="accordionExample">
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne" onclick="BlockForm()">
+                <h5 style="cursor: pointer;">Click to use saved address</h5>
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div id="savedAddress">
+                  <% database.userdata.Address.forEach((x, index)=> { %>
+                    <div class="radio-container">
+                      <input type="radio" id="fromDbAddressRadio<%= index %>" name="fromDbAddressRadio"
+                        class="custom-radio"
+                        value="HouseNo: <%=x.houseNo%>, Street: <%=x.street%>, Location: <%=x.location%>, Landmark: <%=x.landmark%>, City: <%=x.city%>, State: <%=x.state%>, Country: <%=x.country%>, Pincode: <%=x.pincode%>, PhoneNo: <%=x.phoneNo%>">
+                      <label for="fromDbAddressRadio<%= index %>" class="custom-radio-label">
+                        HouseNo: <%=x.houseNo%>, Street: <%=x.street%>, Location: <%=x.location%>, Landmark:
+                              <%=x.landmark%>, City: <%=x.city%>, State: <%=x.state%>, Country: <%=x.country%>, Pincode:
+                                      <%=x.pincode%>, PhoneNo: <%=x.phoneNo%>
+                      </label>
+                    </div>
+                    <% }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                onclick="clearRadioButtons();unBlockForm()">
+                <h5 style="cursor: pointer;">Click to use a new address </h5>
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div id="newAddressSection">
+                  <div class="d-flex my-4 " id="secondline">
+
+                    <div class="mb-3 mx-4 ">
+                      <label for="phonenumber" class="form-label">Contact Number:</label>
+                      <input type="tel" id="phonenumber" name="phonenumber" class="form-control"
+                        placeholder="Phone number">
+                      <div id="phonenumberMessage" class="text-danger m-3"></div>
+                    </div>
+
+                    <div class="mb-3 mx-4 ">
+                      <label for="house" class="form-label">House NO:</label>
+                      <input type="text" id="house" name="house" class="form-control">
+                      <div id="houseMessage" class="text-danger m-3"></div>
+                    </div>
+
+                    <div class="mb-3 mx-4 ">
+                      <label for="street" class="form-label">Street:</label>
+                      <input type="text" id="street" name="street" class="form-control">
+                      <div id="streetMessage" class="text-danger m-3"></div>
+                    </div>
+
+                  </div>
+
+                  <div class="d-flex my-4 " id="thirdline">
+                    <div class="mb-3 mx-4 ">
+                      <label for="location" class="form-label">Location:</label>
+                      <input type="text" id="location" name="location" class="form-control">
+                      <div id="locationMessage" class="text-danger m-3"></div>
+                    </div>
+                    <div class="mb-3 mx-4 ">
+                      <label for="landmark" class="form-label">Landmark:</label>
+                      <input type="text" id="landmark" name="landmark" class="form-control">
+                      <div id="landmarkMessage" class="text-danger m-3"></div>
+                    </div>
+                    <div class="mb-3 mx-4 ">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" id="city" name="city" class="form-control">
+                      <div id="cityMessage" class="text-danger m-3"></div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex my-4 " id="fourthline">
+                    <div class="mb-3 mx-4 ">
+                      <label for="state" class="form-label">State:</label>
+                      <select id="state" name="state" class="form-control">
+                        <option value="andaman_and_nicobar_islands">Andaman and Nicobar Islands</option>
+                        <option value="chandigarh">Chandigarh</option>
+                        <option value="dadra_and_nagar_haveli_and_daman_and_diu">Dadra and Nagar Haveli and Daman & Diu
+                        </option>
+                        <option value="delhi">Delhi</option>
+                        <option value="jammu_and_kashmir">Jammu & Kashmir</option>
+                        <option value="ladakh">Ladakh</option>
+                        <option value="lakshadweep">Lakshadweep</option>
+                        <option value="puducherry">Puducherry</option>
+                        <option value="andhra_pradesh">Andhra Pradesh</option>
+                        <option value="arunachal_pradesh">Arunachal Pradesh</option>
+                        <option value="assam">Assam</option>
+                        <option value="bihar">Bihar</option>
+                        <option value="chhattisgarh">Chhattisgarh</option>
+                        <option value="goa">Goa</option>
+                        <option value="gujarat">Gujarat</option>
+                        <option value="haryana">Haryana</option>
+                        <option value="himachal_pradesh">Himachal Pradesh</option>
+                        <option value="jammu_kashmir">Jammu and Kashmir</option>
+                        <option value="jharkhand">Jharkhand</option>
+                        <option value="karnataka">Karnataka</option>
+                        <option value="kerala">Kerala</option>
+                        <option value="madhya_pradesh">Madhya Pradesh</option>
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="manipur">Manipur</option>
+                        <option value="meghalaya">Meghalaya</option>
+                        <option value="mizoram">Mizoram</option>
+                        <option value="nagaland">Nagaland</option>
+                        <option value="odisha">Odisha</option>
+                        <option value="punjab">Punjab</option>
+                        <option value="rajasthan">Rajasthan</option>
+                        <option value="sikkim">Sikkim</option>
+                        <option value="tamil_nadu">Tamil Nadu</option>
+                        <option value="telangana">Telangana</option>
+                        <option value="tripura">Tripura</option>
+                        <option value="uttar_pradesh">Uttar Pradesh</option>
+                        <option value="uttarakhand">Uttarakhand</option>
+                        <option value="west_bengal">West Bengal</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-3  px-4 ">
+                      <label for="Country" class="form-label">Country:</label>
+                      <input type="Country" id="Country" name="Country" class="form-control" value="India">
+                    </div>
+
+                    <div class="mb-3 mx-4 ">
+                      <label for="pincode" class="form-label">Pincode:</label>
+                      <input type="tel" id="pincode" name="pincode" class="form-control">
+                      <div id="pincodeMessage" class="text-danger m-3"></div>
+                    </div>
+
+                  </div>
+
+                  <div class="m-4 text-danger ">
+                    <input type="checkbox" id="saveaddressCheckbox" name="saveaddressCheckbox" class="form-check-input">
+                    <label for="saveaddressCheckbox" class="form-check-label">
+                      <h5>I want to save this address for future use.</h5>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <button class="btn btn-warning  m-3" type="button" id="deliverychrg" onclick="getDeliveryCharge()">GET DELIVERY CHARGES</button>
+
+      </form>
+
+
+    </div>
+
+
+
+
+    <div id="rightside" class="m-3 pt-3 ">
+      <h5 class="text-center">PAYMENT OPTIONS</h5>
+      <div class="premium-container">
+        <div>
+          <h5 class="premium-label">PAY:</h5>
+        </div>
+        <div>
+          <h5 class="premium-value" id="actualPrice">&#8377;<%= database.cartdata.OrderTotalPrice %></h5>
+        </div>
+      </div>
+      <br>
+      <div>
+        <h5>Delivery charge: &#8377;<h5 id="deliveryCharge"></h5></h5>
+      </div>
+      <hr>
+      <div id="couponSection">
+        <h6 id="question">Have a coupon ?</h6>
+        <% if (database.cartdata.couponApplied == false) { %>
+        <div id="hasapplied">
+          <input type="text" class="w-100" id="couponcode" name="couponcode" placeholder="Enter Coupon Code">
+          <button class="btn btn-success w-100 mt-4" onclick="couponSubmit()">APPLY</button>
+        </div>
+        <% } else if(database.cartdata.couponApplied == true) { %>
+        <div id="hasremoved">
+          <script>
+            var appliedCouponCode = '<%= database.cartdata.couponCode %>';
+          </script>
+          <input type="text" class="w-100" id="removecode" name="removecode" hidden>
+          <button class="btn btn-warning w-100 mt-4" onclick="removeCoupon()">REMOVE COUPON</button>
+        </div>
+        <% } %>
+      </div>
+      <br>
+      <hr>
+      <div class="payment-option d-flex justify-content-between">
+        <% if (database.cartdata.OrderTotalPrice <= 30000) { %>
+        <div>
+          <label for="COD1">Cash on delivery</label>
+        </div>
+        <div>
+          <input type="radio" id="COD1" name="paymentMethod" value="COD">
+        </div>
+        <% } %>
+      </div>
+      <hr>
+      <div class="payment-option d-flex justify-content-between">
+        <div>
+          <label for="MyWallet">My Wallet</label>
+        </div>
+        <div>
+          <input type="radio" id="MyWallet" name="paymentMethod" value="MyWallet">
+        </div>
+      </div>
+      <hr>
+      <div class="payment-option d-flex justify-content-between">
+        <div>
+          <label for="Razorpay">Razorpay</label>
+        </div>
+        <div>
+          <input type="radio" id="Razorpay" name="paymentMethod" value="Razorpay">
+        </div>
+      </div>
+      <hr>
+      <div>
+        <button type="button" id="checkoutButton" class="btn btn-warning w-100" style="display: none;" onclick="paymentprocess()">
+          <strong>CHECKOUT</strong>
+        </button>
+      </div>
+    </div>
+    
+  </div>
+
+
+  </div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <%- include("../partials/footer.ejs") %>
+
+
+
+
+
+
+
+
+    <script>
+      var selectionCheck = 1;
+
+      function getDeliveryCharge() {
+        let selectedRadi = document.querySelector('input[name="fromDbAddressRadio"]:checked');
+        if (selectionCheck == 1) {//purpose of this is to take the saved address for delivery...
+          const addressFromSaved = selectedRadi.value;
+          var pincodePattern = /Pincode:\s*([0-9]+)/;
+          var pincodeMatch = pincodePattern.exec(addressFromSaved);
+          if (pincodeMatch) {
+            const pincodeValue = pincodeMatch[1];
+            FindDeliveryCharge(pincodeValue)
+          } else { }
+
+        }
+        else {
+          const pincode = document.getElementById('pincode').value;
+          FindDeliveryCharge(pincode)
+        }
+      }
+
+
+      function FindDeliveryCharge(pin) {
+        fetch("/getdeliveryCost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ pin })
+        })
+          .then(response => {
+
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            return response.json();
+          })
+          .then(data => {
+            console.log(data);
+
+            const DeliveryCostFromBackend = document.getElementById('deliveryCharge');
+            DeliveryCostFromBackend.innerText = `${data.DeliveryCharge}`;
+            
+            const actualPriceElement = document.getElementById('actualPrice');
+            const currentPrice = parseFloat(actualPriceElement.innerText.replace('₹', ''));
+            
+
+            console.log("data:",data.DeliveryCharge)
+            console.log("currentPrice:",currentPrice)
+            const newPrice = Number(data.DeliveryCharge) + currentPrice;
+            console.log("newPrice:",newPrice)
+            // Format the new price with the currency symbol and set it as the inner text of the actualPriceElement
+            actualPriceElement.innerText = `₹ ${newPrice}`;
+            
+
+            const checkoutButton = document.getElementById("checkoutButton");
+            checkoutButton.style.display = 'block';
+            const deliverychrgs=document.getElementById("deliverychrg");
+            deliverychrgs.style.display='none'
+
+          })
+          .catch(error => {
+
+            console.error('Fetch error:', error);
+          });
+      }
+
+
+
+
+
+
+      function paymentprocess() {
+
+
+        if (!validateForm()) {
+          // If form validation fails, do not proceed with the payment process
+          return;
+      }
+
+
+        var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        var selectedRadio = document.querySelector('input[name="fromDbAddressRadio"]:checked');
+        const deliveryChargeElement = document.getElementById('deliveryCharge');
+        const updatedDeliveryChargeValue = deliveryChargeElement.innerText;
+
+        if (selectionCheck == 1) {//purpose of this is to take the saved address for delivery...
+
+          let Value = selectedRadio.value;
+
+          fetch("/paynow", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              Value: Value,
+              paymentMethod: paymentMethod,
+              deliveryCharge: updatedDeliveryChargeValue
+            }),
+          })
+            .then(response => { //in this part it will handle the response recieved from the backend.
+              if (!response.ok) {
+                throw new Error("paynow fetch in checkout not giving an OK response as intended");
+              }
+              return response.json();
+              //what this does, is it convert the received  data to json object.
+            })
+
+            .then(data => {
+              if (data.COD == true || data.wallet == true) {
+                console.log("Success 1:", data);
+                window.location.href = "/successpage"
+              }
+              else if (data.COD == false || data.wallet == false) {
+                console.log("Success 1:", data);
+                window.location.href = "/failedpage"
+              }
+
+              var options = {//the data send from backend after creating the interface
+                "key": data.key_id,
+                "amount": data.amount,
+                "currency": "INR",
+                "name": "TIME S",
+                "description": "Test Payment",
+                "image": "/image/TIME S.jpg",
+                "order_id": data.order_id,
+
+                "prefill": {
+                  "name": data.username,
+                  "email": data.email,
+                  "contact": data.phone
+                },
+                "notes": {
+                  "address": ""
+                },
+                "theme": {
+                  "color": "#735bff"
+                },
+
+
+                config: {
+                  display: {
+                    blocks: {
+                      banks: {
+                        name: 'Pay via UPI',
+                        instruments: [
+                          {
+                            method: 'upi'
+                          }
+                        ],
+                      },
+                    },
+                    sequence: ['block.banks'],
+                    preferences: {
+                      show_default_blocks: true,
+                    },
+                  },
+                },
+
+                "handler": function (response) {
+                  sendRazPaymentDetials(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature);
+                },
+              };
+
+              var rzp1 = new Razorpay(options);
+
+              rzp1.on('payment.failed', function (response) {
+                sendRazFailedPaymentDetials(response.code, response.description, response.source, response.step, response.reason, response.order_id, response.payment_id)
+
+              });
+
+              rzp1.open(); // Open Razorpay after initialization
+            })
+            .catch(error => {
+              console.error("Error during fetch:", error);
+            });
+        }
+
+
+
+        else if (selectionCheck == 2) {//purpose of this is to used typed address for delivery...
+
+          console.log("in typed address section")
+
+
+          const saveaddressCheckbox = document.getElementById('saveaddressCheckbox').checked;
+          const phoneNumber = document.getElementById('phonenumber').value;
+          const house = document.getElementById('house').value;
+          const street = document.getElementById('street').value;
+          const location = document.getElementById('location').value;
+          const landmark = document.getElementById('landmark').value;
+          const city = document.getElementById('city').value;
+          const state = document.getElementById('state').value;
+          const Country = document.getElementById('Country').value;
+          const pincode = document.getElementById('pincode').value;
+          console.log("paymentMode2:::::", paymentMethod) //working
+
+          fetch("/paynow", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+            },
+            body: JSON.stringify({
+              saveaddressCheckbox: saveaddressCheckbox,
+              paymentMethod: paymentMethod,
+              phoneNumber: phoneNumber,
+              house: house,
+              street: street,
+              location: location,
+              landmark: landmark,
+              city: city,
+              state: state,
+              Country: Country,
+              pincode: pincode,
+              deliveryCharge: updatedDeliveryChargeValue
+            }),
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("not working in 2nd fetch of payment");
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.COD == true || data.wallet == true) {
+                console.log("Success 2:", data);
+                window.location.href = "/successpage"
+              }
+              else if (data.COD == false || data.wallet == false) {
+                console.log("Success 2:", data);
+                window.location.href = "/failedpage"
+
+              }
+
+              var options = {
+                "key": data.key_id,
+                "amount": data.amount,
+                "currency": "INR",
+                "name": "TIME S",
+                "description": "Test Payment",
+                "image": "/image/TIME S.jpg",
+                "order_id": data.order_id,
+
+                "prefill": {
+                  "name": data.username,
+                  "email": data.email,
+                  "contact": data.phone
+                },
+                "notes": {
+                  "address": ""
+                },
+                "theme": {
+                  "color": "#735bff"
+                },
+
+
+                config: {
+                  display: {
+                    blocks: {
+                      banks: {
+                        name: 'Pay via UPI',
+                        instruments: [
+                          {
+                            method: 'upi'
+                          }
+                        ],
+                      },
+                    },
+                    sequence: ['block.banks'],
+                    preferences: {
+                      show_default_blocks: true,
+                    },
+                  },
+                },
+
+                "handler": function (response) {
+                  sendRazPaymentDetials(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature);
+                },
+              };
+
+              var rzp1 = new Razorpay(options);
+
+              rzp1.on('payment.failed', function (response) {
+                sendRazFailedPaymentDetials(response.code, response.description, response.source, response.step, response.reason, response.order_id, response.payment_id)
+
+              });
+
+              rzp1.open(); // Open Razorpay after initialization
+            })
+            .catch(error => {
+              console.error("Error during fetch:", error);
+            });
+
+        }
+
+
+      }
+
+
+
+
+
+
+      function sendRazPaymentDetials(payment_id, order_id, signature) {
+        fetch("/paymentData", {
+          method: "post",
+          headers: {
+            'Content-Type': "application/json",
+            'Accept': "application/json"
+          },
+          body: JSON.stringify({ payment_id, order_id, signature })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data === "payment verified") {
+              // Display a success message and redirect to success page
+              window.location.href = "/successpage";
+            } else {
+              // Display an error message
+              alert("Payment not verified");
+              // Handle the error condition accordingly
+              // For example, you might want to redirect to an error page
+              // window.location.href = "/errorpage";
+            }
+
+          })
+          .catch(error => {
+
+            console.error("Error:", error);
+          });
+      }
+
+
+
+
+
+      async function sendRazFailedPaymentDetials(code, description, source, step, reason, order_id, payment_id) {
+        fetch("/failedPaymentData", {
+          method: "post",
+          headers: {
+            'content-Type': "application/json",
+            'Accept': "application/json"
+          },
+          body: JSON.stringify({ code, description, source, step, reason, order_id, payment_id })
+        })
+      }
+
+
+
+      function clearRadioButtons() {
+        var radioButtons = document.getElementsByName("fromDbAddressRadio");
+
+        radioButtons.forEach(function (radio) {
+          radio.checked = false;
+        });
+      }
+
+      function unhide() {
+        let unhideSection = document.getElementById('newAddressSection');
+        unhideSection.style.display = 'block';
+        arrowIconUp
+      }
+
+
+
+      function BlockForm() {
+        selectionCheck = 1;
+        let formElemnts = document.querySelectorAll('#newAddressSection input, #newAddressSection select');
+        formElemnts.forEach(function (element) {
+          element.disabled = true;
+        });
+
+
+      }
+
+
+
+      function unBlockForm() {
+        selectionCheck = 2;
+        let formElemnts = document.querySelectorAll('#newAddressSection input, #newAddressSection select');
+        formElemnts.forEach(function (element) {
+          element.disabled = false;
+        });
+
+
+      }
+
+
+
+      function validateForm() {
+        
+        var newAddressRadio = document.getElementById('collapseTwo').classList.contains('show');
+        if (newAddressRadio) {
+            let phonenumber = document.getElementById("phonenumber").value;
+            let house = document.getElementById("house").value;
+            let street = document.getElementById("street").value;
+            let location = document.getElementById("location").value;
+            let landmark = document.getElementById("landmark").value;
+            let city = document.getElementById("city").value;
+            let pincode = document.getElementById("pincode").value;
+    
+            let phonenumberMessage = document.getElementById("phonenumberMessage");
+            let houseMessage = document.getElementById("houseMessage");
+            let streetMessage = document.getElementById("streetMessage");
+            let locationMessage = document.getElementById("locationMessage");
+            let landmarkMessage = document.getElementById("landmarkMessage");
+            let cityMessage = document.getElementById("cityMessage");
+            let pincodeMessage = document.getElementById("pincodeMessage");
+    
+            let isValid = true;
+    
+            if (phonenumber.trim() === "") {
+                phonenumberMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else if (!/^\d+$/.test(phonenumber)) {
+                phonenumberMessage.innerHTML = "Input must be a number";
+                isValid = false;
+            } else {
+                phonenumberMessage.innerHTML = ""; 
+            }
+    
+           
+            if (house.trim() === "") {
+                houseMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else {
+                houseMessage.innerHTML = "";
+            }
+    
+            if (street.trim() === "") {
+                streetMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else {
+                streetMessage.innerHTML = "";
+            }
+    
+            if (location.trim() === "") {
+                locationMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else {
+                locationMessage.innerHTML = "";
+            }
+    
+            if (landmark.trim() === "") {
+                landmarkMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else {
+                landmarkMessage.innerHTML = "";
+            }
+    
+            if (city.trim() === "") {
+                cityMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else {
+                cityMessage.innerHTML = "";
+            }
+    
+            if (pincode.trim() === "") {
+                pincodeMessage.innerHTML = "Mandatory";
+                isValid = false;
+            } else if (!/^\d{6}$/.test(pincode)) {
+                pincodeMessage.innerHTML = "Invalid Pincode (Should be 6 digits)";
+                isValid = false;
+            } else {
+                pincodeMessage.innerHTML = "";
+            }
+    
+            if (!isValid) {
+              
+                document.getElementById('checkoutButton').style.display = 'none';
+                return false;
+            }
+        }
+    
+      
+        document.getElementById('checkoutButton').style.display = 'block';
+        return true;
+    }
+    
+
+
+      function removeCoupon() {
+        const couponCode = document.getElementById('removecode').value;
+  
+        fetch("/removeCoupon", {
+          method: "POST",
+          headers: {
+            'Content-Type': "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            couponCode
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to remove coupon');
+          }
+        })
+        .then(data => {
+          console.log('Success:', data);
+          if(data.message=="Coupon removed successfully."){
+           
+        console.log("removecoupon::",data)
+            const newPriceS=document.getElementById("actualPrice")
+            newPriceS.innerHTML=`<h5><b>&#8377; ${data.grandtotals}<b></h5>`
+         
+            const displayCouponMessage=document.getElementById("question");
+            displayCouponMessage.innerText="Have a coupon ?"
+    
+            const hideRemovebutton=document.getElementById("hasapplied")
+            hideRemovebutton.innerHTML=` <input type="text" class="w-100" id="couponcode" name="couponcode" placeholder="Enter Coupon Code">
+            <button class="btn btn-success w-100 mt-4" onclick="couponSubmit()">APPLY</button>`
+            
+          }
+        
+        })
+        .catch(error => {
+          console.error('Error removing coupon:', error);
+        });
+      }
+    
+    
+    
+    
+    
+    
+    
+    //coupon spply ...............
+      function couponSubmit() {
+        const couponCode = document.getElementById('couponcode').value;
+     
+        fetch("/applyCoupon", {
+          method: "POST",
+          headers: {
+            'Content-Type': "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            code: couponCode
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to apply coupon');
+          }
+        })
+        .then(data => {
+          console.log('Success:', data);
+       
+          if(data.message=="Coupon applied successfully."){
+            const newPrice=document.getElementById("actualPrice")
+            newPrice.innerHTML=`<h5> <b>&#8377; ${data.grandtotal}<b></h5>`
+         
+            const displayCouponMessage=document.getElementById("question");
+            displayCouponMessage.innerText=`Coupon used: ${data.codes}` 
+    
+            const hideapplybutton=document.getElementById("hasapplied")
+            hideapplybutton.innerHTML=` <input type="text" class="w-100" id="removecode" name="removecode" hidden>
+            <button class="btn btn-warning w-100 mt-4 " onclick="removeCoupon()">REMOVE COUPON</button>`
+    
+            
+          }
+        else if(data.message=="Coupon does not exist."){
+          const displayCouponMessage=document.getElementById("question");
+          displayCouponMessage.innerText=`Coupon does not exist ` 
+        }
+              
+    
+        })
+        .catch(error => {
+          console.error('Error applying coupon:', error);
+        });
+      }
+
+
+
+
+    </script>
+
+
+
+
+    <style>
+      #rightside {
+        background-color: #2d2b2b;
+        padding: 15px;
+        color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      }
+
+      .payment-option {
+        margin-bottom: 15px;
+      }
+
+      .payment-option label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .payment-option input {
+        margin-right: 5px;
+      }
+
+      @media (max-width: 768px) {
+
+        #firstline,
+        #secondline,
+        #thirdline,
+        #fourthline {
+          width: 100%;
+          flex-direction: column;
+        }
+
+        .cartpage {
+          flex-direction: column;
+
+        }
+      }
+
+      .premium-container {
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .premium-label {
+        font-size: 18px;
+        color: #333;
+      }
+
+      .premium-value {
+        font-size: 24px;
+        color: #0066cc;
+        font-weight: bold;
+      }
+
+
+      .radio-container {
+        border: 1px solid #000000;
+        background-color: hsla(216, 46%, 86%, 0.493);
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+     
+      }
+
+      #savedAddress {
+        background-color: #fcfcfc;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #2e2e2e;
+        padding: 10px;
+      
+      }
+
+      .radio-container {
+        margin-bottom: 10px;
+       
+      }
+    </style>

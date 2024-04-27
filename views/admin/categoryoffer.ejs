@@ -1,0 +1,184 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container mt-3">
+    
+  <div class="mt-4 ">
+    <a href="/admin/listCoupon">
+        <button>LIST COUPON</button>
+    </a>
+
+    <a href="/admin/addOffer">
+      <button>ADD OFFER</button>
+  </a>
+</div>
+<br>
+
+<!-- this is the categorywise offer page of admin -->
+
+
+<a href="/admin/Offerproduct" class="btn btn-warning ">PRODUCT BASED</a>
+<a href="/admin/offerreferral" class="btn btn-success">REFERRAL BASED</a>
+<form  onsubmit="return validate()"    action="/admin/Offercategory" method="POST">
+
+    <div class="mb-3">
+        <label for="productCategory" class="form-label">Product Category</label>
+        <select class="form-select" id="productCategory" name="productCategory" required>
+            <option value="" disabled selected>Select a category</option>
+            <% urlData.category.forEach(category=> { %>
+                <option value="<%= category._id %>">
+                    <%= category.categoryName %>
+                </option>
+                <% }) %>
+        </select>
+    </div>
+
+
+    <div class="mb-3">
+        <label for="discount">Enter discount value:</label>
+        <input type="tel" id="discount" name="discount" placeholder="Enter discount value %...">
+        <div id="errMessage1" class="text-danger m-3 "></div>
+    </div>
+
+    <div class="mb-3   d-flex    justify-content-between ">
+    <label for="createdDate">Created Date:</label>
+    <input type="date" id="createdDate" name="createdDate">
+    <div id="errMessage2" class="text-danger m-3 "></div>
+    
+    
+    <label for="expiryDate">Expiry Date:</label>
+    <input type="date" id="expiryDate" name="expiryDate">
+    <div id="errMessage3" class="text-danger m-3 "></div>
+    </div>
+    
+    
+    
+    <button class="btn btn-success ">Submit</button>
+    
+          </form>
+
+<br>
+
+<% if (urlData && urlData.category && urlData.category.length > 0) { %>
+    <table>
+        <thead>
+            <tr id="tb">
+                <th>CATEGORY NAME</th>
+                <th>OFFER AVAILABLE</th>
+                <th>REMOVE OFFER</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% urlData.category.forEach(category => { %>
+                <% if (category.catOffer && category.catOffer.length > 0) { %>
+                    <% category.catOffer.forEach(offer => { %>
+                        <tr>
+                            <td><%= category.categoryName %></td>
+                            <td><%= offer.catDiscountValue %> %</td>
+                            <td>
+                            
+                                    <button class="btn btn-danger btn-sm" onclick="removeOffer('<%= category._id %>')">REMOVE</button>
+                                
+                            </td>
+                            
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td><%= category.categoryName %></td>
+                        <td>No offer available</td>
+                        <td></td>
+                    </tr>
+                <% } %>
+            <% }); %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No offer available</p>
+<% } %>
+
+
+
+
+
+<%- include("../partials/adminfooter.ejs") %>
+
+
+
+<script>
+
+    function removeOffer(id) {
+        console.log(id);
+    
+        fetch("/admin/removeOffer", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+    
+            location.reload();
+        })
+        .catch(error => {
+            console.log(error.message);
+        });
+    }
+    
+
+function validate(){
+    const discountval=document.getElementById('discount')
+    const createdDateval=document.getElementById('createdDate');
+    const expiryDateval=document.getElementById('expiryDate')
+    const errMessage1=document.getElementById('errMessage1')
+    const errMessage2=document.getElementById('errMessage2')
+    const errMessage3=document.getElementById('errMessage3')
+    
+    
+    if(discountval.value.trim()==""){
+        errMessage1.innerText="Value cannot be empty"
+        return false;
+    }
+    else if(isNaN(discountval.value.trim()) || parseFloat(discountval.value.trim()) < 0){
+        errMessage1.innerText="Value must be a non-negative number";
+        return false;
+    }
+    else{
+        errMessage1.innerText="";
+        return true;
+    }
+    
+    
+    if(createdDateval.value.trim()==''){
+        errMessage2.innerText="Date cannot be empty"
+        return false;
+    }
+    else{
+        errMessage2.innerText="";
+        return true; 
+    }
+    
+    if(expiryDateval.value.trim()==''){
+        errMessage3.innerText="Date cannot be empty"
+        return false;
+    }
+    else{
+        errMessage3.innerText="";
+        return true; 
+    }
+
+
+}
+
+
+
+
+</script>
+
+<style>
+
+    
+</style>

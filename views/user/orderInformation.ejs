@@ -1,0 +1,314 @@
+<%- include("../partials/userloggedheder.ejs") %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+    <div class="container-fluid  d-flex ">
+        <div class=" row">
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;">
+                            </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                    <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span
+                                class="d-none d-sm-inline">Add profile</span></a></li>
+                    <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span
+                                class="d-none d-sm-inline">set password</span></a></li>
+                    <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span
+                                class="d-none d-sm-inline">Wallet</span></a></li>
+                    <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span
+                                class="d-none d-sm-inline">Wishlist</span></a></li>
+                    <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;">
+                            </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                    <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;">
+                            </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container-fluid">
+            <!-- Delivery Address -->
+            <div class="m-4 ">
+                <h4>Delivery Address</h4>
+                <p class="delivery-address"><%= information.address %></p>
+            </div>
+        
+            <!-- Order Items -->
+
+            <h4 class="m-4">Ordered product</h4>
+
+            <ul class="list-group m-4">
+                <% information.items.forEach((item) => { %>
+                    <li class="list-group-item d-flex justify-content-between align-items-center order-item">
+                        <div class="d-flex align-items-center">
+                            <img src="<%= item.productImage %>" alt="<%= item.productName %>" style="width: 70px; height: 70px;" class="me-3 order-item-image">
+                            <div>
+                                <h6 class="mb-0 order-item-name"><%= item.productName %></h6>
+                                <small class="text-muted order-item-quantity">Quantity: <%= item.quantity %></small>
+                            </div>
+                        </div>
+                        <div class="text-danger order-item-price">&#8377;<%= item.price %></div>
+                    </li>
+                <% }); %>
+            </ul>
+
+
+
+
+            <div class="d-flex justify-content-between ">
+                <div class="m-4 info-box  ">
+                    <h5>Payment Method:</h5>
+                    <p class="delivery-address"><%= information.paymentMethod %></p>
+                </div>
+                <div class="m-4 info-box">
+                    <h5>Coupon Applied:</h5>
+                    <p class="delivery-address"><%= information?.couponCode %></p>
+                </div>
+                <div class="m-4 info-box">
+                    <h5>Discount Given:</h5>
+                    <p class="delivery-address">&#8377; <%= information?.discountgiven %></p>
+                </div>
+                <div class="m-4 info-box">
+                    <h5>Delivery Charges:</h5>
+                    <p class="delivery-address">&#8377; <%= information?.DeliveryCharge %></p>
+                </div>
+            </div>
+            
+           
+
+
+            <h4 class="m-4 ">Order status</h4>
+            <div class="d-flex justify-content-center align-items-center">
+                <% if (information?.Status === "pending" || information?.Status === "shipped" || information?.Status === "delivered") { %>
+                    <div class="status-container">
+                        <i class="fa-solid fa-clock" style="color: #00cc00;"></i>
+                        <span style="color:#006600;">Pending</span>
+                    </div>
+                <% } %>
+                
+               
+            
+                <% if (information?.Status === "shipped" || information?.Status === "delivered") { %>
+                    <i class="fas fa-arrow-right" style="color:#006600; width: 100px;"></i>
+                
+                    <div class="status-container">
+                        <i class="fa-solid fa-truck" style="color: #00cc00;"></i>
+
+                        <span style="color:#006600;">Shipped</span>
+                    </div>
+                <% } %>
+                
+
+
+                <% if (information?.Status === "delivered") { %>
+                    <i class="fas fa-arrow-right" style="color: #006600; width: 100px;"></i>
+                  
+                    <div class="status-container">
+                        <i class="fa-solid fa-circle-check" style="color: #00cc00;;"></i>
+                        <span style="color:#006600;">Delivered</span>
+                    </div>
+                <% } %>
+            
+              
+            
+            </div>
+            <br>
+            
+            
+
+
+        
+
+
+
+            
+
+        </div>
+        
+       
+
+      
+        
+
+
+
+    </div>
+    </div>
+<%-include("../partials/footer.ejs")%>
+
+
+
+
+
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: rgb(242, 239, 239);
+            }
+
+            .sidebar {
+                height: auto;
+                width: 200px;
+                background-color: #333;
+                padding-top: 20px;
+                color: white;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar li {
+                padding: 15px;
+                font-size: 14px;
+                cursor: pointer;
+                border-bottom: 1px solid #555;
+                transition: background-color 0.3s;
+            }
+
+            .sidebar li:hover {
+                background-color: #555;
+            }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #fff;
+                display: block;
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    width: 100%;
+                    padding: 0px;
+                }
+            }
+
+
+            #example_filter {
+                float: right;
+            }
+
+
+
+            #example thead th {
+                background-color: #3d3d3d;
+                /* Set background color for header cells */
+                color: #fff;
+                /* Set text color for header cells */
+            }
+
+            #example tbody td {
+                background-color: #ffffff;
+                /* Set background color for body cells */
+                color: #333;
+                /* Set text color for body cells */
+            }
+
+
+
+            .liness {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #sl,
+            #item,
+            #qyt,
+            #delivery,
+            #cgst,
+            #sgst,
+            #price {
+                padding: 5px;
+                /* Adjust padding as needed */
+            }
+
+            #sl {
+                width: 5%;
+            }
+
+            #item {
+                width: 15%;
+            }
+
+            #qyt {
+                width: 10%;
+            }
+
+            #delivery {
+                width: 20%;
+            }
+
+            #cgst {
+                width: 10%;
+            }
+
+            #sgst {
+                width: 15%;
+            }
+
+            #price {
+                width: 15%;
+            }
+
+
+
+
+
+            .status-container {
+                display: flex;
+                align-items: center;
+                margin-right: 15px;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: rgb(242, 239, 239);
+              
+            }
+            
+            .status-container i {
+                margin-right: 10px;
+                font-size: 20px;
+            }
+            
+            .status-container span {
+                color: #333;
+                font-weight: bold;
+                font-size: 18px;
+            }
+            
+            .info-box {
+                background-color: rgb(242, 239, 239);
+                padding: 10px;
+                border-radius: 5px;
+              
+             
+            }
+            
+         
+            
+        </style>
+
+
+
+
+
+        <script>
+            new DataTable("#example", {
+                ordering: false // Disable sorting
+            });
+        </script>

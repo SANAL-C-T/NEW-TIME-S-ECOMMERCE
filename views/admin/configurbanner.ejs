@@ -1,0 +1,177 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container">
+    <!-- Section One -->
+    <div class="sectionOne">
+        <h2>SECTION ONE</h2>
+        <form action="/admin/save/sectionOne" method="post" enctype="multipart/form-data">
+            <h3>Add banner Images for section one</h3>
+            <div class="d-flex justify-content-between flex-wrap">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 2"></div>
+                <input type="file" name="bannerImage2" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            </div>
+        
+            
+            <!-- Add text for the banner -->
+            <h3>Add text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText">
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">SAVE</button>
+        </form>
+    </div>
+
+    <!-- Section Two -->
+    <div class="sectionTwo">
+        <h2>SECTION TWO</h2>
+        <form action="/admin/save/sectionTwo" method="post" enctype="multipart/form-data">
+            <h3>Add banner Images for section Two</h3>
+            <div class="d-flex justify-content-between flex-wrap">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 2"></div>
+                <input type="file" name="bannerImage2"  class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            </div>
+            
+            
+            <!-- Add text for the banner -->
+            <h3>Add text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText">
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">SAVE</button>
+        </form>
+    </div>
+
+    <!-- Section Three -->
+    <div class="sectionThree">
+        <h2>SECTION THREE</h2>
+        <form action="/admin/save/sectionThree" method="post" enctype="multipart/form-data">
+            <h3>Add banner Images for section Three</h3>
+            <div class="d-flex justify-content-between flex-wrap">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 2"></div>
+                <input type="file" name="bannerImage2" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="" alt="Banner Image 3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*">
+            </div>
+            </div>
+            <!-- Add text for the banner -->
+            <h3>Add text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText">
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">SAVE</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .sectionOne, .sectionTwo, .sectionThree {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .image-placeholder {
+        width: 200px;
+        height: 150px;
+        border: 1px solid black;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .image-placeholder img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>

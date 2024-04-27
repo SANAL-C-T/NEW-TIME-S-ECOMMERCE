@@ -1,0 +1,183 @@
+<%- include("../partials/userloggedheder.ejs") %>
+<div class="container mt-3 mb-3   ">
+    <div class="d-flex">
+        <div class="btn btn-primary btn-sm  mx-2 m-2 "  onclick="sortNew('<%=selectedProduct%>')">New posts</div>
+        <div class="btn btn-primary btn-sm mx-2 m-2"   onclick="sorthighestStar('<%=selectedProduct%>')" >Highest stars</div>
+        <div class="btn btn-primary btn-sm mx-2 m-2 "  onclick="sortLowestStar('<%=selectedProduct%>')">Lowest stars</div>
+    </div>
+    
+    <% if (viewRev != null) { %>
+        <% viewRev.forEach((x) => { %>
+            <div class="review-item">
+                <div class="username"><%= x.username %></div>
+                <div class="comment"><%= x.comment %></div>
+                <div class="rating">Rating: <%= x.rating %></div>
+                <div class="time">Posted: <%= x.formattedTime %></div>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <div class="no-reviews"><h3>No reviews available.</h3></div>
+    <% } %>
+
+</div>
+
+<%- include("../partials/footer.ejs") %>
+
+<style>
+    .review-item {
+        border: 1px solid #0a0909;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f2f2f2;
+        border-radius: 10px; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+    }
+    
+    .username {
+        font-weight: bold;
+    }
+    
+    .comment {
+        margin-bottom: 5px;
+    }
+    
+    .rating {
+        color: #FFA500; 
+        font-weight: bold;
+    }
+    
+    .no-reviews {
+        font-style: italic;
+        color: #f90303;
+    }
+</style>
+
+<script>
+    function sortNew(selectedProduct) {
+    
+        fetch(`/sortNew/${selectedProduct}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data:", data);
+            const reviewContainer = document.querySelector('.container');
+            reviewContainer.innerHTML = '';
+
+            if (data && data.viewRev && data.viewRev.length > 0) {
+                data.viewRev.forEach(review => {
+                    const reviewItem = document.createElement('div');
+                    reviewItem.classList.add('review-item');
+                    reviewItem.innerHTML = `
+                        <div class="username">${review.username}</div>
+                        <div class="comment">${review.comment}</div>
+                        <div class="rating">Rating: ${review.rating}</div>
+                        <div class="time">Posted: ${review.Time}</div>
+                    `;
+                    reviewContainer.appendChild(reviewItem);
+                });
+            } else {
+                const noReviews = document.createElement('div');
+                noReviews.classList.add('no-reviews');
+                noReviews.innerHTML = '<h3>No reviews available.</h3>';
+                reviewContainer.appendChild(noReviews);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function sorthighestStar(selectedProduct) {
+        fetch(`/sorthighestStar/${selectedProduct}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data:", data);
+            const reviewContainer = document.querySelector('.container');
+            reviewContainer.innerHTML = '';
+
+            if (data && data.viewRev && data.viewRev.length > 0) {
+                data.viewRev.forEach(review => {
+                    const reviewItem = document.createElement('div');
+                    reviewItem.classList.add('review-item');
+                    reviewItem.innerHTML = `
+                        <div class="username">${review.username}</div>
+                        <div class="comment">${review.comment}</div>
+                        <div class="rating">Rating: ${review.rating}</div>
+                        <div class="time">Posted: ${review.formattedTime}</div>
+                    `;
+                    reviewContainer.appendChild(reviewItem);
+                });
+            } else {
+                const noReviews = document.createElement('div');
+                noReviews.classList.add('no-reviews');
+                noReviews.innerHTML = '<h3>No reviews available.</h3>';
+                reviewContainer.appendChild(noReviews);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function sortLowestStar(selectedProduct) {
+
+        fetch(`/sortLowestStar/${selectedProduct}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("data:", data);
+            const reviewContainer = document.querySelector('.container');
+            reviewContainer.innerHTML = '';
+
+            if (data && data.viewRev && data.viewRev.length > 0) {
+                data.viewRev.forEach(review => {
+                    const reviewItem = document.createElement('div');
+                    reviewItem.classList.add('review-item');
+                    reviewItem.innerHTML = `
+                        <div class="username">${review.username}</div>
+                        <div class="comment">${review.comment}</div>
+                        <div class="rating">Rating: ${review.rating}</div>
+                        <div class="time">Posted: ${review.formattedTime}</div>
+                    `;
+                    reviewContainer.appendChild(reviewItem);
+                });
+            } else {
+                const noReviews = document.createElement('div');
+                noReviews.classList.add('no-reviews');
+                noReviews.innerHTML = '<h3>No reviews available.</h3>';
+                reviewContainer.appendChild(noReviews);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>

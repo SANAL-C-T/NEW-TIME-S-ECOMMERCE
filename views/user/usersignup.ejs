@@ -1,0 +1,133 @@
+<%-include("../partials/header.ejs")%>
+
+
+
+<div class="row justify-content-center align-items-center p-2">
+  <div class="text-center">
+    <img src="/image/TIME S.jpg" />
+  </div>
+</div>
+
+<div >
+  <div class="row justify-content-center align-items-center ">
+    <div class="col-md-6">
+      
+      <form onsubmit="return validateSignup()" action="/signup" method="post">
+        <div class="m-3">
+          <label for="username" class="form-label"><i class="fa-solid fa-user" style="color: #010c14;"></i>     Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div id="usernameMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="email" class="form-label"><i class="fa-solid fa-envelope" style="color: #01090f;"></i>   Email:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Enter your email id"
+          />
+        </div>
+        <div id="emailMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="phone" class="form-label"><i class="fa-solid fa-phone" style="color: #010f1a;"></i>    Phone number:</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            name="phone"
+            placeholder="Enter your phone number"
+          />
+        </div>
+        <div id="phoneMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="password" class="form-label"><i class="fa-solid fa-lock" style="color: #010d16;"></i>   Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            oninput="checkStrong()"
+
+          />
+        </div>
+        <div id="passwordMessage" class="text-danger m-3"></div>
+        <div class="message-container">
+          <div id="S1Message" class="crossmark">Should contain atleast a uppercase alphabet.</div>
+          <div id="S2Message" class="crossmark">Should contain atleast a special character.</div>
+          <div id="S3Message" class="crossmark">Should contain atleast a number.</div>
+          <div id="S4Message" class="crossmark">Should contain atleast 9 characters.</div>
+      </div>
+      
+
+        <div class="m-3">
+          <label for="Referralcode" class="form-label"><i class="fa-solid fa-share-nodes" style="color: #010c14;"></i> Referral code:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="Referralcode"
+            name="Referralcode"
+            placeholder="Enter your username"
+          />
+        </div>
+
+     
+
+
+
+        <button  type="submit" value="signup"  class="btn btn-warning mb-5 m-3  ">SIGNUP</button>
+
+
+        <% if (locals.errorMessage) { %>
+          <div id="errorAlert" class="alert alert-danger" role="alert">
+              <%= locals.errorMessage %>
+          </div>
+          
+      <% } %>
+
+
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<%-include("../partials/footer.ejs")%>
+
+
+
+
+<style>
+.checkmark {
+  position: relative;
+  padding-left: 25px; /* Add padding to make space for the check mark */
+}
+
+.checkmark::before {
+  content: '\2713'; /* Unicode for check mark symbol */
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 20px; 
+  color: #26cc29; 
+}
+
+
+.checkmark {
+    color: rgb(4, 146, 4); 
+}
+.crossmark {
+    color: rgb(255, 0, 72); 
+}
+</style>

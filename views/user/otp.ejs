@@ -1,0 +1,104 @@
+<%-include("../partials/otpheader.ejs")%>
+
+<div class="row justify-content-center align-content-center">
+    <div class="col-md-6 p-5">
+        <h2>Verify your Email</h2>
+        <h4>Send OTP will be valid for the next 1 minute.</h4>
+
+        <div>
+            <form method="post" action="/verifyOtp">
+                <div>
+                    <input type="text" maxlength="1" name="otp1" id="verificationCode" oninput="validateNumericInput(this)" required>
+                    <input type="text" maxlength="1" name="otp2" id="verificationCode" oninput="validateNumericInput(this)" required>
+                    <input type="text" maxlength="1" name="otp3" id="verificationCode" oninput="validateNumericInput(this)" required>
+                    <input type="text" maxlength="1" name="otp4" id="verificationCode" oninput="validateNumericInput(this)" required>
+                    <input type="text" maxlength="1" name="otp5" id="verificationCode" oninput="validateNumericInput(this)" required>
+                </div>
+                <div>
+                    <button id="otpButton" type="submit" style.display = 'block'>Verify</button>
+                </div>
+               <div class="mt-3 text-danger">
+                <div id="otpTimer">Time remaining: <span id="timer"></span></div>
+               </div>
+                   
+              
+            </form>
+
+            <button id="otpBut" class="mt-3 mb-3 " style="display: none;"><a href="/resentOtp">Resend OTP</a></button>
+
+        </div>
+                        <% if (locals.errorMessage) { %>
+                            
+                            <div id="errorMessageContainer" class="alert alert-danger" role="alert">
+                                <%= locals.errorMessage %>
+                            </div>
+<script>
+    setTimeout(function(){
+        var errorAlert=document.getElementById('errorMessageContainer')
+        if(errorAlert){
+            errorAlert.style.display="none"
+            document.getElementById('otpBut').style.display = 'block';
+        }
+    },40000)
+</script>
+
+
+
+
+                        <% } %>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function validateNumericInput(input) {
+                input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+            }
+
+            // Function to start the OTP timer
+            function startOTPTimer(durationInSeconds) {
+                let timer = durationInSeconds;
+                const timerElement = document.getElementById("timer");
+
+                const countdown = setInterval(function () {
+                    const minutes = Math.floor(timer / 60);
+                    const seconds = timer % 60;
+
+                    timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                    if (--timer < 0) {
+                        clearInterval(countdown);
+                        timerElement.textContent = "Time expired!";
+                        document.getElementById('otpBut').style.display = 'block';
+                        document.getElementById("otpButton").style.display= "none";
+                    }
+                }, 1000);
+            }
+
+
+
+            const otpDuration = 60;
+
+            var errorMessageContainer = document.getElementById('errorMessageContainer');
+            if (errorMessageContainer) {
+                var isActive = errorMessageContainer.style.display !== 'none';
+                console.log('Is active:', isActive);
+            }
+
+      //if error is not active this will work,      
+if(!isActive){
+    startOTPTimer(otpDuration);
+}
+            
+                
+            
+           
+
+
+           
+        </script>
+    </div>
+
+    <%-include("../partials/footer.ejs")%>
+</div>

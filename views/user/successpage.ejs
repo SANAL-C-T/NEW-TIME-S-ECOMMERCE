@@ -1,0 +1,51 @@
+<%- include("../partials/userloggedheder.ejs") %>
+
+<div class="container-fluid text-center  bx1  mb-5 mt-5">
+    <h1>Payment Successful</h1>
+    <p>Thank you for your order!</p>
+    <p>Your order has been placed successfully.</p>
+
+    <p>We will send you the invoice via email shortly.</p>
+    <p><a href="/orderHistory">Go to Order History</a></p>
+    <p>Auto download invoice</p>
+</div>
+
+
+<%- include("../partials/footer.ejs") %>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+    .bx1  {
+        max-width: 600px;
+        margin: 100px auto;
+        background-color: #ddfee6;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h1 {
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    p {
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

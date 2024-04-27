@@ -1,0 +1,241 @@
+<%- include("../partials/adminheader.ejs") %>
+<div class="container">
+  <h2 class="mt-4 mb-4">ADD CATEGORY DETAIL </h2>
+
+  <form onsubmit="return validation()"  method="post" action="/admin/category">
+    <div class="mb-3">
+      <label for="categoryName" class="form-label">Category Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="categoryName"
+        name="categoryName"
+        required
+      />
+    </div>
+<div id="carterror" class="text-danger m-3 "></div>
+    <div class="mb-3">
+      <label for="Categorystatus" class="form-label">Category status</label>
+      <select
+        class="form-select"
+        id="Categorystatus"
+        name="Categorystatus"
+        required
+      >
+        <option value="active">TRUE (ACTIVE)</option>
+        <option value="inactive">FALSE (IN ACTIVE)</option>
+      </select>
+    </div>
+
+    <% if (locals.errormessage) { %>
+      <div class="error-message">
+        <%= locals.errormessage %>
+      </div>
+    <% } %>
+    
+
+
+    <button type="submit" class="btn btn-success ">Add Category</button>
+  </form>
+
+  <h2 class="mt-4 mb-4">CATEGORY LIST</h2>
+  <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width: 100%">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>CATEGORY</th>
+        <th>STATUS</th>
+        <th>OPTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%urlData.cat.forEach(ca => {%>
+      <tr>
+        <td><%=ca._id%></td>
+        <td><%=ca.categoryName%></td>
+        <td><%=ca.Categorystatus%></td>
+        <td>
+          <a href="/admin/editCategory/<%=ca.id%>" class="btn btn-primary btn-sm px-4"
+            >EDIT</a
+          >
+
+          <!-- Modal trigger  restore button -->
+
+          <%if(ca.Categorystatus === false) {%>
+          <button
+            type="button"
+            class="btn btn-success btn-sm restore-button"
+            data-bs-toggle="modal"
+            data-bs-target="#modalId1"
+            data-category-id1="<%= ca.id %>"
+          >
+            RESTORE
+          </button>
+
+          <% }%>
+
+          <!-- Modal trigger  delete button -->
+
+          <% if (ca.Categorystatus === true) { %>
+
+          <button
+            type="button"
+            class="btn btn-danger btn-sm delete-button"
+            data-bs-toggle="modal"
+            data-bs-target="#modalId"
+            data-category-id="<%= ca.id %>"
+          >
+            DELETE
+          </button>
+          <% } %>
+        </td>
+      </tr>
+      <%})%>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Body for delete button -->
+<div
+  class="modal fade"
+  id="modalId"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Warning</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">Admin do you want to delete the category</div>
+      <div class="modal-footer">
+        <a id="deleteCategoryLink" class="btn btn-danger"
+          >YES I WANT TO DELETE</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Body for restore button -->
+
+<div
+  class="modal fade"
+  id="modalId1"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">Warning</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">Admin do you want to restore this category</div>
+      <div class="modal-footer">
+        <a id="RestoreCategoryLink" class="btn btn-success"
+          >YES I WANT TO RESTORE</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize DataTable
+    new DataTable("#example");
+
+    // Get the modal elements
+    const modalElement = document.getElementById("modalId");
+    const restoremodalElement = document.getElementById("modalId1");
+//getting the id of all the link to proceed further
+    const deleteCategoryLink = document.getElementById("deleteCategoryLink");
+    const restoreCategoryLink = document.getElementById("RestoreCategoryLink");
+
+    // Initialize modals
+    const myModal = new bootstrap.Modal(modalElement);
+    const restoreModal = new bootstrap.Modal(restoremodalElement);
+
+    // Get all delete buttons
+    const deleteButtons = document.querySelectorAll(".delete-button");
+    const restoreButtons = document.querySelectorAll(".restore-button");
+
+    // Adding click event listener to each delete button
+    deleteButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        // Get the category id from the data attribute
+        const categoryId = this.getAttribute("data-category-id");
+
+        // Update the href  of the delete link with the category id
+        deleteCategoryLink.href = "/admin/deleteCategory/" + categoryId;
+
+        // Open the delete modal
+        myModal.show();
+      });
+    });
+
+    // Adding click event listener to each restore button
+    restoreButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        // Get the category id from the data attribute
+        const categoryId = this.getAttribute("data-category-id1");
+
+        // Update the href attribute of the restore link with the category id
+        restoreCategoryLink.href = "/admin/restoreCategory/" + categoryId;
+
+        // Open the restore modal
+        restoreModal.show();
+      });
+    });
+  });
+
+
+
+  function validation() {
+    let categoryName = document.getElementById('categoryName').value;
+    let carterror = document.getElementById('carterror');
+
+    // Regular expression to match only alphabets
+    let alphabetRegex = /^[a-zA-Z]+$/;
+
+    if (categoryName.trim() === "") {
+      carterror.innerHTML = "Category name cannot be empty";
+      return false;
+    } else if (!alphabetRegex.test(categoryName)) {
+      carterror.innerHTML = "Category name should contain only alphabets";
+      return false;
+    } else {
+      // Clear previous error messages
+      carterror.innerHTML = "";
+      return true;
+    }
+  }
+</script>
+
+<%- include("../partials/adminfooter.ejs") %>

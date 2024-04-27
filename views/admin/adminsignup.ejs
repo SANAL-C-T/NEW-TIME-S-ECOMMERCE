@@ -1,0 +1,89 @@
+<%-include("../partials/header.ejs")%>
+<h1> admin sign up</h1>
+
+
+
+
+<div class="row justify-content-center align-items-center p-2">
+  <div class="text-center">
+    <img src="/image/TIME S.jpg" />
+  </div>
+</div>
+
+<div >
+  <div class="row justify-content-center align-items-center ">
+    <div class="col-md-6">
+      
+      
+
+
+
+      <form onsubmit="return validateSignup()" action="adminsignup" method="post">
+        <div class="m-3">
+          <label for="username" class="form-label"><i class="fa-solid fa-user" style="color: #010c14;"></i>     Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div id="usernameMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="email" class="form-label"><i class="fa-solid fa-envelope" style="color: #01090f;"></i>   Email:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Enter your email id"
+          />
+        </div>
+        <div id="emailMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="phone" class="form-label"><i class="fa-solid fa-phone" style="color: #010f1a;"></i>    Phone number:</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="phone"
+            name="phone"
+            placeholder="Enter your phone number"
+          />
+        </div>
+        <div id="phoneMessage" class="text-danger m-3"></div>
+
+        <div class="m-3">
+          <label for="password" class="form-label"><i class="fa-solid fa-lock" style="color: #010d16;"></i>   Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+          />
+        </div>
+        <div id="passwordMessage" class="text-danger m-3"></div>
+
+
+        <button  type="submit" value="signup"  class="btn btn-warning mb-5 m-3  ">SIGNUP</button>
+
+
+        <% if (locals.errorMessage) { %>
+          <div id="errorAlert" class="alert alert-danger" role="alert">
+              <%= locals.errorMessage %>
+          </div>
+          
+      <% } %>
+
+
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<%-include("../partials/footer.ejs")%>

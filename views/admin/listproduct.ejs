@@ -1,0 +1,192 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container">
+  <div class="mt-4 mx-5 ">
+    <a href="/admin/products"> <button>ADD PRODUCT</button></a>
+  </div>
+
+  <h1 class="mx-5 "><%= urlData.pageTitle %></h1>
+
+  <br />
+  <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width: 100%">
+    <thead>
+      <tr>
+        <th>NAME</th>
+        <th>IMAGE</th>
+        <th>DESCRIPTION</th>
+        <th>STOCK</th>
+        <th>CATEGORY</th>
+        <th>STATUS</th>
+        <th>PRICE</th>
+        <th>ACTION</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% urlData.pro.forEach(product => { %>
+      <tr>
+        <td><%= product.productName %></td>
+        <td class="img-fluid">
+          <img src="<%= product.productImage[0].image1 %>" style="width: 90px;">
+      </td>
+      
+        <td><%= product.productDescription %></td>
+        <td><%= product.stockCount %></td>
+        <td><%= product.productCategory.categoryName %></td>
+        <td><%= product.isDeleted %></td>
+        <td><%= product.productPrice %></td>
+
+        <td>
+          <a
+            href="/admin/editProduct/<%= product._id %>"
+            class="btn btn-primary btn-sm w-100 my-2 "
+          >EDIT</a>
+          <br />
+         
+
+          <% if(product.isDeleted === false) { %>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm delete-button w-100  my-2"
+              data-bs-toggle="modal"
+              data-bs-target="#modalId"
+              delete-button-attribute="<%=product._id%>"
+            >
+              DELETE
+            </button>
+          <% } else { %>
+            <button
+              type="button"
+              class="btn btn-success btn-sm restore-button w-100 my-2 "
+              data-bs-toggle="modal"
+              data-bs-target="#modalId1"
+              restore-button-attribute="<%=product._id%>"
+            >
+              RESTORE
+            </button>
+          <% } %>
+
+          <div
+            class="modal fade"
+            id="modalId"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            role="dialog"
+            aria-labelledby="modalTitleId"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+              role="document"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalTitleId">Warning</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  Admin, do you want to delete this product?
+                </div>
+                <div class="modal-footer">
+                  <a id="deleteproduct" class="btn btn-danger">YES I WANT TO DELETE</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+       
+
+          <div
+            class="modal fade"
+            id="modalId1"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            role="dialog"
+            aria-labelledby="modalTitleId"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+              role="document"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalTitleId">Warning</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  Admin, do you want to restore this product?
+                </div>
+                <div class="modal-footer">
+                  <a id="restoreproduct" class="btn btn-success">YES I WANT TO RESTORE</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <br />
+
+  <script>
+    const modalElement = document.getElementById("modalId");
+    const restoremodalElement = document.getElementById("modalId1");
+
+    // Initialize modals
+    const myModal = new bootstrap.Modal(modalElement);
+    const restoreModal = new bootstrap.Modal(restoremodalElement);
+
+    // getting the buttons.
+    const deletebuttons = document.querySelectorAll('.delete-button');
+    const restorebuttons = document.querySelectorAll('.restore-button');
+
+    // add event listeners on the delete button.
+    deletebuttons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const catid = button.getAttribute("delete-button-attribute");
+        document.getElementById('deleteproduct').href = "/admin/DeleteProduct/" + catid;
+        modalElement.show();
+      });
+    });
+
+    // add event listeners on all restore buttons.
+    restorebuttons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const catid = button.getAttribute("restore-button-attribute");
+        document.getElementById('restoreproduct').href = "/admin/RestoreProduct/" + catid;
+        restoremodalElement.show();
+      });
+    });
+
+    new DataTable("#example", {
+      ordering: false // Disable sorting
+  });
+
+
+  </script>
+
+  <style>
+ 
+    #example {
+        width: 100%;
+        
+    }
+</style>
+
+
+  <%- include("../partials/adminfooter.ejs") %>
+</div>

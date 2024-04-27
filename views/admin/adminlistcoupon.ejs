@@ -1,0 +1,141 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container mt-3">
+    
+  <div class="mt-4">
+    <a href="/admin/coupon">
+      <button>ADD COUPON</button>
+    </a>
+  </div>
+  <br>
+
+  <div class="table-responsive">
+    <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width: 100%">
+      <thead>
+        <tr>
+          <th>CODE</th>
+          <th>TYPE</th>
+          <th>DESCRIPTION</th>
+          <th>DISCOUNT</th>
+          <th>CREATED DATE</th>
+          <th>EXPIRY DATE</th>
+          <th>EDIT</th>
+          <th>DELETE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% urlData.couponList.forEach((code) => { %>
+          <tr>
+            <td><%= code.couponCode %></td>
+            <td><%= code.offerType %></td>
+            <td><%= code.OfferDescription %></td>
+            <td><%= code.discount %></td>
+            <td><%= code.createdDate %></td>
+            <td><%= code.expiryDate %></td>
+            <td>
+              <a href="/admin/editcoupon/<%= code._id %>">
+              <button class="btn btn-warning btn-sm">EDIT</button></a>
+            </td>
+            <td>
+              <form method="POST" action="/admin/deletecoupon/<%= code._id %>" id="deleteForm">
+                <button type="button" class="btn btn-danger btn-sm" onclick="showDeleteConfirmation()">DELETE</button>
+            </form>
+            
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<%- include("../partials/adminfooter.ejs") %>
+
+
+
+
+<script>
+
+  new DataTable("#example");
+
+
+
+
+  function validateForm() {
+ 
+    const couponCode = document.getElementById("couponCode").value;
+    const offerType = document.getElementById("offerType").value;
+    const couponValue = document.getElementById("couponValue").value;
+    const couponCodeDescription = document.getElementById("couponCodeDescription").value;
+    const addDate = document.getElementById("addDate").value;
+    const expiryDate = document.getElementById("ExpiryDate").value;
+
+    let couponCodeError = document.getElementById("couponCodeError");
+    let couponValueError = document.getElementById("couponValueError");
+    let couponCodeDescriptionError = document.getElementById("couponCodeDescriptionError");
+    let addDateError = document.getElementById("addDateError");
+    let expiryDateError = document.getElementById("ExpiryDateError");
+
+    let isValid = true;
+
+  
+    if (couponCode.trim() === "") {
+      couponCodeError.innerHTML = "Couponcode cannot be empty";
+      isValid = false;
+    } else {
+      couponCodeError.innerHTML = "";
+    }
+
+    if (couponValue.trim() === "") {
+      couponValueError.innerHTML = "Code value cannot be empty";
+      isValid = false;
+    } else {
+      couponValueError.innerHTML = "";
+    }
+
+    if (couponCodeDescription.trim() === "") {
+      couponCodeDescriptionError.innerHTML = "Couponcode Description cannot be empty";
+      isValid = false;
+    } else {
+      couponCodeDescriptionError.innerHTML = "";
+    }
+
+
+    if (addDate.trim() === "") {
+      addDateError.innerHTML = "Add date cannot be empty";
+      isValid = false;
+    } else {
+      addDateError.innerHTML = "";
+    }
+
+    if (expiryDate.trim() === "") {
+      expiryDateError.innerHTML = "Expiry date cannot be empty";
+      isValid = false;
+    } else {
+      expiryDateError.innerHTML = "";
+    }
+
+    return isValid;
+  }
+
+
+
+  function showDeleteConfirmation() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('deleteForm').submit();
+        }
+    });
+}
+
+</script>
+

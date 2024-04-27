@@ -1,0 +1,119 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button{
+    border-style: hidden;
+    padding: 4px;
+    border: solid black 1.5px;
+}
+
+
+#b1{
+    background-color: rgb(253, 157, 4);
+
+}
+#b1:hover{
+    background-color: #f7f322;
+}
+
+#b2{
+    background-color: rgb(253, 157, 4);
+}
+#b2:hover{
+    background-color: #f7f322;
+}
+
+.sideMenu{
+    background-color: #fcfafa;
+
+    width: max-content;
+
+}
+
+
+.sideMenu a{
+    display: block;
+    color: black;
+    background-color: rgb(228, 228, 222);
+    padding: 10px;
+    text-decoration: none;
+    
+}
+.sideMenu a:hover{
+    background-color: rgb(246, 177, 3);
+    border: solid black 1.5px;
+
+}
+
+
+
+
+
+.banner img{
+    border: solid black 1.5px;
+    border-radius: 5px;
+}
+
+
+
+
+/* .notification{
+    position: fixed;
+    top: 30px;
+    right: 20px;
+    background: linear-gradient(to right,rgba(108, 241, 110, 0.714),rgba(74, 168, 2, 0.766) );
+   
+}
+.toast_success{
+    position: relative;
+    padding: 10px;
+    color: #191717;
+    margin:10px;
+    display: grid;
+    width: 200px;
+} */
+
+#imageview{
+
+display: flex;
+justify-content: space-around;
+
+}
+
+#imageview img{
+   
+    width: 100px;
+    margin-top:20px ;
+    margin-bottom:20px ;
+    }
+
+    #imageview input{
+       
+        height: 35px;
+        
+        }
+
+        @media only screen and (max-width: 768px) {
+            #imageview{
+              
+                display: block;
+            }
+           
+           
+        }
+
+
+        #example thead th {
+            background-color: #333; 
+            color: #fff; 
+        }
+        
+       
+        #example tbody td {
+            background-color: #fff; 
+            color: #333;
+        }

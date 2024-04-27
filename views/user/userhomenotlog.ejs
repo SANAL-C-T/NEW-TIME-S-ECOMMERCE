@@ -1,0 +1,280 @@
+<%-include("../partials/header.ejs")%>
+
+<div id="carouselExampleControls0" class="carousel slide parrentBanner" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active   banner0">
+       
+        <img src="<%=Banner1.bannerImage1%>" class="d-block w-100   onePIC0">
+      </div>
+
+
+      <div class="carousel-item  banner">
+        <img src="<%=Banner1.bannerImage2%>" class="d-block w-100  onePIC0">
+      </div>
+
+      <div class="carousel-item  banner">
+        <img src="<%=Banner1.bannerImage3%>" class="d-block w-100 onePIC0">
+      </div>
+
+    </div>
+
+
+    
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls0" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls0" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+
+ <div class="carousel-caption  d-md-block top-0   bannerCaption0" >
+    <h1 class="mt-5 "><%=Banner1.MainTextContent%></h1>
+    <h4><%=Banner1.SubTextContent%></h4>
+</div>
+  </div> 
+ 
+</div>  
+
+<br>
+
+<div class="container text-center  "><p><%=Banner1.introductionTextContent%></p>
+<br>
+<div id="tx1">
+  <h4><%=Banner1.heading%></h4>
+  <h5 class="hologram-text"><%=Banner1.subHeading%></h5>
+</div>
+
+
+</div>
+
+<br>
+
+<section style="background-color: #e8e8e8;">
+  <div class="text-center container py-5">
+    <div class="row">
+<!-- ---------------------------------------------------------------------------------------------- -->
+<% for (let i = 0; i < 4 && i < loadProduct.length; i++) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100">
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        
+          <img src="<%= loadProduct[i].productImage[0].image1 %>" id="proimg" class="w-100" />
+      
+      </div>
+      <div class="card-body  bodyimg">
+       
+          <div><h5 class="card-title mb-3" id="txtcrd"><%= loadProduct[i].productName %></h5></div>
+       
+        <a href="/product1" class="text-reset">
+          <button class="m-2 " id="btBYNOW">LOGIN FOR MORE</button>
+        </a>
+        <h6 class="mb-3 ">&#8377;  <%= loadProduct[i].productPrice %></h6>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+
+<!--  --------------------------------------------------------------------------------------- -->
+    </div>  <!-- row closing -->
+</section>
+
+
+
+ <!-- <div>
+ 
+  <div class="container ">
+    <div class="row  justify-content-center ">
+      <div class="col-2">
+    <div>   
+        <video width="100%" height="315"  autoplay muted loop >
+          <source src="../../image/galaxy-watch6-overview-popup03-pc.webm" type="video/webm">
+      </div>
+
+      <div class="col-6">
+        <video width="100%" height="315" autoplay muted loop>
+          <source src="../../image/Garmin _ Venu 2 Plus Fitness Smartwatch _ ECG App.mp4" type="video/webm">
+      </div>
+
+      <div class="col-4">
+        <video width="100%" height="315" autoplay muted loop>
+          <source src="../../image/galaxy-watch6-overview-popup01-pc.webm" type="video/webm">
+      </div>
+</div>
+     
+
+      <div class="col-6">
+        <video width="100%" height="315" autoplay muted loop>
+          <source src="../../image/Galaxy Watch5 _ Watch5 Pro_ Durability _ Samsung.mp4" type="video/mp4">
+      </div>
+
+
+    </div>
+  </div>  -->
+  
+
+  </div>
+
+<!-- here the products of samasung brad is to be displayed,   -->
+<!-- p1 -->
+<!-- p2 -->
+<!-- p3 -->
+
+<div id="bottomCarousel0" class="carousel slide parrentBanner" data-bs-ride="carousel">
+  <div class="carousel-inner">
+      <div class="carousel-item active banner">
+          <img src="<%=Banner2.bannerImage1%>" class="d-block w-100  onePIC0">
+      </div>
+
+      <div class="carousel-item banner">
+          <img src="<%=Banner2.bannerImage2%>" class="d-block w-100 onePIC0">
+      </div>
+
+      <div class="carousel-item banner">
+          <img src="<%=Banner2.bannerImage3%>" class="d-block w-100 onePIC0">
+      </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#bottomCarousel0" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#bottomCarousel0" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+  </button>
+
+<div class="carousel-caption d-md-block  top-0   bannerCaption0">
+  <h1 class="mt-5 "><%=Banner2.MainTextContent%></h1>
+  <h4 ><%=Banner2.SubTextContent%></h4>
+</div>
+
+</div>
+<br>
+<div class="container text-center  "><p><%=Banner2.introductionTextContent%></p>
+<br>
+<div id="tx1">
+  <h4><%=Banner2.heading%></h4>
+  <h5 class="hologram-text"><%=Banner2.subHeading%></h5>
+
+</div>
+ 
+</div>
+
+<section style="background-color: #e8e8e8;">
+  <div class="text-center container py-5">
+    <div class="row">
+<!-- ---------------------------------------------------------------------------------------------- -->
+<% for (let i = 0; i < 4 && i < loadProductA.length; i++) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100">
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        
+          <img src="<%= loadProductA[i].productImage[0].image1 %>" class="w-100" id="proimg" />
+      
+      </div>
+      <div class="card-body  bodyimg">
+      
+          <div><h5 class="card-title mb-3" id="txtcrd"><%= loadProductA[i].productName %></h5></div>
+       
+        <a href="/product1" class="text-reset">
+          <button class="m-2 " id="btBYNOW">LOGIN FOR MORE</button>
+        </a>
+        <h6 class="mb-3">&#8377;  <%= loadProductA[i].productPrice %></h6>
+      </div>
+    </div>
+  </div>
+<% } %>
+<!--  --------------------------------------------------------------------------------------- -->
+    </div>  <!-- row closing -->
+</section>
+
+
+
+
+
+<!-- gramin section -->
+
+
+
+<div id="bottom2Carousel0" class="carousel slide parrent2Banner" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active banner">
+      <img src="<%=Banner3.bannerImage1%>" class="d-block w-100 onePIC0">
+    </div>
+    <div class="carousel-item banner">
+      <img src="<%=Banner3.bannerImage2%>" class="d-block w-100 onePIC0">
+    </div>
+    <div class="carousel-item banner">
+      <img src="<%=Banner3.bannerImage3%>" class="d-block w-100 onePIC0">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#bottom2Carousel0" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#bottom2Carousel0" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+<div class="carousel-caption  d-md-block  top-0  bannerCaption0">
+  <h1 class="mt-5 "><%=Banner3.MainTextContent%></h1>
+  <h4 ><%=Banner3.SubTextContent%></h4>
+</div>
+
+
+</div>
+<div class="container text-center  "><p><%=Banner3.introductionTextContent%></p>
+<br>
+<div id="tx1">
+  <h4><%=Banner3.heading%></h4>
+  <h5 class="hologram-text"><%=Banner3.subHeading%></h5>
+
+</div>
+  
+</div>
+
+
+<section style="background-color: #e8e8e8;">
+  <div class="text-center container py-5">
+    <div class="row">
+<!-- ---------------------------------------------------------------------------------------------- -->
+<% for (let i = 0; i < 4 && i < loadProductG.length; i++) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100">
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        
+          <img src="<%= loadProductG[i].productImage[0].image1 %>" class="w-100"id="proimg" />
+      
+      </div>
+      <div class="card-body  bodyimg">
+        
+          <div><h5 class="card-title mb-3" id="txtcrd"><%= loadProductG[i].productName %></h5></div>
+      
+        <a href="/product1" class="text-reset">
+          <button class="m-2 " id="btBYNOW">LOGIN FOR MORE</button>
+        </a>
+        <h6 class="mb-3">&#8377;  <%= loadProductG[i].productPrice %></h6>
+      </div>
+    </div>
+  </div>
+<% } %>
+<!--  --------------------------------------------------------------------------------------- -->
+    </div>  <!-- row closing -->
+</section>
+
+
+
+
+</div><!--  for maintaining the bootstrap for pages.-->
+<%-include("../partials/footer.ejs")%>
+
+
+   
+
+   
+
+

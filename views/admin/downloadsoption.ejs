@@ -1,0 +1,173 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container  m-3 ">
+  <div class="row">
+      <div class="d flex-column ">
+      
+<button type="button" class="btn btn-success btn-sm  " data-bs-toggle="modal" data-bs-target="#dateModal">
+    By DATE
+  </button>
+  
+
+  <div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="dateModalLabel">Generate Report by Date</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+       
+          <form action="/admin/postDate" method="POST">
+            <div class="mb-3">
+              <label for="startDate" class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="startDate" name="startDate">
+            </div>
+            <div class="mb-3">
+              <label for="endDate" class="form-label">End Date</label>
+              <input type="date" class="form-control" id="endDate" name="endDate">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Report</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+            
+          
+            
+      </div>
+
+
+
+
+      <div class="table-responsive mt-3 ">
+      
+
+        <h5 class="text-center ">SALES REPORT</h5>
+          <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width:100%">
+              <thead>
+                  <tr>
+                    
+                      <th>SL No</th>
+                      <th>USERNAME</th>
+                      <th>INVOICE DATE</th>
+                      <th>INVOICE AMOUNT</th>
+                      <th>PAYMENT METHOD</th>
+                      
+                  
+                  </tr>
+              </thead>
+              <tbody>
+                  <% urlData.salesData.forEach((order, index) => { %>
+                      <tr>
+                          <td><%= index + 1 %></td>
+                          <td><%= order.userid?. username %></td>
+                          <td><%= order?.OrderDate %></td>
+                          <td>&#8377; <%= order?.OrderTotalPrice %></td>
+                          <td><%= order?.paymentMethod %></td>
+                         </tr>
+                  <% }); %>
+              </tbody>
+          </table>
+      
+  </div>
+
+  </div>
+ 
+  <br>
+
+<hr>
+
+  <div class="table-responsive mt-3 ">
+      <h5 class="text-center ">REVENUE DETAILS</h5>
+      <table id="example2"  style="width:100%">
+      <thead>
+          <tr>
+              <th>GENERATED AMOUNT</th>
+            <th> ACTUAL REVENUE </th>
+              <th>CASH ON DELIVERY</th>
+              <th>ONLINE PAYMENT</th>
+              <th>AMOUNT RETURNED</th>
+              <th>AMOUNT CREDITED VIA COUPON CODE</th>
+          </tr>
+      </thead>
+      <tbody>
+          
+              <tr> 
+             
+                  <td>&#8377; <%= urlData?.total %></td>
+                  <td>&#8377; <%= urlData?.actual %></td>
+                  <td>&#8377; <%= urlData.CODtotal %></td>
+                  <td>&#8377; <%= urlData.razorpayTotal %></td>
+                  <td>&#8377; <%= urlData.returned %></td>
+                  <td>&#8377; <%= urlData?.discount %></td>
+                  
+                 </tr>
+       
+      </tbody>
+  </table>
+ 
+<br>
+
+
+</div>
+
+<br>
+
+<div class="table-responsive mt-3 ">
+    <h5 class="text-center ">COUNT DETAILS</h5>
+    <table id="example2"  style="width:100%">
+    <thead>
+        <tr>
+            <th>SALE COUNT</th>
+            <th>RETURN COUNT</th>
+            <th>DELIVERED COUNT</th>
+            <th>DISCOUNTED COUNT</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+            <tr> 
+                <td><%= urlData?.count %></td>
+                <td><%= urlData?.returncount %></td>
+                <td><%= urlData?.deliveredCount %></td>
+                <td><%= urlData?.discountedCount%></td>
+            
+    </tbody>
+</table>
+<br>
+<div class="d-flex justify-content-between ">
+    <a href="/admin/downloadrevenue"><button>DOWNLOAD REVENUE DETAILS IN EXCEL FILE</button></a>
+    <br>
+    <br>
+   <a href="/admin/downloadrevenuepdf"> <button>DOWNLOAD REVENUE DETAILS IN PDF</button></a>
+
+</div>
+
+<br>
+<br>
+
+</div>
+
+
+
+<%- include("../partials/adminfooter.ejs") %>
+
+  
+
+
+<script>
+
+  new DataTable("#example", {
+    ordering: false // Disable sorting
+});
+</script>
+
+<style>
+  th {
+    background-color: #88a1e0;
+    color: rgb(254, 254, 254);
+}
+</style>

@@ -1,0 +1,428 @@
+<%- include("../partials/userloggedheder.ejs") %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<div class="container-fluid  d-flex ">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+  
+
+
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 d-flex flex-column  mx-3 ">
+   
+        <div class="table-responsive">
+            <br>
+            <div class="text-center "><h5>ORDER HISTORY</h5></div>
+            
+            <table id="example" class="table table-striped table-bordered table-hover table-sm table-responsive">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">NO</th>
+                                <th style="width: 20%;">ORDER ID</th>
+                                <th style="width: 10%;">INFO</th>
+                                <th style="width: 15%;">ORDER ON</th>
+                                <th style="width: 20%;">STATUS AT</th>
+                                <th style="width: 10%;">TOTAL</th>
+                                <th style="width: 10%;">STATUS</th>
+                                <th style="width: 5%;">ACTION</th>
+                                <th style="width: 5%;">BILL</th>
+                            </tr>
+                            
+                        </thead>
+                 
+                        
+                        <tbody>
+                            <% cartHistory.forEach((order, orderIndex) => { %>
+                                <tr>
+                                    <td><%= orderIndex + 1 %></td>
+                                    <td><%= order._id %></td>
+                                    <td><a href="/getFullInfo/<%= order._id %>" class="btn btn-success  btn-sm">INFO</a></td>
+                                    <td id="orderDateCell"><%= order.OrderDate %></td>
+                                
+                                    <td id="deliverDateCell"><%= order.DeliveredDate %></td>
+                                    <td>&#8377; <%= order.OrderTotalPrice %></td>
+                                    <td><%= order.Status %></td>
+
+
+                                    <% if (order.Status !== "shipped" && order.Status !== "delivered" && order.Status !== "Cancel"&& order.Status !== "User cancelled" && order.Status !== "Returned"  ) { %>
+                                        <td>
+                                            <form id="cancelForm<%= orderIndex %>" action="/orderCancel/<%= order._id %>" method="POST">
+                                                <input type="hidden" name="index" value="<%= orderIndex %>">
+                                                <button type="button" class="btn btn-danger  btn-sm" onclick="showCancelConfirmation(<%= orderIndex %>)">Cancel</button>
+                                            </form>
+                                        </td>
+                                    <% } 
+                                    
+                                     else if(order.Status == "delivered") { %>
+                                        <td>
+                                           <!--  <form id="returnForm<%= orderIndex %>" action="/orderReturn/<%= order._id %>" method="POST">
+                                                <input type="hidden" name="index" value="<%= orderIndex %>">
+                                                <button type="button" class="btn btn-warning  btn-sm " onclick="showReturnConfirmation(<%= orderIndex %>)">Return</button>
+                                            </form> -->
+
+                                            <!-- Button to trigger the modal -->
+                                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#returnModal<%= orderIndex %>">Return</button>
+                                            
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="returnModal<%= orderIndex %>" tabindex="-1" aria-labelledby="returnModalLabel<%= orderIndex %>" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="returnModalLabel<%= orderIndex %>">Return Order</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <form id="returnForm<%= orderIndex %>" action="/orderReturn/<%= order._id %>" method="POST">
+                                                      <input type="hidden" name="index" value="<%= orderIndex %>">
+                                                      <!-- Your form fields go here -->
+                                                      <div class="mb-3">
+                                                        <label for="reason" class="form-label">Reason for Return:</label>
+                                                        <select id="reason" name="reason" class="form-select">
+                                                          <option value="Defective product">Defective product</option>
+                                                          <option value="Not the color I wanted">Not the color I wanted</option>
+                                                          <option value="Tampered delivery">Tampered delivery</option>
+                                                        </select>
+                                                      </div>
+                                                    </form>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" form="returnForm<%= orderIndex %>" class="btn btn-primary">Submit</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </td>
+                                    <% }
+
+                                    else{%>
+                                        <td></td> 
+                                        <%}
+                                    
+                                    %>
+
+
+                                    <% if (order.Status == "delivered") { %>
+                                        <td> <!-- Modal invoice trigger button -->
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalIdbill<%= orderIndex %>">BILL</button>
+                                            <!-- Modal Body -->
+                                            <div class="modal fade" id="modalIdbill<%= orderIndex %>" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalTitleId">INVOICE SUMMARY</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container" id="invoice<%= orderIndex %>">
+                                                                <div class="text-center">
+                                                                    <img src="/image/TIME S.jpg">
+                                                                </div>
+                                                                <hr>
+                                                                <div class="d-flex justify-content-between">
+                                                                    <div style="width: 50%;"><b>Delivered Address:</b> <%=order.address%></div>
+                                                                    
+                                                                    <div><b>Delivered Date:</b> <%=order.DeliveredDate%></div>
+                                                                </div>
+                                                                <hr class="dashed">
+                                                                <h6 class="text-center">SUMMARY</h6>
+                                                                <hr>
+                                                                <div class="d-flex justify-content-between    liness">
+                                                                    <div id="sl">SL NO</div>
+                                                                    <div id="item">ITEM</div>
+                                                                    <div id="qyt">QTY</div>
+                                                                    <div id="cgst">CGST</div>
+                                                                    <div id="sgst">SGST</div>
+                                                                    <div id="price">PRICE</div>
+                                                                </div>
+                                                                
+                                                                <hr>
+                                                                
+                                                                <% cartHistory[orderIndex].items.forEach((item, index) => { %>
+                                                                    <div class="d-flex justify-content-between   liness">
+                                                                        <div id="sl"><%=index + 1%></div>
+                                                                        <div id="item"><%= item.productName %></div>
+                                                                        <div id="qyt" class="text-danger"><%= item.quantity %></div>
+                                                                        <div id="cgst">CGST</div>
+                                                                        <div id="sgst">SGST</div>
+                                                                        <div class="text-danger">&#8377; <%= item.price %></div>
+                                                                    </div>
+                                                                <% }); %>
+                                                            
+                                                                
+                                                                <hr>
+                                                                
+                                                                <div>
+                                                                    <div><b>Delivery charge: </b> &#8377;  <%= order.DeliveryCharge %></div>
+                                                                    <div><b>Grand Total: </b> &#8377;  <%= order.grandTotal %></div>
+                                                                </div>
+                                                                
+                                                                <hr>
+                                                                <div class="text-center">
+                                                                    <div>--THANK YOU FOR PURCHASING WITH US--</div>
+                                                                    <div>"If you want to return the product, the return window will be open for 7 days from the date of delivery."</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-warning " onclick="billdownload(<%= orderIndex %>)"   >DOWNLOAD</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    <% }
+                                    else{%>
+                                        <td></td> 
+                                        <%}
+                                    
+                                    %>
+
+                                </tr>
+                            <% }); %>
+                        
+                            <script>
+                           
+                            </script>
+                        </tbody>
+                    </table>
+                    </div>
+     
+
+
+
+
+
+
+                    
+</main>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+<%-include("../partials/footer.ejs")%>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(242, 239, 239);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding:0px;
+    }
+}
+
+
+#example_filter {
+    float: right;
+}
+
+
+
+#example thead th {
+    background-color: #3d3d3d; /* Set background color for header cells */
+    color: #fff; /* Set text color for header cells */
+}
+
+#example tbody td {
+    background-color: #ffffff; /* Set background color for body cells */
+    color: #333; /* Set text color for body cells */
+}
+
+
+
+.liness {
+    display: flex;
+    justify-content: space-between;
+}
+
+#sl, #item, #qyt, #delivery, #cgst, #sgst, #price {
+    padding: 5px; /* Adjust padding as needed */
+}
+
+#sl {
+    width: 5%;
+}
+
+#item {
+    width: 15%;
+}
+
+#qyt {
+    width: 10%;
+}
+
+#delivery {
+    width: 20%;
+}
+
+#cgst {
+    width: 10%;
+}
+
+#sgst {
+    width: 15%;
+}
+
+#price {
+    width: 15%;
+}
+
+
+
+
+
+    </style>
+
+  
+
+
+
+<script>
+    new DataTable("#example");
+
+
+
+    
+    function billdownload(orderIndex) {
+        const invoiceElement = document.getElementById(`invoice${orderIndex}`);
+        console.log("Invoice Element:", invoiceElement);
+        html2canvas(invoiceElement, { scale: 7 }).then((canvas) => {
+            console.log("Canvas width:", canvas.width);
+            console.log("Canvas height:", canvas.height);
+            console.log("Canvas data URL:", canvas.toDataURL());
+        
+            // Calculate dimensions for A4 page
+            const a4Width = 595; // Width of A4 page in pixels
+            const a4Height = 842; // Height of A4 page in pixels
+            
+            // Calculate scaling factors to fit content onto A4 page
+            const scaleFactor = Math.min(a4Width / canvas.width, a4Height / canvas.height);
+            const scaledWidth = canvas.width * scaleFactor;
+            const scaledHeight = canvas.height * scaleFactor;
+            
+            // Create a new jsPDF instance with A4 page dimensions
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                imageQuality: 1,
+                margin: { top: 100, right: 30, bottom: 50, left: 30 },
+                format: [a4Width, a4Height]
+            });
+            doc.context2d.imageSmoothingEnabled = true;
+            // Add the scaled image to the PDF document
+            doc.addImage(canvas, 'JPEG', 0, 50, scaledWidth, scaledHeight);
+            // Save the PDF file
+            doc.save("newFile.pdf");
+        });
+    }
+    
+    
+             function showCancelConfirmation(orderIndex) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: 'You won\'t be able to revert this!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, cancel it!'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById(`cancelForm${orderIndex}`).submit();
+                                        }
+                                    });
+                                }
+
+                              function showReturnConfirmation(orderIndex){
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: 'You won\'t be able to revert this!',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, Return it!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById(`returnForm${orderIndex}`).submit();
+                                    }
+                                });
+                              }
+
+
+
+    
+</script>

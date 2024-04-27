@@ -1,0 +1,425 @@
+<%- include("../partials/userloggedheder.ejs") %>
+
+<div class="container-fluid d-flex cartpage">
+  <div id="leftside" class="" style="width: 80%; min-height: 50vh ">
+    <table id="example" class="table table-bordered table-hover table-sm table-responsive">
+      <thead>
+        <tr>
+          <th style="width: 5%;">SL NO</th>
+          <th style="width: 10%;">IMAGE</th>
+          <th style="width: 15%;">NAME</th>
+          <th style="width: 10%;">QTY</th>
+          <th style="width: 15%;">UNIT PRICE</th>
+          <th style="width: 10%;">OFF</th>
+          <th style="width: 15%;">OFFER PRICE</th>
+          <th style="width: 5%;">CANCEL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cartItem.cart.items.forEach((item, index) => { %>
+          <% if (item.products && item.products.productName) { %> 
+            <tr id="tableRow_<%= index %>">
+              <td><%= index + 1 %></td>
+              <td>
+                <img src="<%= item.products.productImage && item.products.productImage[0] && item.products.productImage[0].image1 %>" style="width: 60px; height: auto;">
+              </td>
+              <td><%= item.products.productName %></td>
+              <td>
+                <span id="qtybox_<%= index %>">
+                  <button onclick="decrementQuantity(<%= index %>)" style="border: none; padding: 5px; background-color: transparent; color: #ff001e;"><b><strong>-</strong></b></button>
+                  <span id="displayqty_<%= index %>" class="quantity-display"><%= item.quantity %></span>
+                  <button onclick="incrementQuantity(<%= index %>)" style="border: none; padding: 5px; background-color: transparent; color: #2cfb02;"><b><strong>+</strong></b></button>
+                  
+                </span>
+                <p id="limit_<%= index %>" class="text-danger my-3 "></p>
+              </td>
+              <td id="unitPrice_<%= index %>">&#8377; <%= item.products.productPrice %></td>
+              <td id="discount_<%= index %>"><%= item.percentageDiscounted %> %</td>
+              <td id="totalPrice_<%= index %>">&#8377; <%= item.price %></td>
+              <td>
+                <form id="deleteForm_<%= index %>" action="/itemdelete" method="post">
+                  <input type="hidden" name="currentQyt" value="<%= item.quantity %>">
+                  <input type="hidden" name="deleteIndex" value="<%= index %>">
+                  <input type="hidden" name="id" value="<%= item.products._id %>">
+                  <button type="button" onclick="confirmDelete('deleteForm_<%= index %>')" style="background-color: transparent; border: none; color: #df1919;"><b>X</b></button>
+                </form>
+              </td>
+            </tr>
+          <% } else { %>
+            
+          
+                <script>
+                  window.onload = function() {
+                    check();
+                  };
+                </script>
+            
+            
+          <% } %>
+        <% }); %>
+      </tbody>
+      
+      <% if (locals.errorMessage) { %>
+        <script>
+          setTimeout(function() {
+            document.getElementById('errorAlert').style.display = 'none';
+          }, 5000); 
+        </script>
+        <div id="errorAlert" class="alert alert-danger" role="alert">
+          <%= locals.errorMessage %>
+        </div>
+      <% } %>
+    </table>
+    
+  </div>
+
+  <div id="rightside" class="m-3 pt-5">
+    <% if (cartItem.cart.items.length > 0) { %>
+      <ul>
+          <li id="summary"><h4>SUMMARY</h4></li>
+          <hr>
+          <li id="subprice"><h5>Sub Total: &#8377; <%=cartItem.cart.OrderTotalPrice%></h5></li>
+          <li><h5>GST: 18%</h5></li>
+          <hr>
+          <li id="cartprice"><h5><B>Grand Total:</B> &#8377; <%=cartItem.cart.OrderTotalPrice%></h5></li>
+          <hr>
+          <form action="/paynow" method="GET">
+              <button type="submit" class="btn btn-warning w-100 mt-4">PAY NOW</button>
+          </form>
+      </ul>
+  <% } else { %>
+    <div class="empty-cart-message">
+      <h4>Your cart is empty!</h4>
+  </div>
+  <% } %>
+  
+  
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>
+
+
+
+
+
+<script>
+
+  var currentQty;
+  var priceOfItem;
+  var price;
+  var percentageDiscount;
+  var actualcost;
+
+  function check() {
+
+    fetch("/onloadPrices", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Success:", data);
+      // Handle the fetched data here
+     
+      let totalPriceElement = document.getElementById('subprice');
+      totalPriceElement.innerHTML = `<h5>Sub total: ₹${data.totalPrice}</h5>`;
+
+      let grandPriceElement = document.getElementById('cartprice');
+      grandPriceElement.innerHTML = `<h5>Grand Total: ₹${data.totalPrice}</h5>`;
+
+     
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      // Handle errors that occur during the fetch request or response handling
+    });
+  }
+  
+
+  //............price calculation according to qyt................
+  function priceCalculation(index) { //index is passed from another function, not from ejs
+    let priceOfItemElement = document.getElementById(`unitPrice_${index}`);
+    priceOfItem = parseInt(priceOfItemElement.textContent.replace(/\D/g, ''), 10);
+    
+    let perDiscount=document.getElementById(`discount_${index}`)
+    percentageDiscount=parseInt(perDiscount.textContent)
+    actualcost=priceOfItem * currentQty;
+    price = actualcost-(actualcost * (percentageDiscount/100));
+    const currencySymbol = '₹';
+    let totalPriceElement = document.getElementById(`totalPrice_${index}`);
+    totalPriceElement.innerHTML = `${currencySymbol} ${price}`;
+    updateQuantitydecrOnServer(index, currentQty);//updating the datas on database.
+  }
+
+
+
+  //.......... update on server about the qyt , using fetch.......................
+  function updateQuantitydecrOnServer(index, currentQty) {
+    fetch("/quantityUpdate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({
+        index: index,
+        quantity: currentQty,
+        price: price,
+        ActualPriceWithoutOffer:actualcost
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Success:", data);
+      let cp = document.getElementById('cartprice');
+      cp.innerHTML = `<h4>Order total: ₹${data.totalPrice}</h4>`;
+      let sp=document.getElementById('subprice');
+      sp.innerHTML=`<h5>Sub total: ₹${data.totalPrice}</h5>`
+     
+      console.log("in fetch", index);
+  })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+  }
+
+
+
+//........................................qyt increment.....................................................
+
+  function incrementQuantity(index) {
+    let priceOfItemElement = document.getElementById(`unitPrice_${index}`);
+    priceOfItem = parseInt(priceOfItemElement.textContent.replace(/\D/g, ''), 10);
+    currentQty = parseInt(document.getElementById(`displayqty_${index}`).textContent);
+
+    if (currentQty < 4) {
+      currentQty += 1;
+
+      
+      fetch("/stockup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          index: index,
+          quantity: currentQty,
+          
+        }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+      
+        console.log("Success:", data);
+ 
+
+      if(data.success==false){
+        document.getElementById(`limit_${index}`).innerHTML = "Out of stock";
+      }else{
+        document.getElementById(`displayqty_${index}`).textContent = currentQty;
+        document.getElementById(`limit_${index}`).innerHTML = "";
+      //----------------------------------------------------------------------------
+        priceCalculation(index);//calculate the amount according to qyt..
+      }
+
+
+      })
+
+
+  
+//----------------------------------------------------------------------------
+    } else {
+      document.getElementById(`limit_${index}`).innerHTML = "Reached the max limit";
+    }
+  }
+
+
+
+  //................qty decrement...........................................................................
+  function decrementQuantity(index) {
+    let priceOfItemElement = document.getElementById(`unitPrice_${index}`);
+    priceOfItem = parseInt(priceOfItemElement.textContent.replace(/\D/g, ''), 10);
+    currentQty = parseInt(document.getElementById(`displayqty_${index}`).textContent);
+
+    if (currentQty > 1) {
+      currentQty -= 1;
+      document.getElementById(`displayqty_${index}`).textContent = currentQty;
+      document.getElementById(`limit_${index}`).innerHTML = "";
+//----------------------------------------------------------------------------
+      priceCalculation(index);//calculate the amount according to qyt..
+//----------------------------------------------------------------------------
+
+      fetch("/stockDown", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify({
+          index: index,
+          quantity: currentQty,
+          
+        }),
+      })
+
+
+    } else {
+      document.getElementById(`limit_${index}`).innerHTML = "Reached the min limit";
+    }
+  }
+
+
+
+//..........confirm delete................................................................
+function confirmDelete(formId) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You won\'t be able to revert this!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#008000',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById(formId).submit();
+    }
+  });
+}
+
+
+
+
+
+
+
+//.........script for data table...................
+
+  new DataTable("#example");
+</script>
+
+
+
+
+
+
+<style>
+  #example {
+    width: 100%;
+  }
+
+  #example_filter {
+    text-align: right;
+  }
+
+  #rightside {
+    width: 20%;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .cartpage {
+      flex-direction: column;
+    }
+
+    #example_filter {
+      padding-top: 20px;
+      text-align: left;
+    }
+
+    #example_paginate {
+      padding-top: 30px;
+    }
+
+    #rightside {
+      width: auto;
+      margin: 0;
+      white-space: nowrap;
+      border-radius: 8px;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    text-decoration: none;
+  }
+
+  #rightside {
+    background-color: #2d2b2b;
+    padding: 15px;
+    color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+
+  #summary {
+    text-align: center;
+    background-color: #f9fafb;
+    padding: 10px;
+   
+    color: #0066cc;
+    font-weight: bold;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .quantity-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .quantity-button {
+    background-color: #df1919;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0 5px;
+  }
+
+  .quantity-button i {
+    font-size: 18px;
+  }
+
+  .quantity-display {
+    font-size: 16px;
+  }
+
+  #qtybox {
+    border: solid 1px black;
+    padding: 8px;
+  }
+
+
+
+  .empty-cart-message {
+    text-align: center;
+    font-size: 24px;
+    color: #555;
+    margin-top: 20px;
+}
+
+
+
+</style>

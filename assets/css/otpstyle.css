@@ -1,0 +1,39 @@
+
+
+#verificationCode{
+  
+    width: 3em;
+    height: 3em;
+    text-align: center;
+
+
+}
+#otpButton{
+margin-top: 25px;
+width: 150px;
+
+border: solid black 1px;
+color: rgb(255, 252, 252);
+background-color: rgb(105, 123, 244);
+}
+
+#otpButton:hover{
+    background-color: rgb(3, 255, 7);
+    color: black;
+}
+
+#otpBut{
+    margin-top: 25px;
+    width: 150px;
+    border: solid black 1px;
+    color: rgb(255, 252, 252);
+}
+#otpBut a{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+#otpBut:hover{
+    background-color: rgb(46, 208, 248);
+    color: black;
+}

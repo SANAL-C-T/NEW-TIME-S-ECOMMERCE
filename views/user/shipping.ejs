@@ -1,0 +1,492 @@
+<%- include("../partials/userloggedheder.ejs") %>
+
+<div class="container-fluid d-flex cartpage">
+  <div id="leftside" class="" style="width: 80%; min-height: 50vh ">
+    <h5 class="text-center mt-4 "><strong>Enter Shipping Address</strong></h5>
+    <br>
+    <form id="checkoutForm" >
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick="BlockForm()">
+              <h5 style="cursor: pointer;">Click to use saved address</h5>
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <br>
+              <div id="savedAddress">
+                <% database.userdata.Address.forEach((x, index) => { %>
+                <div class="radio-container">
+                  <input type="radio" id="fromDbAddressRadio<%= index %>" name="fromDbAddressRadio" class="custom-radio" value="HouseNo: <%=x.houseNo%>, Street: <%=x.street%>, Location: <%=x.location%>, Landmark: <%=x.landmark%>, City: <%=x.city%>, State: <%=x.state%>, Country: <%=x.country%>, Pincode: <%=x.pincode%>, PhoneNo: <%=x.phoneNo%>">
+                  <label for="fromDbAddressRadio<%= index %>" class="custom-radio-label">
+                    HouseNo: <%=x.houseNo%>, Street: <%=x.street%>, Location: <%=x.location%>, Landmark: <%=x.landmark%>, City: <%=x.city%>, State: <%=x.state%>, Country: <%=x.country%>, Pincode: <%=x.pincode%>, PhoneNo: <%=x.phoneNo%>
+                  </label>
+                </div>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="accordion" id="accordionExample2">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne2">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne2" aria-controls="collapseOne2" onclick="clearRadioButtons();unBlockForm()">
+              <h5 style="cursor: pointer;">Click to use a new address </h5>
+            </button>
+          </h2>
+          <div id="collapseOne2" class="accordion-collapse collapse" aria-labelledby="headingOne2" data-bs-parent="#accordionExample2">
+            <div class="accordion-body">
+              <div id="newAddressSection">
+                <div class="d-flex my-4 " id="secondline">
+                  <div class="mb-3 mx-4 ">
+                    <label for="phonenumber" class="form-label">Contact Number:</label>
+                    <input type="tel" id="phonenumber" name="phonenumber" class="form-control" placeholder="Phone number">
+                    <div id="phonenumberMessage" class="text-danger m-3"></div>
+                  </div>
+                  <div class="mb-3 mx-4 ">
+                    <label for="house" class="form-label">House NO:</label>
+                    <input type="text" id="house" name="house" class="form-control">
+                    <div id="houseMessage" class="text-danger m-3"></div>
+                  </div>
+                  <div class="mb-3 mx-4 ">
+                    <label for="street" class="form-label">Street:</label>
+                    <input type="text" id="street" name="street" class="form-control">
+                    <div id="streetMessage" class="text-danger m-3"></div>
+                  </div>
+                </div>
+                <div class="d-flex my-4 " id="thirdline">
+                  <div class="mb-3 mx-4 ">
+                    <label for="location" class="form-label">Location:</label>
+                    <input type="text" id="location" name="location" class="form-control">
+                    <div id="locationMessage" class="text-danger m-3"></div>
+                  </div>
+                  <div class="mb-3 mx-4 ">
+                    <label for="landmark" class="form-label">Landmark:</label>
+                    <input type="text" id="landmark" name="landmark" class="form-control">
+                    <div id="landmarkMessage" class="text-danger m-3"></div>
+                  </div>
+                  <div class="mb-3 mx-4 ">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" id="city" name="city" class="form-control">
+                    <div id="cityMessage" class="text-danger m-3"></div>
+                  </div>
+                </div>
+                <div class="d-flex my-4 " id="fourthline">
+                  <div class="mb-3 mx-4 ">
+                    <label for="state" class="form-label">State:</label>
+                    <select id="state" name="state" class="form-control">
+                      <option value="andaman_and_nicobar_islands">Andaman and Nicobar Islands</option>
+                      <option value="chandigarh">Chandigarh</option>
+                      <option value="dadra_and_nagar_haveli_and_daman_and_diu">Dadra and Nagar Haveli and Daman & Diu</option>
+                      <option value="delhi">Delhi</option>
+                      <option value="jammu_and_kashmir">Jammu & Kashmir</option>
+                      <option value="ladakh">Ladakh</option>
+                      <option value="lakshadweep">Lakshadweep</option>
+                      <option value="puducherry">Puducherry</option>
+                      <option value="andhra_pradesh">Andhra Pradesh</option>
+                      <option value="arunachal_pradesh">Arunachal Pradesh</option>
+                      <option value="assam">Assam</option>
+                      <option value="bihar">Bihar</option>
+                      <option value="chhattisgarh">Chhattisgarh</option>
+                      <option value="goa">Goa</option>
+                      <option value="gujarat">Gujarat</option>
+                      <option value="haryana">Haryana</option>
+                      <option value="himachal_pradesh">Himachal Pradesh</option>
+                      <option value="jammu_kashmir">Jammu and Kashmir</option>
+                      <option value="jharkhand">Jharkhand</option>
+                      <option value="karnataka">Karnataka</option>
+                      <option value="kerala">Kerala</option>
+                      <option value="madhya_pradesh">Madhya Pradesh</option>
+                      <option value="maharashtra">Maharashtra</option>
+                      <option value="manipur">Manipur</option>
+                      <option value="meghalaya">Meghalaya</option>
+                      <option value="mizoram">Mizoram</option>
+                      <option value="nagaland">Nagaland</option>
+                      <option value="odisha">Odisha</option>
+                      <option value="punjab">Punjab</option>
+                      <option value="rajasthan">Rajasthan</option>
+                      <option value="sikkim">Sikkim</option>
+                      <option value="tamil_nadu">Tamil Nadu</option>
+                      <option value="telangana">Telangana</option>
+                      <option value="tripura">Tripura</option>
+                      <option value="uttar_pradesh">Uttar Pradesh</option>
+                      <option value="uttarakhand">Uttarakhand</option>
+                      <option value="west_bengal">West Bengal</option>
+                    </select>
+                  </div>
+                  <div class="mb-3  px-4 ">
+                    <label for="Country" class="form-label">Country:</label>
+                    <input type="Country" id="Country" name="Country" class="form-control" value="India">
+                  </div>
+                  <div class="mb-3 mx-4 ">
+                    <label for="pincode" class="form-label">Pincode:</label>
+                    <input type="tel" id="pincode" name="pincode" class="form-control">
+                    <div id="pincodeMessage" class="text-danger m-3"></div>
+                  </div>
+                </div>
+                <div class="m-4 text-danger ">
+                  <input type="checkbox" id="saveaddressCheckbox" name="saveaddressCheckbox" class="form-check-input">
+                  <label for="saveaddressCheckbox" class="form-check-label"><h5>I want to save this address for future use.</h5></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="rightside" class="m-3 pt-3 ">
+    <h5 class="text-center">PAYMENT OPTIONS</h5>
+    <div class="premium-container">
+      <div>
+        <h5 class="premium-label">PAY:</h5>
+      </div>
+      <div>
+        <h5 class="premium-value"> &#8377;  <%= database.cartdata.OrderTotalPrice %></h5>
+      </div>
+    </div>
+    <br>
+    <hr>
+    <div class="payment-option d-flex  justify-content-between  ">
+      <div>
+        <label for="COD1">Cash on delivery</label>
+      </div>
+      <div>
+        <input type="radio" id="COD1" name="paymentMethod" value="COD">
+      </div>
+    </div>
+    <hr>
+    <div class="payment-option d-flex  justify-content-between  ">
+      <div>
+        <label for="MyWallet">My Wallet</label>
+      </div>
+      <div>
+        <input type="radio" id="MyWallet" name="paymentMethod" value="MyWallet">
+      </div>
+    </div>
+    <hr>
+    <div class="payment-option  d-flex  justify-content-between ">
+      <div>
+        <label for="Razorpay">Razorpay</label>
+      </div>
+      <div>
+        <input type="radio" id="Razorpay" name="paymentMethod" value="Razorpay">
+      </div>
+    </div>
+    <hr>
+    <div>
+      <button type="button" id="checkoutButton" class="btn btn-warning w-100 " onclick="paymentprocess()"><strong>CHECKOUT</strong></button>
+    </div>
+  </div>
+</div>
+
+
+</div>
+<%- include("../partials/footer.ejs") %>
+
+
+
+
+
+
+
+
+<script>
+ 
+
+  var orderId ;
+  $(document).ready(function(){
+      var settings = {
+    "url": "/create/orderId",
+    "method": "POST",
+    "timeout": 0,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "data": JSON.stringify({
+      "amount": "50000"
+    }),
+  };
+  
+  //creates new orderId everytime
+  $.ajax(settings).done(function (response) {
+  
+    orderId=response.orderId;
+    console.log(orderId);
+    $("button").show();
+  });
+  });
+
+
+
+
+
+  function paymentprocess() {
+  
+    const formData = new FormData();
+
+
+
+const savedAddress=document.getElementById("headingOne");
+    if(savedAddress)
+    // Append form fields to the FormData object
+    formData.append('productName', document.getElementById('productName').value);
+    formData.append('productDescription', document.getElementById('productDescription').value);
+    formData.append('productPrice', document.getElementById('productPrice').value);
+    formData.append('productCategory', document.getElementById('productCategory').value);
+    formData.append('addedDate', document.getElementById('addedDate').value);
+    formData.append('productsize', document.getElementById('productsize').value);
+    formData.append('productcolour', document.getElementById('productcolour').value);
+    formData.append('stockCount', document.getElementById('stockCount').value);
+
+
+
+
+
+
+
+    fetch("/paynow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({
+      data:formData
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Success:", data);
+    
+  
+  })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+
+
+   
+  }
+  
+
+
+
+function clearRadioButtons() {
+  var radioButtons = document.getElementsByName("fromDbAddressRadio");
+
+  radioButtons.forEach(function (radio) {
+    radio.checked = false;
+  });
+}
+
+function unhide(){
+  let unhideSection=document.getElementById('newAddressSection');
+  unhideSection.style.display = 'block';
+  arrowIconUp
+}
+
+/* function clearForm(){
+  let formElemnts=document.querySelectorAll('#newAddressSection input, #newAddressSection select');
+  formElemnts.forEach(function(element){
+    if(element.type==='checkbox'){
+      element.checked=false;
+    }else{
+      element.value="";
+    }
+  })
+
+} */
+
+
+function BlockForm(){
+  let formElemnts=document.querySelectorAll('#newAddressSection input, #newAddressSection select');
+  formElemnts.forEach(function (element) {
+    element.disabled = true;
+  });
+
+  let accordionElement2 = document.getElementById('collapseOne2');
+  let accordion = new bootstrap.Collapse(accordionElement2, { toggle: false });
+  accordion.toggle();
+
+
+  let accordionElement = document.getElementById('collapseOne');
+  let accordion1 = new bootstrap.Collapse(accordionElement, { toggle: true });
+  accordion1.toggle();
+}
+
+
+
+function unBlockForm(){
+  let formElemnts=document.querySelectorAll('#newAddressSection input, #newAddressSection select');
+  formElemnts.forEach(function (element) {
+    element.disabled = false;
+  });
+
+  let accordionElement = document.getElementById('collapseOne');
+  let accordion = new bootstrap.Collapse(accordionElement, { toggle: false });
+  accordion.toggle();
+
+  let accordionElement2 = document.getElementById('collapseOne2');
+  let accordion2= new bootstrap.Collapse(accordionElement2, { toggle: true });
+  accordion2.toggle();
+}
+
+
+function fieldValidation(){
+  let phonenumber=document.getElementById("phonenumber").value;
+  let house=document.getElementById("house").value;
+  let street=document.getElementById("street").value;
+  let location=document.getElementById("location").value;
+  let landmark=document.getElementById("landmark").value;
+  let city=document.getElementById("city").value;
+  let pincode=document.getElementById("pincode").value;
+
+let phonenumberMessage=document.getElementById("phonenumberMessage");
+let houseMessage=document.getElementById("houseMessage");
+let streetMessage=document.getElementById("streetMessage");
+let locationMessage=document.getElementById("locationMessage");
+let landmarkMessage=document.getElementById("landmarkMessage");
+let cityMessage=document.getElementById("cityMessage");
+let pincodeMessage=document.getElementById("pincodeMessage");
+
+
+
+let isValid = true;
+
+if (phonenumber.trim() === "") {
+  phonenumberMessage.innerHTML = "Mandatory";
+    isValid = false;
+} else if (/^[a-zA-Z\s]+$/.test(phonenumber)) {
+  phonenumberMessage.innerHTML = "Input must be number";
+    isValid = false;
+} else {
+  phonenumberMessage.innerHTML = "";
+}
+
+
+if(house.trim()===""){
+  houseMessage.innerHTML="Mandatory";
+  isValid=false;
+}
+
+
+
+
+
+
+
+}
+
+  
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  #rightside {
+   
+    background-color: #2d2b2b;
+    padding: 15px;
+    color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+
+  .payment-option {
+    margin-bottom: 15px;
+  }
+
+  .payment-option label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .payment-option input {
+    margin-right: 5px;
+  }
+
+  @media (max-width: 768px) {
+    #firstline, #secondline, #thirdline, #fourthline {
+        width: 100%; 
+        flex-direction: column;
+    }
+    .cartpage {
+      flex-direction: column;
+     
+    }
+}
+
+.premium-container {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.premium-label {
+  font-size: 18px;
+  color: #333;
+}
+
+.premium-value {
+  font-size: 24px;
+  color: #0066cc;
+  font-weight: bold;
+}
+
+
+
+.radio-container {
+  border: 1px solid #000000; /* Add a border */
+  background-color: hsla(216, 46%, 86%, 0.493); /* Add a different background color */
+  padding: 10px; /* Add padding for spacing */
+  margin-bottom: 10px; /* Add margin between loop elements */
+  border-radius: 8px; /* Optional: Add border-radius for rounded corners */
+}
+
+#savedAddress {
+  background-color: #fcfcfc; 
+  max-height: 200px; /* Set the maximum height you want for the container */
+  overflow-y: auto; /* Enable vertical scrolling if the content exceeds the container height */
+  border: 1px solid #2e2e2e; /* Add a border for visual clarity */
+  padding: 10px; /* Add padding for better aesthetics */
+}
+
+.radio-container {
+  margin-bottom: 10px; /* Add some margin between each radio container */
+}
+
+
+</style>
+

@@ -1,0 +1,807 @@
+<%- include("../partials/adminheader.ejs") %>
+
+    <div class="container ">
+        <div class="mt-4">
+            <a href="/admin/listProduct">
+                <button>LIST PRODUCT</button>
+            </a>
+        </div>
+
+        <h2 class="mt-4 mb-4">Product detail upload</h2>
+<hr>
+
+        <form id="formclr">
+            <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" required>
+                <div id="productNameMessage" class="text-danger m-3"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="productDescription" class="form-label">Product Description</label>
+                <input type="text" class="form-control" id="productDescription" name="productDescription" required>
+                <div id="productDescriptionMessage" class="text-danger m-3"></div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div class="mb-3">
+                    <label for="productPrice" class="form-label">Product Price</label>
+                    <input type="tel" class="form-control" id="productPrice" name="productPrice" required>
+                    <div id="productPriceMessage" class="text-danger m-3"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productCategory" class="form-label">Product Category</label>
+                    <select class="form-select" id="productCategory" name="productCategory" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <% urlData.cat.forEach(category=> { %>
+                            <option value="<%= category._id %>">
+                                <%= category.categoryName %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div id="productCategoryMessage" class="text-danger m-3"></div>
+
+                <div class="mb-3">
+                    <label for="productStrapColour" class="form-label">Strap colour</label>
+                    <input type="tel" class="form-control" id="productStrapColour" name="productStrapColour" required>
+                    <div id="productStrapColourMessage" class="text-danger m-3"></div>
+                </div>
+
+
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div class="mb-3">
+                    <label for="productsize" class="form-label">Size</label>
+                    <input type="tel" class="form-control" id="productsize" name="productsize" required>
+                    <div id="productsizeMessage" class="text-danger m-3"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="productcolour" class="form-label">Colour</label>
+                    <input type="tel" class="form-control" id="productcolour" name="productcolour" required>
+                    <div id="productcolourMessage" class="text-danger m-3"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="stockCount" class="form-label">Stock Count</label>
+                    <input type="tel" class="form-control" id="stockCount" name="stockCount" required>
+                    <div id="stockCountMessage" class="text-danger m-3"></div>
+                </div>
+            </div>
+
+
+<div class="d-flex justify-content-between">
+    <div class="mb-3">
+        <label for="productDialShape" class="form-label">Dial shape:</label>
+        <input type="text" class="form-control" id="productDialShape" name="productDialShape" required>
+        <div id="productDialShapeMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="productMadeIn" class="form-label">Made in</label>
+        <input type="text" class="form-control" id="productMadeIn" name="productMadeIn" required>
+        <div id="productMadeInMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="strapmaterial" class="form-label">Strap material</label>
+        <input type="text" class="form-control" id="strapmaterial" name="strapmaterial" required>
+        <div id="strapmaterialMessage" class="text-danger m-3"></div>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-between">
+    <div class="mb-3">
+        <label for="waterresistant" class="form-label">Water resistant</label>
+        <input type="text" class="form-control" id="waterresistant" name="waterresistant" required>
+        <div id="waterresistantMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="productdisplay" class="form-label">Display</label>
+        <input type="text" class="form-control" id="productdisplay" name="productdisplay" required>
+        <div id="productdisplayMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="calling" class="form-label">Calling</label>
+        <input type="text" class="form-control" id="calling" name="calling" required>
+        <div id="callingMessage" class="text-danger m-3"></div>
+    </div>
+</div>
+
+
+
+<div class="d-flex justify-content-between">
+    <div class="mb-3">
+        <label for="productfastCharge" class="form-label">Fast charge</label>
+        <input type="text" class="form-control" id="productfastCharge" name="productfastCharge" required>
+        <div id="productfastChargeMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="productbattery" class="form-label">Battery</label>
+        <input type="text" class="form-control" id="productbattery" name="productbattery" required>
+        <div id="productbatteryMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="weight" class="form-label">Weight</label>
+        <input type="text" class="form-control" id="weight" name="weight" required>
+        <div id="weightMessage" class="text-danger m-3"></div>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-between">
+    <div class="mb-3">
+        <label for="productbluetooth" class="form-label">Bluetooth</label>
+        <input type="text" class="form-control" id="productbluetooth" name="productbluetooth" required>
+        <div id="productbluetoothMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="productWarranty" class="form-label">Warranty</label>
+        <input type="text" class="form-control" id="productWarranty" name="productWarranty" required>
+        <div id="productWarrantyMessage" class="text-danger m-3"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="wifi" class="form-label">WiFi</label>
+        <input type="text" class="form-control" id="wifi" name="wifi" required>
+        <div id="wifiMessage" class="text-danger m-3"></div>
+    </div>
+</div>
+
+
+            <div class="mb-3">
+                <label for="productImage" class="form-label">Product Image</label>
+                <div class="container mt-3 w-100">
+                    <div class="card shadow-sw w-100">
+                        <div class="card-header d-flex justify-content-between">
+                            <h4>Selected images</h4>
+                            <div class="fors" id="imageForm">
+                                <input type="file" name="productImage" id="image" accept="image/*" class="d-none"
+                                    multiple onchange="image_select()">
+                                <button class="btn btn-sm btn-primary" type="button"
+                                    onclick="document.getElementById('image').click()">Select Image</button>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex  justify-content-start" id="container"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+
+
+    </div>
+
+    </form>
+
+    <!-- Modal for Crop -->
+
+    <div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog custom-modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropModalLabel">Crop Image</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Image container for Cropper.js -->
+                    <div class="image-container">
+                        <img src="" id="cropImage" class="img-fluid custom-image">
+                    </div>
+                    <button id="cropButton" class="btn btn-success">CROP</button>
+                    <img src="" id="outputimg" class="mx-5">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">SAVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- success message modal -->
+
+		<div class="modal fade" id="statusSuccessModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"> 
+			<div class="modal-dialog modal-dialog-centered modal-sm" role="document"> 
+				<div class="modal-content"> 
+					<div class="modal-body text-center p-lg-4"> 
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+							<circle class="path circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+							<polyline class="path check" fill="none" stroke="#198754" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " /> 
+						</svg> 
+						<h4 class="text-success mt-3">Success</h4> 
+						<p class="mt-3">You have successfully added a product.</p>
+						<button type="button" class="btn btn-sm mt-3 btn-success" data-bs-dismiss="modal"  onclick="cleardata()">Ok</button> 
+					</div> 
+				</div> 
+			</div> 
+		</div>
+	</div>
+
+    <br>
+
+<script src="../node_modules/./cropperjs/dist/cropper.min.js"></script>
+    <%- include("../partials/adminfooter.ejs") %>
+
+        <script>
+
+
+//...........form submit...............
+
+            function submitForm() {
+                if (!addProVlidation()) {
+                    return;
+                }
+                successmessage()
+                // Create a FormData object to store form data, including files
+                const formData = new FormData();
+
+                // Append form fields to the FormData object
+                formData.append('productName', document.getElementById('productName').value);
+                formData.append('productDescription', document.getElementById('productDescription').value);
+                formData.append('productPrice', document.getElementById('productPrice').value);
+                formData.append('productCategory', document.getElementById('productCategory').value);
+                formData.append('productsize', document.getElementById('productsize').value);
+                formData.append('productcolour', document.getElementById('productcolour').value);
+                formData.append('stockCount', document.getElementById('stockCount').value);
+                formData.append('productDialShape', document.getElementById('productDialShape').value);
+                formData.append('productMadeIn', document.getElementById('productMadeIn').value);
+                formData.append('strapmaterial', document.getElementById('strapmaterial').value);
+                formData.append('waterresistant', document.getElementById('waterresistant').value);
+                formData.append('productdisplay', document.getElementById('productdisplay').value);
+                formData.append('calling', document.getElementById('calling').value);
+                formData.append('productfastCharge', document.getElementById('productfastCharge').value);
+                formData.append('productbattery', document.getElementById('productbattery').value);
+                formData.append('weight', document.getElementById('weight').value);
+                formData.append('productbluetooth', document.getElementById('productbluetooth').value);
+                formData.append('productWarranty', document.getElementById('productWarranty').value);
+                formData.append('wifi', document.getElementById('wifi').value);
+                formData.append('productStrapColour', document.getElementById('productStrapColour').value);
+                formData.append('Warranty', document.getElementById('productWarranty').value);
+ 
+
+if(imgArry.length>0){
+    imgArry.forEach((image, index) => {
+        formData.append('productImages[]', image.file);
+    });
+}else{
+    images.forEach((image, index) => {
+        formData.append('productImages[]', image.file);
+    });
+}
+              
+                //fetch request to submit the form data to backend.
+                fetch("/admin/products", {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Form submitted successfully:', data);    
+                       
+                    })
+                    .catch(error => console.error('Error submitting form:', error.message));
+            }
+
+            let images = [];
+
+            function image_select() {
+                var image = document.getElementById("image").files;
+
+                // Add new images
+                for (let i = 0; i < image.length; i++) {
+                    if (checkDupli(image[i].name)) {
+                        images.push({
+                            "name": image[i].name,
+                            "url": URL.createObjectURL(image[i]),
+                            "file": image[i]
+                        });
+                    } else {
+                        alert("Image already exists");
+                    }
+                }
+
+                // Update the display
+                document.getElementById("container").innerHTML = image_show();
+            }
+            function image_show() {
+                let image = '';
+                images.forEach((i, index) => {
+                    image += `
+                <div class="image_container d-flex justify-content-center position-relative">
+                    <img src="${i.url}" class="img-container">
+                    <span class="position-absolute" onclick="delete_image(${index})">&times;</span>
+                    <button class="btn btn-primary crop-button" data-toggle="modal" data-target="#cropModal" onclick="openCropModal(${index})">Crop</button>
+
+                </div>`;
+                });
+                return image;
+            }
+
+            function delete_image(index) {
+                images.splice(index, 1);
+                // Update the display
+                document.getElementById("container").innerHTML = image_show();
+            }
+
+            function checkDupli(name) {
+                return !images.some(image => image.name === name);
+            }
+//........success message modal triger.....
+
+function  successmessage(){
+    $('#statusSuccessModal').modal('show');
+}
+
+//.............clear data..........
+function cleardata(){
+    let formElement = document.getElementById('formclr');
+    formElement.reset();
+    location.reload();
+}
+
+//...................cropper...............................
+let imgArry=[]
+            function openCropModal(index) {
+                // Declare the cropper variable
+                let cropper;
+                event.preventDefault();
+                // Create a unique ID for each modal
+                const modalId = `cropModal-${index}`;
+            
+                // Create the modal structure
+                const modalHtml = `
+                  <div class="modal fade" id="${modalId}" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel-${index}" aria-hidden="true">
+                      <div class="modal-dialog custom-modal-dialog" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="cropModalLabel-${index}">Crop Image</h5>
+                              </div>
+                              <div class="modal-body">
+                                  <!-- Image container for Cropper.js -->
+                                  <div class="image-container">
+                                      <img src="" id="cropImage-${index}" class="img-fluid custom-image">
+                                  </div>
+                                  <button id="cropButton-${index}" class="btn btn-success">CROP</button>
+                                  <img src="" id="outputimg-${index}" class="mx-5">
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-success" id="saveButton-${index}">SAVE</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                `;
+            
+                // Append the modal HTML to the body
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+                // Get the modal elements
+                const modal = $(`#${modalId}`);
+                const modalImage = document.getElementById(`cropImage-${index}`);
+                const cropButton = document.getElementById(`cropButton-${index}`);
+                const outputImg = document.getElementById(`outputimg-${index}`);
+                const saveButton = document.getElementById(`saveButton-${index}`);
+            
+                const selectedImage = images[index];
+                modalImage.src = selectedImage.url;
+            
+                // Create a new Cropper instance when the moda
+                modal.on('shown.bs.modal', function () {
+                    cropper = new Cropper(modalImage, {
+                        aspectRatio: 0,
+                        viewMode: 0
+                    });
+                });
+            
+                // Event listener for the "CROP" button
+                cropButton.addEventListener("click", function () {
+                    // Get the cropped canvas
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                
+                    // Convert the cropped canvas to Blob
+                    croppedCanvas.toBlob(blob => {
+                        // Display the cropped image
+                        outputImg.src = URL.createObjectURL(blob);
+                
+                        // Update the selected image in the images array
+                        images[index].url = URL.createObjectURL(blob);
+                        images[index].file = new File([blob], selectedImage.name); // Update the file
+                        imgArry = images;
+                
+                        // Update the display
+                        document.getElementById("container").innerHTML = image_show();
+                
+                        // the 'blob' variable for further processing or uploading
+                        console.log("Cropped Image Blob:", blob);
+                    }, 'image/png');
+                });
+                
+                saveButton.addEventListener("click", function () {
+                    // Hide the modal
+                    modal.modal('hide');
+                });
+            
+                // Show the modal
+                modal.modal('show');
+            }
+            
+//validation 
+
+function addProVlidation() {
+    let productName = document.getElementById('productName').value;
+    let productDescription = document.getElementById('productDescription').value;
+    let productPrice = document.getElementById('productPrice').value;
+    let productCategory = document.getElementById("productCategory").value;
+    let productsize = document.getElementById("productsize").value;
+    let productcolour = document.getElementById("productcolour").value;
+    let stockCount = document.getElementById("stockCount").value;
+
+    let productDialShape = document.getElementById('productDialShape').value;
+    let productMadeIn = document.getElementById('productMadeIn').value;
+    let strapmaterial = document.getElementById('strapmaterial').value;
+    let waterresistant = document.getElementById('waterresistant').value;
+    let productdisplay = document.getElementById('productdisplay').value;
+    let calling = document.getElementById('calling').value;
+    let productfastCharge = document.getElementById('productfastCharge').value;
+    let productbattery = document.getElementById('productbattery').value;
+    let weight = document.getElementById('weight').value;
+    let productbluetooth = document.getElementById('productbluetooth').value;
+    let productWarranty = document.getElementById('productWarranty').value;
+    let wifi = document.getElementById('wifi').value;
+    let productStrapColour = document.getElementById('productStrapColour').value;
+    const fileInput = document.getElementById('image');
+    let productNameMessage = document.getElementById('productNameMessage');
+    let productDescriptionMessage = document.getElementById('productDescriptionMessage');
+    let productPriceMessage = document.getElementById('productPriceMessage');
+    let productCategoryMessage = document.getElementById('productCategoryMessage');
+    let productsizeMessage = document.getElementById('productsizeMessage');
+    let productcolourMessage = document.getElementById('productcolourMessage');
+    let stockCountMessage = document.getElementById('stockCountMessage');
+    let productDialShapeMessage = document.getElementById('productDialShapeMessage');
+    let productMadeInMessage = document.getElementById('productMadeInMessage');
+    let strapmaterialMessage = document.getElementById('strapmaterialMessage');
+
+    
+    let waterresistantMessage = document.getElementById('waterresistantMessage');
+    let productdisplayMessage = document.getElementById('productdisplayMessage');
+    let callingMessage = document.getElementById('callingMessage');
+    let productfastChargeMessage = document.getElementById('productfastChargeMessage');
+    let productbatteryMessage = document.getElementById('productbatteryMessage');
+    let weightMessage = document.getElementById('weightMessage');
+    let productbluetoothMessage = document.getElementById('productbluetoothMessage');
+    let productWarrantyMessage = document.getElementById('productWarrantyMessage');
+    let wifiMessage = document.getElementById('wifiMessage');
+    let productStrapColourMessage = document.getElementById('productStrapColourMessage');
+
+    let isValid = true;
+
+    if (productName.trim() === "") {
+        productNameMessage.innerHTML = "Product name cannot be empty";
+        isValid = false;
+    }  else {
+        productNameMessage.innerHTML = "";
+    }
+    
+    if (productCategory.trim() === "") {
+        productCategoryMessage.innerHTML = "Product category cannot be empty";
+        isValid = false;
+    } else {
+        productCategoryMessage.innerHTML = "";
+    }
+
+    if (productDescription.trim() === "") {
+        productDescriptionMessage.innerHTML = "Product description cannot be empty";
+        isValid = false;
+    } else {
+        productDescriptionMessage.innerHTML = "";
+    }
+
+    if (productsize.trim() === "") {
+        productsizeMessage.innerHTML = "Product size cannot be empty";
+        isValid = false;
+    } else {
+        productsizeMessage.innerHTML = "";
+    }
+
+    if (productPrice < 0) {
+        productPriceMessage.innerHTML = "Price cannot be negative";
+        isValid = false;
+    } else {
+        productPriceMessage.innerHTML = "";
+    }
+
+    if (productcolour.trim() === "") {
+        productcolourMessage.innerHTML = "Product colour cannot be empty";
+        isValid = false;
+    } else if (!/^[a-zA-Z]+$/.test(productcolour)) {
+        productcolourMessage.innerHTML = "Product colour should only contain alphabets";
+        isValid = false;
+    } else {
+        productcolourMessage.innerHTML = "";
+    }
+    
+    if (stockCount === "") {
+        stockCountMessage.innerHTML = "Product stock cannot be empty";
+        isValid = false;
+    } else if (stockCount < 0) {
+        stockCountMessage.innerHTML = "Stock cannot be negative";
+        isValid = false;
+    } else {
+        stockCountMessage.innerHTML = "";
+    }
+
+    if (productDialShape.trim() === "") {
+        productDialShapeMessage.innerHTML = "Dial shape cannot be empty";
+        isValid = false;
+    } else if (!/^[a-zA-Z]+$/.test(productDialShape)) {
+        productDialShapeMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        productDialShapeMessage.innerHTML = "";
+    }
+
+    if (productMadeIn.trim() === "") {
+        productMadeInMessage.innerHTML = "cannot be empty";
+        isValid = false;
+    } else if (!/^[a-zA-Z]+$/.test(productMadeIn)) {
+        productMadeInMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        productMadeInMessage.innerHTML = "";
+    }
+
+    if (strapmaterial.trim() === "") {
+        strapmaterialMessage.innerHTML = "Strap material cannot be empty";
+        isValid = false;
+    }
+    else if (!/^[a-zA-Z]+$/.test(strapmaterial)) {
+        strapmaterialMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        strapmaterialMessage.innerHTML = "";
+    }
+
+    if (waterresistant.trim() === "") {
+        waterresistantMessage.innerHTML = "Water resistant cannot be empty";
+        isValid = false;
+    } else {
+        waterresistantMessage.innerHTML = "";
+    }
+
+
+    if (productdisplay.trim() === "") {
+        productdisplayMessage.innerHTML = "Display cannot be empty";
+        isValid = false;
+    }  
+     else {
+        productdisplayMessage.innerHTML = "";
+    }
+    if (calling.trim() === "") {
+        callingMessage.innerHTML = "Calling cannot be empty";
+        isValid = false;
+    }  else if (!/^[a-zA-Z]+$/.test(calling)) {
+        callingMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        callingMessage.innerHTML = "";
+    }
+
+    if (productfastCharge.trim() === "") {
+        productfastChargeMessage.innerHTML = "Fast charge cannot be empty";
+        isValid = false;
+    }  else if (!/^[a-zA-Z]+$/.test(productfastCharge)) {
+        productfastChargeMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        productfastChargeMessage.innerHTML = "";
+    }
+
+    if (productbattery.trim() === "") {
+        productbatteryMessage.innerHTML = "Battery cannot be empty";
+        isValid = false;
+    } else {
+        productbatteryMessage.innerHTML = "";
+    }
+    if (weight.trim() === "") {
+        weightMessage.innerHTML = "Weight cannot be empty";
+        isValid = false;
+    } else {
+        weightMessage.innerHTML = "";
+    }
+    if (productbluetooth.trim() === "") {
+        productbluetoothMessage.innerHTML = "Bluetooth cannot be empty";
+        isValid = false;
+    } else {
+        productbluetoothMessage.innerHTML = "";
+    }
+
+    if (productWarranty.trim() === "") {
+        productWarrantyMessage.innerHTML = "Warranty cannot be empty";
+        isValid = false;
+    } else {
+        productWarrantyMessage.innerHTML = "";
+    }
+    if (productStrapColour.trim() === "") {
+        productStrapColourMessage.innerHTML = "Strap colour cannot be empty";
+        isValid = false;
+    } else if (!/^[a-zA-Z]+$/.test(productStrapColour)) {
+        productStrapColourMessage.innerHTML = "Should only contain alphabets";
+        isValid = false;
+    } else {
+        productStrapColourMessage.innerHTML = "";
+    }
+
+
+    if (wifi.trim() === "") {
+        wifiMessage.innerHTML = "Cannot be empty";
+        isValid = false;
+    }  else {
+        wifiMessage.innerHTML = "";
+    }
+
+   
+
+    return isValid;
+}
+
+
+        </script>
+
+       
+
+
+
+        <style>
+            .image_container {
+                height: 150px;
+                width: 200px;
+                border-radius: 6px;
+                overflow: hidden;
+                margin: 10px;
+                position: relative;
+            }
+
+            .img-container {
+                height: 100%;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            .image_container span {
+                top: 2px;
+                right: 2px;
+                color: red;
+                font-size: 24px;
+                font-weight: normal;
+                cursor: pointer;
+                position: absolute;
+            }
+
+         
+            .crop-button {
+                position: absolute;
+                bottom: 5px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+
+            .modal-open {
+                overflow: auto;
+            }
+
+            /*modal width*/
+            .custom-modal-dialog {
+                max-width: auto;
+            }
+
+            /*crop image size style*/
+            .custom-image {
+                max-width: 180%;
+                max-height: 400px;
+                width: auto;
+            }
+
+
+            .modal#statusSuccessModal .modal-content, 
+            .modal#statusErrorsModal .modal-content {
+                border-radius: 30px;
+            }
+            .modal#statusSuccessModal .modal-content svg, 
+            .modal#statusErrorsModal .modal-content svg {
+                width: 100px; 
+                display: block; 
+                margin: 0 auto;
+            }
+            .modal#statusSuccessModal .modal-content .path, 
+            .modal#statusErrorsModal .modal-content .path {
+                stroke-dasharray: 1000; 
+                stroke-dashoffset: 0;
+            }
+            .modal#statusSuccessModal .modal-content .path.circle, 
+            .modal#statusErrorsModal .modal-content .path.circle {
+                -webkit-animation: dash 0.9s ease-in-out; 
+                animation: dash 0.9s ease-in-out;
+            }
+            .modal#statusSuccessModal .modal-content .path.line, 
+            .modal#statusErrorsModal .modal-content .path.line {
+                stroke-dashoffset: 1000; 
+                -webkit-animation: dash 0.95s 0.35s ease-in-out forwards; 
+                animation: dash 0.95s 0.35s ease-in-out forwards;
+            }
+            .modal#statusSuccessModal .modal-content .path.check, 
+            .modal#statusErrorsModal .modal-content .path.check {
+                stroke-dashoffset: -100; 
+                -webkit-animation: dash-check 0.95s 0.35s ease-in-out forwards; 
+                animation: dash-check 0.95s 0.35s ease-in-out forwards;
+            }
+            
+            @-webkit-keyframes dash { 
+                0% {
+                    stroke-dashoffset: 1000;
+                }
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+            @keyframes dash { 
+                0% {
+                    stroke-dashoffset: 1000;
+                }
+                100%{
+                    stroke-dashoffset: 0;
+                }
+            }
+            @-webkit-keyframes dash { 
+                0% {
+                    stroke-dashoffset: 1000;
+                }
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+            @keyframes dash { 
+                0% {
+                    stroke-dashoffset: 1000;}
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+            @-webkit-keyframes dash-check { 
+                0% {
+                    stroke-dashoffset: -100;
+                }
+                100% {
+                    stroke-dashoffset: 900;
+                }
+            }
+            @keyframes dash-check {
+                0% {
+                    stroke-dashoffset: -100;
+                }
+                100% {
+                    stroke-dashoffset: 900;
+                }
+            }
+            .box00{
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+            }
+
+        </style>

@@ -1,0 +1,370 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+<div class="container-fluid  d-flex ">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 d-flex flex-column  mx-3">
+        <form onsubmit="return validateForm()" method="post" action="/profileEdit"  enctype="multipart/form-data"> <!-- form -->
+            <!-- first line  -->
+            <div class="d-flex  justify-content-between my-4 " id="firstline">
+                <div class="mb-3 mx-4 ">
+                    <label for="username1" class="form-label">FIRST NAME:</label>
+                    <input type="text" id="username1" name="username1" class="form-control" value="<%=hasUserAddedDetails?.first_name%>">
+                    <div id="errorMessage1" class="text-danger m-3"></div>
+                </div>
+                <div class="mb-3 mx-4">
+                    <label for="username2"  class="form-label">LAST NAME:</label>
+                    <input type="text" id="username2" name="username2" class="form-control" value="<%=hasUserAddedDetails?.Last_name%>">
+                    <div id="errorMessage2" class="text-danger m-3"></div>
+                </div>
+                <div class="justify-content-end mx-4">
+                    <img id="selectedImage" src="<%=hasUserAddedDetails?.profileImage%>">
+                </div>
+            </div>
+            <div class="m-4">
+                <h5>Add profile image</h5>
+                <br>
+                <label for="profilepic" class="custom-file-upload">Choose Image</label>
+                <input type="file" id="profilepic" name="profilepic" class="form-control input-file" onchange="validateFile()" style="display: none;">
+                <div id="errorMessage3" class="text-danger m-3"></div>
+            </div>
+            <!-- second line -->
+            <div class="accordion mb-3 mx-4" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            <h4>Add / Edit primary address</h4> 
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div id="addressSection">
+                                <div class="d-flex my-4" id="secondline">
+                                    <div class="mb-3 mx-4">
+                                        <label for="phonenumber" class="form-label">Contact Number:</label>
+                                        <input type="tel" id="phonenumber" name="phonenumber" class="form-control" placeholder="Phone number"  disabled>
+                                        <div id="errorMessage4" class="text-danger m-3"></div>
+                                    </div>
+                                    <div class="mb-3 mx-4">
+                                        <label for="house" class="form-label">House NO:</label>
+                                        <input type="text" id="house" name="house" class="form-control"  disabled>
+                                    </div>
+                                    <div class="mb-3 mx-4">
+                                        <label for="street" class="form-label">Street:</label>
+                                        <input type="text" id="street" name="street" class="form-control"  disabled>
+                                    </div>
+                                </div>
+                                <div class="d-flex my-4" id="thirdline">
+                                    <div class="mb-3 mx-4">
+                                        <label for="location" class="form-label">Location:</label>
+                                        <input type="text" id="location" name="location" class="form-control"  disabled>
+                                    </div>
+                                    <div class="mb-3 mx-4">
+                                        <label for="landmark" class="form-label">Landmark:</label>
+                                        <input type="text" id="landmark" name="landmark" class="form-control"  disabled>
+                                    </div>
+                                    <div class="mb-3 mx-4">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" id="city" name="city" class="form-control"  disabled>
+                                    </div>
+                                </div>
+                                <div class="d-flex my-4" id="fourthline">
+                                    <div class="mb-3 mx-4">
+                                        <label for="state" class="form-label">State:</label>
+                                        <select id="state" name="state" class="form-control"  disabled>
+                                            <option value="andaman_and_nicobar_islands">Andaman and Nicobar Islands</option>
+                                            <option value="chandigarh">Chandigarh</option>
+                                            <option value="dadra_and_nagar_haveli_and_daman_and_diu">Dadra and Nagar Haveli and Daman & Diu</option>
+                                            <option value="delhi">Delhi</option>
+                                            <option value="jammu_and_kashmir">Jammu & Kashmir</option>
+                                            <option value="ladakh">Ladakh</option>
+                                            <option value="lakshadweep">Lakshadweep</option>
+                                            <option value="puducherry">Puducherry</option>
+                                            <option value="andhra_pradesh">Andhra Pradesh</option>
+                                            <option value="arunachal_pradesh">Arunachal Pradesh</option>
+                                            <option value="assam">Assam</option>
+                                            <option value="bihar">Bihar</option>
+                                            <option value="chhattisgarh">Chhattisgarh</option>
+                                            <option value="goa">Goa</option>
+                                            <option value="gujarat">Gujarat</option>
+                                            <option value="haryana">Haryana</option>
+                                            <option value="himachal_pradesh">Himachal Pradesh</option>
+                                            <option value="jammu_kashmir">Jammu and Kashmir</option>
+                                            <option value="jharkhand">Jharkhand</option>
+                                            <option value="karnataka">Karnataka</option>
+                                            <option value="kerala">Kerala</option>
+                                            <option value="madhya_pradesh">Madhya Pradesh</option>
+                                            <option value="maharashtra">Maharashtra</option>
+                                            <option value="manipur">Manipur</option>
+                                            <option value="meghalaya">Meghalaya</option>
+                                            <option value="mizoram">Mizoram</option>
+                                            <option value="nagaland">Nagaland</option>
+                                            <option value="odisha">Odisha</option>
+                                            <option value="punjab">Punjab</option>
+                                            <option value="rajasthan">Rajasthan</option>
+                                            <option value="sikkim">Sikkim</option>
+                                            <option value="tamil_nadu">Tamil Nadu</option>
+                                            <option value="telangana">Telangana</option>
+                                            <option value="tripura">Tripura</option>
+                                            <option value="uttar_pradesh">Uttar Pradesh</option>
+                                            <option value="uttarakhand">Uttarakhand</option>
+                                            <option value="west_bengal">West Bengal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 px-4">
+                                        <label for="Country" class="form-label">Country:</label>
+                                        <input type="Country" id="Country" name="Country" class="form-control" value="India"  disabled>
+                                    </div>
+                                    <div class="mb-3 mx-4">
+                                        <label for="pincode" class="form-label">Pincode:</label>
+                                        <input type="tel" id="pincode" name="pincode" class="form-control"  disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success m-3 px-5">Save</button>
+        </form>
+    </main>
+    
+
+</div>
+</div>
+<%-include("../partials/footer.ejs")%>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(242, 239, 239);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+@media (max-width: 768px) {
+    #firstline, #secondline, #thirdline, #fourthline {
+        width: 100%; 
+        flex-direction: column;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding: 0%;
+    }
+}
+
+img {
+    width: 100px;
+    margin-top: 10px;
+}
+
+.custom-file-upload {
+    border: 1px solid #0b0b0b;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #e2e9dc;
+    color: #333;
+    border-radius: 4px;
+}
+
+.custom-file-upload:hover {
+    background-color: #80ee1f;
+}
+
+.accordion-button{
+    background-color: #eaeded; 
+}
+  .accordion-body {
+    background-color: #e5e5e5; 
+  }
+
+    </style>
+
+    <script>
+        function displaySelectedImage() {
+           
+            var inputElement = document.getElementById('profilepic');
+
+          
+            var file = inputElement.files[0];
+
+         
+            if (file) {
+            
+                var reader = new FileReader();
+
+              
+                reader.onload = function(e) {
+                 
+                    var imageElement = document.getElementById('selectedImage');
+
+                 
+                    imageElement.src = e.target.result;
+                };
+
+              
+                reader.readAsDataURL(file);
+            } else {
+               
+                document.getElementById('selectedImage').src = "";
+            }
+        }
+
+
+
+        function validateForm() {
+            var firstName = document.getElementById('username1');
+            var lastName = document.getElementById('username2');
+            var phoneNumber = document.getElementById('phonenumber');
+            var pincode = document.getElementById('pincode');
+            const errMessage1=document.getElementById('errorMessage1');
+            const errMessage2=document.getElementById('errorMessage2');
+           
+            const errMessage4=document.getElementById('errorMessage4');
+            const errMessage5=document.getElementById('errorMessage5');
+            const errMessage6=document.getElementById('errorMessage6')
+
+            if(firstName.value.trim() === ""){
+                firstName.style.border = "solid 2px red"
+                errMessage1.innerText="First name cannot be empty"
+                return false;
+            }else{
+                return true;
+            }
+            if(lastName.value.trim() === ''){
+                lastName.style.border = "solid 2px red"
+                errMessage1.innerText="Last name cannot be empty"
+                return false;
+            }else{
+                return true;
+            }
+            if(phoneNumber.value.trim() === ''){
+                phoneNumber.style.border = "solid 2px red"
+                errMessage1.innerText="Phone number cannot be empty"
+                return false;
+            }else{
+                return true;
+            }
+            if(pincode.value.trim() === ''){
+                pincode.style.border = "solid 2px red"
+                errMessage1.innerText= "Pincode cannot be empty"
+                return false;
+            }else{
+                return true;
+            }
+
+    }
+
+    function validateFile() {
+        var fileInput = document.getElementById("profilepic");
+        const errMessage3=document.getElementById('errorMessage3');
+        var files = fileInput.files;
+        
+    
+        if (files.length === 0) {
+            errMessage3.innerText="Please select a file."
+            return;
+        }
+        
+       
+        var validTypes = ["image/jpeg", "image/png"];
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            if (!validTypes.includes(file.type)) {
+                errMessage3.innerText="Please select a jpeg/png file."
+                return;
+            }
+        }
+        
+       
+        displaySelectedImage();
+    }
+  
+
+
+//THIS BELLOW FUNCTION HIDES AND UNHIDE THE ADDRESS FIELD
+
+document.getElementById('collapseOne').addEventListener('hidden.bs.collapse', function () {
+    // When the collapsible area is closed, disable the form fields
+    var addressFields = document.querySelectorAll('#addressSection input');
+    addressFields.forEach(function(field) {
+        field.disabled = true;
+    });
+    console.log("close");
+
+    document.getElementById('state').disabled = true;
+});
+
+document.getElementById('collapseOne').addEventListener('shown.bs.collapse', function () {
+    // When the collapsible area is opened, enable the form fields
+    var addressFields = document.querySelectorAll('#addressSection input');
+    addressFields.forEach(function(field) {
+        field.disabled = false;
+    });
+
+    document.getElementById('state').disabled = false;
+    console.log("open");
+});
+
+
+    </script>

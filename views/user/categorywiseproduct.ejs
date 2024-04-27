@@ -1,0 +1,621 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+<div  class="d-flex  gradient-sidebar ">
+    <div class="row">
+          
+            <div class="sideMenu mt-3 mx-3">
+                <ul class="nav flex-column">
+                    <h6 class="text-center mt-3  text-light">FILTER</h6>
+             
+                    
+                    <input type="checkbox" id="APPLE" name="productType" class="form-check-input" <%= comingCategory === "APPLE" ? 'checked' : '' %>>
+                    <label class="form-check-label" for="APPLE">APPLE</label>
+                    <br>
+                    <input type="checkbox" id="GARMIN" name="productType" class="form-check-input" <%= comingCategory === "GARMIN" ? 'checked' : '' %>>
+                    <label class="form-check-label" for="GARMIN">GARMIN</label>
+                    <br>
+                    <input type="checkbox" id="SAMSUNG" name="productType" class="form-check-input" <%= comingCategory === "SAMSUNG" ? 'checked' : '' %>>
+                    <label class="form-check-label" for="SAMSUNG">SAMSUNG</label>
+                    
+
+                    <!-- sorting by price -->
+                <h6 class="text-center mt-3 "> PRICE</h6>
+                    <li class="nav-item">
+                        <label class="nav-link" for="Hightolow">
+                            <input type="radio" id="Hightolow" name="pricesort" class="form-check-input">
+                            High to Low
+                        </label>
+                    </li>
+                    <li class="nav-item">
+                        <label class="nav-link" for="lowtohigh">
+                            <input type="radio" id="lowtohigh" name="pricesort" class="form-check-input">
+                            Low to High
+                        </label>
+                    </li> 
+                   
+         
+                 
+                </ul>
+            
+            </div>
+         
+            
+    </div>
+    
+
+
+
+
+
+
+<main class="col-md-9 ms-sm-auto col-lg-10 md-4">
+    <!-- ---------------------------------------------------------------------------------------------- -->
+    <section style="background-color: #fbf9f9;">
+        <div class="text-center container py-5  ">
+           
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" name="ser" id="serh" aria-label="Search">
+                <br>
+                </form>
+ <!-- ---------------------------------------------------------------------------------------------- -->
+ <div id="messageContainer"></div>
+
+        <div class="row pdlist">
+                <% catlist.forEach(product => { %>
+                    <div class="col-lg-3 col-md-12 mb-4">
+                        <div class="card h-100">
+                            <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                <img src="<%= product.productImage[0].image1%>" class="w-100" id="proimg"/>
+                            </div>
+                                <div class="card-body">   
+                                    <button class="btn btn-link position-absolute start-0 top-0" onclick="addToWishlist('<%= product._id %>')">
+                                        <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                    </button>
+                                    <div><h5 class="card-title mb-3" id="txtcrd"><%= product.productName %></h5></div> 
+                                                     
+                                    <a href="/productpage/<%= product._id %>" class="text-reset">
+                                        <button class="m-2 bg-warning px-4">BUY NOW</button>
+                                    </a>
+                                    <h6 class="mb-3">₹ <%= product.productPrice %></h6>
+                                </div>
+                        </div>
+                    </div>
+                <% }) %>
+        </div>  <!-- row closing -->
+ <!-- ---------------------------------------------------------------------------------------------- -->
+<!-- pagination -->
+            <div class="pagination_div w-100 mt-4  d-flex justify-content-center  b ">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination d-flex">
+                        <% for (let i = 1; i <= Math.ceil(docCount / 4); i++) { %>
+                            <li class="page-item <%= i === 1 ? 'active' : '' %>">
+                                <a class="page-link" onclick="newProductlist(i)"><%= i %></a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+<!-- ---------------------------------------------------------------------------------------------- -->
+    </section>
+<!-- ---------------------------------------------------------------------------------------------- -->
+</main>
+
+
+
+</div>
+<%-include("../partials/footer.ejs")%>
+
+
+
+<!-- ------------------------------------------\EJS  COMPLETE\---------------------------------------------------- -->
+
+
+
+
+
+
+
+<style>
+    #proimg { 
+        height: 250px;
+      }
+      #txtcrd {
+        height: 50px;
+      }
+      .gradient-sidebar {
+        background: linear-gradient(to bottom , #080707, #290129); /* Adjust colors as needed */
+    } 
+
+    .pagination .page-item.active .page-link {
+        background-color: #04fa6f;
+        color: #000000; 
+    }
+
+
+    .form-check-label {
+        color: azure;
+    }
+</style>
+
+
+
+
+
+
+
+
+<!-- --------------------------------------------JAVASCRIPT STARTING-------------------------------------------------- -->
+
+<script>
+
+let usersearch;
+
+//below function responsible
+  document.addEventListener('DOMContentLoaded', async function () {
+        const filters = document.querySelectorAll('input[name=productType]');
+        const sorts = document.querySelectorAll('input[name=pricesort]');
+        const searchInputs = document.querySelector('input[name="ser"]');
+        const page = 1;
+
+       console.log(searchInputs)
+       console.log("filters::::",filters)
+        filters.forEach((selection)=>{
+            selection.addEventListener("change",newProductlist);
+        })
+        sorts.forEach((selection)=>{
+            selection.addEventListener("change",newProductlist);
+        })
+       
+        searchInputs.addEventListener("input",newProductlist);
+       
+        newProductlist(page);
+
+    });
+
+    //this will work if pagination is clicked, filtered, serched
+            async function newProductlist(page){
+                
+                const productType=document.querySelectorAll('input[name=productType]:checked');
+                const checkedValues = [];
+
+                // Loop through each checked checkbox and push its ID to the array
+                productType.forEach(checkbox => {
+                    checkedValues.push(checkbox.id);
+                });
+                console.log(checkedValues);
+
+            
+                const pricesort=document.querySelector('input[name=pricesort]:checked');
+                const ser = document.querySelector('input[name=ser]').value; 
+                usersearch=ser;
+                
+                try{
+                  //posting the user input to backend.
+                const responseData= await fetch("/api/productfilter",{
+                    method:"POST",
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+                    body:JSON.stringify({
+                        productType: checkedValues,
+                    
+                        pricesort: pricesort ? pricesort.id : null,
+                        page:page,
+                        ser:ser,
+                    }),
+                    
+                })
+                    const data=await responseData.json() //incoming data from backend is here.
+                    console.log("frontend",data)
+                    updateTitle(data);//updating the page title
+
+                    updateProductHTML(data);//updating the page content.
+                   
+                }
+                catch(error){
+                    console.log(error.message);
+                }
+
+            }
+
+            
+            var lock;//non selected category manager.
+            function updateTitle(data) {
+                const title = document.querySelector(".nam");
+                if (data.productType) {
+                    lock=0;
+                    title.innerHTML = `<h4 class="mt-4 mb-5"><strong>${data.productType}</strong></h4>`;
+                } else {
+                    console.log("empty")
+                lock=1;
+                }
+            }
+            
+            
+//...................product card..........................
+
+            function updateProductHTML(data) {
+                const contain = document.querySelector(".pdlist"); //getting  the card container
+                const productType=document.querySelectorAll('input[name=productType]:checked');
+                const checkedValues = [];
+                productType.forEach(checkbox => {
+                    checkedValues.push(checkbox.id);
+                });
+                console.log("update product data in userside in categorywise page",data)
+ 
+               if(lock!=1){
+                    contain.innerHTML = '';
+                }
+
+                let cards=[] 
+
+                if (data.products != undefined && data.SortByPrice == undefined) {  // when user enter to the page, it wont have any sorting.
+                    console.log("working   in line 253 of ejs category wise product")
+                
+                    data.products.forEach(product => { //it shows the offer tag on the image
+                        let highestDiscount = 0;
+                
+                        if (product.offer) {
+                            product.offer.forEach(offer => {
+                                if (offer.Discountvalue > highestDiscount) {
+                                    highestDiscount = offer.Discountvalue;
+                                }
+                            });
+                        } else {
+                
+                        }
+                
+                        if (product.productCategory && product.productCategory.catOffer) {
+                            product.productCategory.catOffer.forEach(offer => {
+                                if (offer.catDiscountValue > highestDiscount) {
+                                    highestDiscount = offer.catDiscountValue;
+                                }
+                            });
+                        } else {
+                
+                        }
+                
+                        if (highestDiscount > 0) {
+                            // Product has a discount
+
+
+                            if (product.stockCount > 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                            <div id="discount" style="position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 0, 0.8); padding: 5px 10px; border-radius: 5px;">${highestDiscount}% OFF</div>
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <a href="/productpage/${product._id}" class="text-reset">
+                                                <button class="m-2 bg-warning px-4">BUY NOW</button>
+                                            </a>
+                                            <h6 class="mb-3" style="color: green;">In stock</h6>
+                                            <h6 class="mb-3">₹ ${product.productPrice}</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            } else if (product.stockCount <= 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                            <div id="discount" style="position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 0, 0.8); padding: 5px 10px; border-radius: 5px;">${highestDiscount}% OFF</div>
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <h6 class="mb-3" style="color: red;" >Out of Stock</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
+
+
+
+
+                          
+            
+                            cards.push(cardHTML);
+                        } else {
+                            // Product has no discount
+                            if (product.stockCount > 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                            
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <a href="/productpage/${product._id}" class="text-reset">
+                                                <button class="m-2 bg-warning px-4">BUY NOW</button>
+                                            </a>
+                                            <h6 class="mb-3" style="color: green;">In stock</h6>
+                                            <h6 class="mb-3">₹ ${product.productPrice}</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            } else if (product.stockCount <= 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                     
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <h6 class="mb-3" style="color: red;" >Out of Stock</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
+
+            
+                            cards.push(cardHTML);
+                        }
+                    });
+                
+                    contain.innerHTML = cards.join("");
+                    const paginations = document.querySelector('.pagination')
+                    paginations.innerHTML = generatePagination(data.docCount, data.pageStartindex);
+            
+                  
+                    }
+                
+                else if(data.products != undefined && data.SortByPrice != undefined){
+                    console.log("sorting")
+
+                    data.products.forEach(product => { //it shows the offer tag on the image
+                        let highestDiscount = 0;
+                
+                        if (product.offer) {
+                            product.offer.forEach(offer => {
+                                if (offer.Discountvalue > highestDiscount) {
+                                    highestDiscount = offer.Discountvalue;
+                                }
+                            });
+                        } else {
+                
+                        }
+                
+                        if (product.productCategory && product.productCategory.catOffer) {
+                            product.productCategory.catOffer.forEach(offer => {
+                                if (offer.catDiscountValue > highestDiscount) {
+                                    highestDiscount = offer.catDiscountValue;
+                                }
+                            });
+                        } else {
+                
+                        }
+                
+                        if (highestDiscount > 0) {
+                            // Product has a discount
+                            if (product.stockCount > 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                            <div id="discount" style="position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 0, 0.8); padding: 5px 10px; border-radius: 5px;">${highestDiscount}% OFF</div>
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <a href="/productpage/${product._id}" class="text-reset">
+                                                <button class="m-2 bg-warning px-4">BUY NOW</button>
+                                            </a>
+                                            <h6 class="mb-3" style="color: green;">In stock</h6>
+                                            <h6 class="mb-3">₹ ${product.productPrice}</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            } else if (product.stockCount <= 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                            <div id="discount" style="position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 0, 0.8); padding: 5px 10px; border-radius: 5px;">${highestDiscount}% OFF</div>
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <h6 class="mb-3" style="color: red;" >Out of Stock</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
+
+                            cards.push(cardHTML);
+                        } else {
+                            // Product has no discount
+                            if (product.stockCount > 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                                         
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <a href="/productpage/${product._id}" class="text-reset">
+                                                <button class="m-2 bg-warning px-4">BUY NOW</button>
+                                            </a>
+                                            <h6 class="mb-3" style="color: green;">In stock</h6>
+                                            <h6 class="mb-3">₹ ${product.productPrice}</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            } else if (product.stockCount <= 0) {
+                                cardHTML = `<div class="col-lg-3 col-md-12 mb-4">
+                                    <div class="card h-100">
+                                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                            
+                                            <img src="${product.productImage[0].image1}" class="w-100" id="proimg" style="height: 250px;"/>
+                                        </div>
+                                        <div class="card-body">
+                                            <button class="btn btn-link position-absolute start-0 top-0" onclick="toggleWishlist('${product._id}', this)">
+                                                <i class="fas fa-heart" style="color: #63E6BE;"></i>
+                                            </button>
+                                            <div><h5 class="card-title mb-3" id="txtcrd">${product.productName}</h5></div>
+                                            <h6 class="mb-3" style="color: red;" >Out of Stock</h6>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            }
+
+            
+                            cards.push(cardHTML);
+                        }
+                    });
+                
+                    contain.innerHTML = cards.join("");
+                    const paginations = document.querySelector('.pagination')
+                    paginations.innerHTML = generatePagination(data.docCount, data.pageStartindex);
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+ //......pagination section..........................................
+ function generatePagination(totalProducts, currentPage) {
+    const totalPages = Math.ceil(totalProducts / 4);
+    let paginationHTML = `<nav aria-label="Page navigation example"><ul class="pagination">`;
+
+    for (let i = 1; i <= totalPages; i++) {
+        let activeClass = '';
+        if (i === currentPage) {
+            activeClass = 'active';
+        }
+        paginationHTML += `<li class="page-item ${activeClass}">
+                            <a class="page-link" onclick="newProductlist(${i})" style="${activeClass ? 'background-color: #007bff; color: #fff;' : ''}">${i}</a>
+                          </li>`;
+    }
+
+    paginationHTML += `</ul></nav>`;
+    return paginationHTML;
+}
+
+
+        }
+
+
+
+        function toggleWishlist(productId, button) {
+            const icon = button.querySelector('i.fa-heart');
+          
+            if (icon.style.color === 'rgb(99, 230, 190)') {
+               
+                icon.style.color = '#FF0000';
+
+                const data = { productId: productId };
+
+                
+                fetch('/wishlistadd', {
+                    method: 'POST', 
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data) 
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('response is not ok');
+                    }
+                    return response.json(); 
+                })
+                .then(responseText => {
+                    console.log('Success:', responseText);
+                    showMessage(responseText.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error); 
+                    
+                });
+
+
+
+            } else {
+
+                icon.style.color = '#63E6BE';
+
+                const data = { productId: productId };
+                fetch('/wishlistremove', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(responseText => {
+                    console.log('Success:', responseText); 
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                   
+                });
+            
+            }
+        
+         
+        }
+        
+        
+
+        function showMessage(message) {
+    
+            const messageContainer = document.getElementById('messageContainer');
+
+            messageContainer.textContent = message;
+           setTimeout(()=>{
+            messageContainer.textContent = "";
+           },2000);
+          
+          
+        }
+
+
+
+</script>
+
+
+
+
+
+
+

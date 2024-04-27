@@ -1,0 +1,428 @@
+<%-include("../partials/userloggedheder.ejs")%>
+
+<div id="carouselExampleControls" class="carousel slide parrentBanner" data-bs-ride="carousel">
+    <div class="carousel-inner">
+
+      <div class="carousel-item active   banner">
+        <img src="<%=Banner1.bannerImage1%>" class="d-block w-100   onePIC">
+      </div>
+
+
+      <div class="carousel-item  banner">
+        <img src="<%=Banner1.bannerImage2%>" class="d-block w-100  onePIC">
+      </div>
+
+      <div class="carousel-item  banner">
+        <img src="<%=Banner1.bannerImage3%>" class="d-block w-100 onePIC">
+      </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+
+ <div class="carousel-caption  d-md-block top-0   bannerCaption">
+    <h1 class="mt-5 "><%=Banner1.MainTextContent%></h1>
+    <h4><%=Banner1.SubTextContent%></h4>
+    
+</div>
+
+
+  </div> 
+ 
+</div>  
+
+
+<br>
+
+<div class="container text-center  "><p><%=Banner1.introductionTextContent%></p>
+<br>
+  <h4><%=Banner1.heading%></h4>
+  <h5><%=Banner1.subHeading%></h5>
+</div>
+
+<br>
+
+<section style="background-color: #e8e8e8;">
+  <div class="text-center container py-5">
+    <div class="row">
+     
+      <% if (loadProduct.length === 0) { %>
+        <div class="col-lg-3 col-md-12 mb-4">
+          <div class="card h-100" id="cd">
+            <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+              <img src="" class="w-100" id="proimg" alt="">
+
+            </div>
+            <div class="card-body bodyimg">
+              <div>
+                <h5 class="card-title mb-3" id="txtcrd"> NO PRODUCT TO DISPLAY</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+      
+
+
+
+      <% for (let i = 0; i < 4 && i < loadProduct.length; i++) { %>
+          <div class="col-lg-3 col-md-12 mb-4">
+              <div class="card h-100" id="cd">
+           
+
+
+                  <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                    <% let highestDiscount = 0; %>
+                    <% if (loadProduct[i].offer) { %>
+                        <% loadProduct[i].offer.forEach(offer => { %>
+                            <% if (offer.Discountvalue > highestDiscount) { %>
+                                <% highestDiscount = offer.Discountvalue; %>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+                    <% if (loadProduct[i].productCategory && loadProduct[i].productCategory.catOffer) { %>
+                        <% loadProduct[i].productCategory.catOffer.forEach(offer => { %>
+                            <% if (offer.catDiscountValue > highestDiscount) { %>
+                                <% highestDiscount = offer.catDiscountValue; %>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+                    <% if (highestDiscount > 0) { %>
+                        <div id="discount">
+                            <%= highestDiscount %>% OFF
+                        </div>
+                    <% } else { %>
+                        <div id="dummydiscount"></div>
+                    <% } %>
+                    <img src="<%= loadProduct[i].productImage[0].image1 %>" class="w-100" id="proimg" />
+                </div>
+
+                  <div class="card-body bodyimg">
+                      <div>
+                          <h5 class="card-title mb-3" id="txtcrd"><%= loadProduct[i].productName %></h5>
+                      </div>
+                    
+                      <% if (loadProduct[i].stockCount > 0) { %>
+                          <div class=" justify-content-between m-3">
+                              <h6 class="mb-3 text-danger">&#8377; <%= loadProduct[i].productPrice %></h6>
+                              <div id="stock" class="mb-3 text-success">In Stock</div>
+                            
+                              <a href="/product/<%= loadProduct[i]._id %>" class="text-reset">
+                                  <button class="m-2" id="btBYNOW">BUY NOW</button>
+                              </a>
+                          </div>
+                      <% } else { %>
+                       
+                          <div class="m-3">
+                              <div id="stock" class="mb-3 text-danger">Out of Stock</div>
+                          </div>
+                      <% } %>
+                  </div>
+              </div>
+          </div>
+      <% } %>
+  </div>
+  
+  
+</section>
+
+
+
+  </div>
+
+<!-- here the products of samasung brad is to be displayed,   -->
+<!-- p1 -->
+<!-- p2 -->
+<!-- p3 -->
+
+<div id="bottomCarousel" class="carousel slide parrentBanner" data-bs-ride="carousel">
+  <div class="carousel-inner">
+      <div class="carousel-item active banner">
+          <img src="<%=Banner2.bannerImage1%>" class="d-block w-100  onePIC">
+      </div>
+
+      <div class="carousel-item banner">
+          <img src="<%=Banner2.bannerImage2%>" class="d-block w-100 onePIC">
+      </div>
+
+      <div class="carousel-item banner">
+          <img src="<%=Banner2.bannerImage3%>" class="d-block w-100 onePIC">
+      </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#bottomCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#bottomCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+  </button>
+
+<div class="carousel-caption d-md-block  top-0   bannerCaption">
+  <h1 class="mt-5 "><%=Banner2.MainTextContent%></h1>
+  <h4><%=Banner2.SubTextContent%></h4>
+</div>
+
+</div>
+
+<div class="container text-center  "><p><%=Banner2.introductionTextContent%></p>
+<br>
+  <h4><%=Banner2.heading%></h4>
+  <h5><%=Banner2.subHeading%></h5>
+</div>
+<section style="background-color: #e8e8e8;">
+  <div class="text-center container py-5">
+    <div class="row">
+<!-- ---------------------------------------------------------------------------------------------- -->
+<% if (loadProductA.length === 0) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100" id="cd">
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        <img src="" class="w-100" id="proimg" alt="">
+
+      </div>
+      <div class="card-body bodyimg">
+        <div>
+          <h5 class="card-title mb-3" id="txtcrd"> NO PRODUCT TO DISPLAY</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+
+
+
+
+<% for (let i = 0; i < 4 && i < loadProductA.length; i++) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100" id="cd" >
+  
+
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        <% let highestDiscount = 0; %>
+        <% if (loadProductA[i].offer) { %>
+            <% loadProductA[i].offer.forEach(offer => { %>
+                <% if (offer.Discountvalue > highestDiscount) { %>
+                    <% highestDiscount = offer.Discountvalue; %>
+                <% } %>
+            <% }); %>
+        <% } %>
+        <% if (loadProductA[i].productCategory && loadProductA[i].productCategory.catOffer) { %>
+            <% loadProductA[i].productCategory.catOffer.forEach(offer => { %>
+                <% if (offer.catDiscountValue > highestDiscount) { %>
+                    <% highestDiscount = offer.catDiscountValue; %>
+                <% } %>
+            <% }); %>
+        <% } %>
+        <% if (highestDiscount > 0) { %>
+            <div id="discount">
+                <%= highestDiscount %>% OFF
+            </div>
+        <% } else { %>
+            <div id="dummydiscount"></div>
+        <% } %>
+        <img src="<%= loadProductA[i].productImage[0].image1 %>" class="w-100" id="proimg" />
+    </div>
+
+
+
+
+      <div class="card-body bodyimg">
+        <div>
+          <h5 class="card-title mb-3"id="txtcrd"><%= loadProductA[i].productName %></h5>
+        </div>
+      
+        <% if (loadProductA[i].stockCount > 0) { %>
+            <div class=" justify-content-between m-3">
+                <h6 class="mb-3 text-danger">&#8377; <%= loadProductA[i].productPrice %></h6>
+                <div id="stock" class="mb-3 text-success">In Stock</div>
+              
+                <a href="/product/<%= loadProductA[i]._id %>" class="text-reset">
+                    <button class="m-2" id="btBYNOW">BUY NOW</button>
+                </a>
+            </div>
+        <% } else { %>
+         
+            <div class="m-3">
+                <div id="stock" class="mb-3 text-danger">Out of Stock</div>
+            </div>
+        <% } %>
+    </div>
+
+
+
+
+    </div>
+  </div>
+<% } %>
+<!--  --------------------------------------------------------------------------------------- -->
+    </div>  <!-- row closing -->
+</section>
+
+
+
+
+
+<!-- gramin section -->
+
+
+
+<div id="bottom2Carousel" class="carousel slide parrent2Banner" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active banner">
+      <img src="<%=Banner3.bannerImage1%>" class="d-block w-100 onePIC">
+    </div>
+    <div class="carousel-item banner">
+      <img src="<%=Banner3.bannerImage2%>" class="d-block w-100 onePIC">
+    </div>
+    <div class="carousel-item banner">
+      <img src="<%=Banner3.bannerImage3%>" class="d-block w-100 onePIC">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#bottom2Carousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#bottom2Carousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+<div class="carousel-caption  d-md-block  top-0  bannerCaption">
+  <h1 class="mt-5 "><%=Banner3.MainTextContent%></h1>
+  <h4><%=Banner3.SubTextContent%></h4>
+</div>
+
+
+</div>
+<div class="container text-center  "><p><%=Banner3.introductionTextContent%></p>
+<br>
+
+  <h4><%=Banner3.heading%></h4>
+  <h5><%=Banner3.subHeading%></h5>
+</div>
+<section style="background-color: #e8e8e8;" >
+  <div class="text-center container py-5" >
+    <div class="row" >
+<!-- ---------------------------------------------------------------------------------------------- -->
+
+<% if (loadProductG.length === 0) { %>
+  <div class="col-lg-3 col-md-12 mb-4">
+    <div class="card h-100" id="cd">
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        <img src="" class="w-100" id="proimg" alt="">
+
+      </div>
+      <div class="card-body bodyimg">
+        <div>
+          <h5 class="card-title mb-3" id="txtcrd"> NO PRODUCT TO DISPLAY</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+
+
+
+<% for (let i = 0; i < 4 && i < loadProductG.length; i++) { %>
+  <div class="col-lg-3 col-md-12 mb-4" >
+    <div class="card h-100" id="cd">
+  
+      <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+        <% let highestDiscount = 0; %>
+        <% if (loadProductG[i].offer) { %>
+            <% loadProductG[i].offer.forEach(offer => { %>
+                <% if (offer.Discountvalue > highestDiscount) { %>
+                    <% highestDiscount = offer.Discountvalue; %>
+                <% } %>
+            <% }); %>
+        <% } %>
+        <% if (loadProductG[i].productCategory && loadProductG[i].productCategory.catOffer) { %>
+            <% loadProductG[i].productCategory.catOffer.forEach(offer => { %>
+                <% if (offer.catDiscountValue > highestDiscount) { %>
+                    <% highestDiscount = offer.catDiscountValue; %>
+                <% } %>
+            <% }); %>
+        <% } %>
+        <% if (highestDiscount > 0) { %>
+            <div id="discount">
+                <%= highestDiscount %>% OFF
+            </div>
+        <% } else { %>
+            <div id="dummydiscount"></div>
+        <% } %>
+        <img src="<%= loadProductG[i].productImage[0].image1 %>" class="w-100" id="proimg" />
+    </div>
+
+
+
+      <div class="card-body bodyimg">
+        <div>
+          <h5 class="card-title mb-3"id="txtcrd"><%= loadProductG[i].productName %></h5>
+        </div>
+      
+        <% if (loadProductG[i].stockCount > 0) { %>
+            <div class=" justify-content-between m-3">
+                <h6 class="mb-3 text-danger">&#8377; <%= loadProductG[i].productPrice %></h6>
+                <div id="stock" class="mb-3 text-success">In Stock</div>
+              
+                <a href="/product/<%= loadProductG[i]._id %>" class="text-reset">
+                    <button class="m-2" id="btBYNOW">BUY NOW</button>
+                </a>
+            </div>
+        <% } else { %>
+         
+            <div class="m-3">
+                <div id="stock" class="mb-3 text-danger">Out of Stock</div>
+            </div>
+        <% } %>
+    </div>
+
+
+
+
+    </div>
+  </div>
+<% } %>
+<!--  --------------------------------------------------------------------------------------- -->
+    </div>  <!-- row closing -->
+</section>
+
+</div><!--  for maintaining the bootstrap for pages.-->
+<%-include("../partials/footer.ejs")%>
+
+
+   
+
+   
+
+
+<style>
+  #discount {
+    background-color: rgb(248, 224, 3);
+    width: 45px;
+    height: 45px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    border-radius:0  0 100% 100%  ;
+    overflow: hidden;
+}
+
+
+#dummydiscount{
+ 
+  width: 45px;
+  height: 45px;
+
+
+}
+
+</style>

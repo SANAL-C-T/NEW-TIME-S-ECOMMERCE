@@ -1,0 +1,185 @@
+
+
+<%-include("../partials/userloggedheder.ejs")%>
+
+
+
+
+
+<div class="container-fluid  d-flex ">
+    <div class=" row">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/Myprofile"><i class="fa-solid fa-address-card mx-3 " style="color: #fefefe;"> </i><span class="d-none d-sm-inline">My profile</span></a></li>
+                <li><a href="/profileEdits"> <i class="fa-solid fa-user-pen mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Add profile</span></a></li>
+                <li><a href="/changepassword"><i class="fa-solid fa-key mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">set password</span></a></li>
+                <li><a href="/wallet"><i class="fa-solid fa-wallet mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Wallet</span></a></li>
+                <li><a href="/wishlist"><i class="fa-solid fa-heart mx-3" style="color: #fefefe;"></i><span class="d-none d-sm-inline">Wishlist</span></a></li>
+                <li><a href="/orderHistory"><i class="fa-solid fa-clock-rotate-left mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Order history</span></a></li>
+                <li><a href="/savedaddress"><i class="fa-solid fa-address-book mx-3" style="color: #fefefe;"> </i><span class="d-none d-sm-inline">Saved address</span></a></li>
+        
+            </ul>
+        </nav>
+    </div>
+
+
+<div class=" container   justify-content-between  mt-5 m-3     ">
+                <div class="d-flex mx-5  justify-content-between mb-5  balance">
+
+                    <div>
+                        <h3>Available Balance</h3>
+                    </div>
+                    <div>
+                        <h3>&#8377; <%=getWWallet.avaliable%></h3>
+                    </div>
+
+
+            </div>
+
+
+
+    
+                <table id="example" class="table table-bordered table-hover table-sm table-responsive " style="width: 100%">
+                    <thead>
+                      <tr>
+                        <th>DATE</th>
+                        <th>CREDIT</th>
+                        <th>DEBIT</th>
+                        <th>REMARK</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% getWWallet.Transaction.forEach((transc) => { %>
+                            <tr>
+                                <td><%= transc.CreditDate %></td>
+                                <td>&#8377; <%= transc.creditAmount %></td>
+                                <td>&#8377; <%= transc.debitAmount %></td>
+                                <td> <%= transc.remark %></td>
+                            </tr>
+                        <% }) %>
+                     
+                     
+                    </tbody>
+                  </table>
+           
+
+
+
+</div>
+
+
+</div>
+<%-include("../partials/footer.ejs")%>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(242, 239, 239);
+        }
+
+        .sidebar {
+            height: auto;
+            width: 200px;
+            background-color: #333;
+            padding-top: 20px;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #555;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #555;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        .sidebar ul li a {
+            text-decoration: none; 
+            color: #fff;
+            display: block;
+        }
+@media (max-width: 768px) {
+    #firstline, #secondline, #thirdline, #fourthline {
+        width: 100%; 
+        flex-direction: column;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .sidebar{
+        width:100%;
+        padding: 0%;
+    }
+}
+
+
+#example thead th {
+    background-color: #333; 
+    color: #fff; 
+}
+
+
+#example tbody td {
+    background-color: #fff; 
+    color: #333;
+}
+
+#example_filter {
+    float: right;
+}
+
+
+
+.balance{
+    background-color: rgb(245, 245, 250);
+    height: 100PX;
+    padding:30px;
+   
+  box-shadow: 0 0 15px rgb(140, 139, 139);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/image/wallets.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+
+
+
+}
+
+    </style>
+
+
+
+
+
+<script>
+    new DataTable("#example");
+
+
+
+</script>
+
+

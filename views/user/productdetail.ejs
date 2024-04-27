@@ -1,0 +1,73 @@
+<%-include("../partials/userloggedheder.ejs")%>
+<div id="page" class="container-fluid ">
+        <div id="imageSection">
+            <div class="card m-2" id="mainImage">
+                <img src="<%=pdetail.productImage[0].image1%>" class="card-img-top" id="largeimg">
+            </div>
+              <br>
+              <br>
+              <div id="smallImage">
+                <img src="<%=pdetail.productImage[0].image1%>" class="card-img-top" id="sm1" onclick="changeImage('largeimg','sm1')">
+                <img src="<%=pdetail.productImage[0].image2%>" class="card-img-top" id="sm2" onclick="changeImage('largeimg','sm2')">
+                <img src="<%=pdetail.productImage[0].image3%>" class="card-img-top" id="sm3" onclick="changeImage('largeimg','sm3')">
+                <img src="<%=pdetail.productImage[0].image4%>" class="card-img-top" id="sm4" onclick="changeImage('largeimg','sm4')">
+                <img src="<%=pdetail.productImage[0].image5%>" class="card-img-top" id="sm5" onclick="changeImage('largeimg','sm5')">
+            </div>
+        </div>
+          <div class="card m-2" id="textleft"  style="width:100%;">
+            <div class="card-body">
+              <h2 class="card-title"><%=pdetail.productName%></h2>
+              <br>
+              <h6 class="card-title">CATEGORY:<%=pdetail.productCategory.categoryName%></h6>
+              <br>
+              <h3 class="card-title"> &#8377; <%=pdetail.productPrice%></h3>
+              <br>
+              <p class="card-text" style="text-align: justify;"><%= pdetail.productDescription %></p>
+              <div class="d-flex ">
+                <br>
+                <br>
+                <a href="/cart/<%=pdetail._id%>" class="btn btn-warning">ADD TO CART</a>
+                <br>
+              </div>
+              <br>
+              <a href="/review/<%= pdetail._id %>" style="text-decoration:none;">Want to write a review?</a>
+              <br>
+              <br>
+              <h4 class="card-text">Avg Rating: <b id="avgRating"><%=roundedaverageRating%></b></h4>
+              <br>
+              <a href="/viewreview/<%= pdetail._id %>" style="text-decoration:none;">See all review?</a>
+            </div>
+          </div>
+
+    <div class="card m-2  " id="textright" style="width: 100%;">
+      <div class="card-body  ">
+        <h4 class="card-title" style="font-family: 'Arial Black', sans-serif; font-size: 18px; color: #333333; text-transform: uppercase;">Specifications</h4>
+        <hr>
+        <div class="row">
+            <p class="card-text"><strong>Dial shape:</strong> <%= pdetail.dialShape %></p>
+            <p class="card-text"><strong>Strap Color:</strong> <%= pdetail.StrapColour %></p>
+            <p class="card-text"><strong>Strap Material:</strong> <%= pdetail.StrapMaterial %></p>
+            <p class="card-text"><strong>Water Resistant:</strong> <%= pdetail.waterResistant %></p>
+            <p class="card-text"><strong>Fast charging:</strong> <%= pdetail.fastCharge %></p>
+            <p class="card-text"><strong>Weight:</strong> <%= pdetail.weight %></p>
+            <p class="card-text"><strong>Battery Capacity:</strong> <%= pdetail.battery %></p>
+            <p class="card-text"><strong>Call Function:</strong> <%= pdetail.call %></p>
+            <p class="card-text"><strong>Bluetooth:</strong> <%= pdetail.bluetooth %></p>
+            <p class="card-text"><strong>Wi-Fi:</strong> <%= pdetail.wifi %></p>
+            <p class="card-text"><strong>Display Resolution:</strong> <%= pdetail.display %></p>
+            <p class="card-text"><strong>Country of Origin:</strong> <%= pdetail.MadeIn %></p>
+            <p class="card-text"><strong>Warranty:</strong> <%= pdetail.Warranty %></p>
+          </div>
+        </div>
+      </div>
+
+        </div>
+<%-include("../partials/footer.ejs")%>
+
+
+
+<style>
+  #avgRating{
+    color: rgb(255, 98, 0);
+  }
+</style>

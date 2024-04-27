@@ -1,0 +1,205 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container mt-3">
+    
+  <div class="mt-4 ">
+    <a href="/admin/listCoupon">
+        <button>LIST COUPON</button>
+    </a>
+
+    <a href="/admin/listOffer">
+      <button>LIST OFFER</button>
+  </a>
+</div>
+<br>
+
+      <!-- this is the productwise offer page -->
+
+      <a href="/admin/Offercategory" class="btn btn-primary ">CATEGORY BASED</a>
+      <a href="/admin/offerreferral" class="btn btn-success">REFERRAL BASED</a>
+
+      <!-- <a href="/admin/offerreferrals" class="btn btn-success">REFERRAL</a> -->
+
+
+
+      <table id="example" class="table table-striped table-responsive mt-5" style="width: 100%">
+        <thead>
+            <tr>
+                <th>NAME OF PRODUCT</th>
+                <th>CURRENT OFFER</th>
+                <th>ADD OFFER</th>
+                <th>REMOVE OFFER</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% urlData.products.forEach(prod => { %>
+                <tr>
+                    <td><%= prod.productName %></td>
+                    <td>
+                        <% if (prod.offer && prod.offer.length > 0) { %>
+                            <% prod.offer.forEach(offer => { %>
+                                <%= offer.Discountvalue %> %
+                                <br>
+                            <% }); %>
+                        <% } else { %>
+                            No offer available
+                        <% } %>
+                    </td>
+                    <td>
+                
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalId" onclick="addOffer('<%= prod._id %>', '<%= prod.productName %>')">ADD</button>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="confirmRemoveOffer('<%= prod._id %>')">REMOVE</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+
+
+
+<!-- Modal trigger add button -->
+<!-- Modal Body -->
+<!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+<div
+    class="modal fade"
+    id="modalId"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    
+    role="dialog"
+    aria-labelledby="modalTitleId"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+        role="document"
+    >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">
+                    ADD PRODUCT OFFER
+                </h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+
+                <form  action="/admin/Offerproduct" method="POST">
+                    <input type="hidden" name="productId" id="forProductId" value="">
+                    <input type="hidden" name="productIdName" id="forProductName" value="">
+                    <div> Product Name: <strong><span id="displayProductName"></span> </strong></div>
+                    <br>
+                    <div class="mb-3">
+                    <label for="discount">Enter discount value:</label>
+                    <input type="tel" id="discount" name="discount" placeholder="Enter discount value %"> 
+                    </div>
+        
+                <div class="mb-3 d-flex justify-content-between ">
+                <label for="createdDate">Created Date:</label>
+                <input type="date" id="createdDate" name="createdDate">
+        
+                <label for="expiryDate">Expiry Date:</label>
+                <input type="date" id="expiryDate" name="expiryDate">
+                </div>
+        
+                <button class="btn btn-success ">Submit</button>
+        
+              </form>
+        
+
+
+
+            </div>
+         
+        </div>
+    </div>
+</div>
+
+
+    <br>
+
+    <script>
+        new DataTable("#example");
+    
+        const myModal = new bootstrap.Modal(
+            document.getElementById("modalId"),
+            options,
+        );
+    
+        function addOffer(id, productName) {
+       
+            let productIdInput = document.getElementById("forProductId");
+            let productNameInput = document.getElementById("forProductName");
+        
+        
+            let displayProductName = document.getElementById("displayProductName");
+        
+          
+            productIdInput.value = id;
+            productNameInput.value = productName;
+   
+      
+            displayProductName.textContent = productName;
+        }
+        
+
+
+
+        
+        function confirmRemoveOffer(id) {
+            // Display SweetAlert confirmation dialog
+            let x = id;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to remove the offer. This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, remove it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                
+                if (result.isConfirmed) {
+                
+                    removeOffer(x);
+                }
+            });
+        }
+        
+        function removeOffer(id) {
+            console.log(id);
+        
+            fetch("/admin/removeProductOffer", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ id })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+        
+                // After removal is completed, redirect the user
+                window.location.href = '/admin/Offerproduct';
+            })
+            .catch(error => {
+                console.log(error.message);
+            });
+        }
+        
+
+
+
+
+    </script>
+    

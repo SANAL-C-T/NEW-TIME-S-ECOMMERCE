@@ -1,0 +1,69 @@
+<%- include("../partials/adminheader.ejs") %>
+<div class="container mt-5">
+
+    <br>
+    <div class="table-responsive mt-3 ">
+        
+            <table id="example" class="table table-bordered table-hover table-sm table-responsive" style="width:100%">
+                <thead>
+                    <tr>
+                     
+                        <th>USER ID</th>
+                        <th>ORDER TRACK</th>
+                        <th>ORDER DATE</th>
+                        <th>INVOICE AMOUNT</th>
+                        <th>PAYMENT MODE</th>
+                        <th>CURRENT STATUS</th>
+                        <th id="us">STATUS CONTROL</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    <% userOrder.forEach((order, index) => { %>
+                        <tr>
+                          
+                            <td><%= order.userid %></td>
+                            <td><%= order._id %></td>
+                            <td><%= order.OrderDate %></td>
+                            <td>&#8377; <%= order.OrderTotalPrice %></td>
+                            <td><%= order.paymentMethod %></td>
+                            <th><%= order.Status %></th>
+                            <td>
+                                <form action="/admin/statusUpdate/<%= order._id %>" method="POST">
+                                    <input type="hidden" name="index" value="<%= index %>">
+                                    <select class="form-control" id="stat" name="status">
+                                        <option value="pending" <%= order.status === "pending" ? "selected" : "" %>>Pending</option>
+                                        <option value="order_placed" <%= order.status === "order_placed" ? "selected" : "" %>>Order Placed</option>
+                                        <option value="shipped" <%= order.status === "shipped" ? "selected" : "" %>>Shipped</option>
+                                        <option value="delivered" <%= order.status === "delivered" ? "selected" : "" %>>Delivered</option>
+                                        <option value="Cancel" <%= order.status === "Cancel" ? "selected" : "" %>>Cancel</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm  mt-4">Update</button>
+                                </form>
+                            </td>
+                            
+                           
+                    <% }); %>
+                </tbody>
+            </table>
+        
+    </div>
+</div>
+
+<%- include("../partials/adminfooter.ejs") %>
+<script>
+    new DataTable("#example", {
+        ordering: false // Disable sorting
+    });
+
+
+ 
+    
+    
+</script>
+
+
+<style>
+
+    
+</style>

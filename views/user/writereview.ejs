@@ -1,0 +1,102 @@
+<%- include("../partials/userloggedheder.ejs") %>
+
+<form action="/saveReview/<%= reviewProduct._id %>" method="post">
+  <div class="review-container m-5 p-5">
+      <h2>Add your review for <%= reviewProduct.productName %></h2>
+
+      <div class="star-rating" id="starRating">
+          <i class="fas fa-star" data-rating="1"></i>
+          <i class="fas fa-star" data-rating="2"></i>
+          <i class="fas fa-star" data-rating="3"></i>
+          <i class="fas fa-star" data-rating="4"></i>
+          <i class="fas fa-star" data-rating="5"></i>
+      </div>
+      <br>
+      <input type="hidden" id="selectedRating" name="rating" value="0">
+      <textarea id="reviewDescription" name="reviewDescription" placeholder="Write your review here..."></textarea>
+
+      <button class="btn btn-primary mt-5" type="submit">Submit</button>
+  </div>
+</form>
+
+
+<%- include("../partials/footer.ejs") %>
+
+<style>
+    .review-container {
+        max-width: 600px;
+        margin: auto;
+        background-color: #f8f8f8;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .star-rating {
+        display: flex;
+        font-size: 24px;
+        color: #ffc107;
+        cursor: pointer;
+    }
+
+    .star-rating i {
+        transition: color 0.2s ease-in-out;
+    }
+
+    .star-rating i:hover {
+        color: #ff9800;
+    }
+
+    .star-rating .rated {
+        color: #ff9800;
+    }
+
+    textarea {
+        width: 100%;
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        resize: vertical;
+    }
+
+    #submitReview {
+        margin-top: 15px;
+        padding: 10px 15px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const starRating = document.getElementById('starRating');
+        const stars = starRating.querySelectorAll('i');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                const rating = this.dataset.rating;
+                resetStars();
+                markStarsAsRated(rating);
+                // You can store the selected rating in a hidden input field if needed
+                document.getElementById('selectedRating').value = rating;
+                selectedRatingInput.value = rating;
+            });
+        });
+
+        function resetStars() {
+            stars.forEach(star => {
+                star.classList.remove('rated');
+            });
+        }
+
+        function markStarsAsRated(count) {
+            for (let i = 0; i < count; i++) {
+                stars[i].classList.add('rated');
+            }
+        }
+    });
+</script>

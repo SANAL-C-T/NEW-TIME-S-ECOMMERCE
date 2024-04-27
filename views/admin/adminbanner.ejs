@@ -1,0 +1,352 @@
+<%- include("../partials/adminheader.ejs") %>
+
+<div class="container">
+
+
+    <!-- <a href="/admin/bannerConfig"><button>CONFIGURE A BANNER</button></a> -->
+
+    <!-- Section One -->
+    <div class="sectionOne">
+        <h2 class="text-center ">SECTION ONE</h2>
+        <br>
+        <form action="/admin/update/sectionOne" method="post" enctype="multipart/form-data">
+            <h3>Update banner Images and its content for section one</h3>
+            <div class="d-flex justify-content-between flex-wrap mt-3">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="<%=urlData.firstBanner. bannerImage1%>" alt="Banner Image 1" id="image1st1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 "  accept="image/*" id="imageFileInput1st1">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.firstBanner. bannerImage2%>" alt="Banner Image 2" id="image1st2"></div>
+                <input type="file" name="bannerImage2" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput1st2">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.firstBanner. bannerImage3%>" alt="Banner Image 3" id="image1st3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput1st3"   >
+            </div>
+            </div>
+        
+            
+            <!-- Add text for the banner -->
+            <h3>Update text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText" value="<%=urlData.firstBanner.MainTextContent%>">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText" value="<%=urlData.firstBanner.SubTextContent%>">
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText" value="<%=urlData.firstBanner.introductionTextContent%>">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText" value="<%=urlData.firstBanner.heading%>">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText" value="<%=urlData.firstBanner.subHeading%>">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">UPDATE THE BANNER</button>
+        </form>
+    </div>
+
+    <!-- Section Two -->
+    <div class="sectionTwo">
+        <h2 class="text-center ">SECTION TWO</h2>
+        <br>
+        <form action="/admin/update/sectionTwo" method="post" enctype="multipart/form-data">
+            <h3>Update banner Images and its content for section Two</h3>
+            <div class="d-flex justify-content-between flex-wrap mt-3">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="<%=urlData.SecondBanner. bannerImage1%>" alt="Banner Image 1" id="image2nd1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput2nd1">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.SecondBanner. bannerImage2%>" alt="Banner Image 2" id="image2nd2"></div>
+                <input type="file" name="bannerImage2"  class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput2nd2">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.SecondBanner. bannerImage3%>" alt="Banner Image 3" id="image2nd3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput2nd3">
+            </div>
+            </div>
+            
+            
+            <!-- Add text for the banner -->
+            <h3>Update text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText" value="<%=urlData.SecondBanner.MainTextContent%>">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText"value="<%=urlData.SecondBanner.SubTextContent%>" >
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText" value="<%=urlData.SecondBanner.introductionTextContent%>">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText" value="<%=urlData.SecondBanner. heading%>">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText" value="<%=urlData.SecondBanner.subHeading%>">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">UPDATE THE BANNER</button>
+        </form>
+    </div>
+
+    <!-- Section Three -->
+    <div class="sectionThree">
+        <h2 class="text-center ">SECTION THREE</h2>
+        <br>
+        <form action="/admin/update/sectionThree" method="post" enctype="multipart/form-data">
+            <h3>Update banner Images and its content for section Three</h3>
+            <div class="d-flex justify-content-between flex-wrap mt-3 ">
+                <!-- Image placeholders -->
+                <div>
+                <div class="image-placeholder"><img src="<%=urlData.ThirdBanner. bannerImage1%>" alt="Banner Image 1" id="image3rd1"></div>
+                <input type="file" name="bannerImage1" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput3rd1">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.ThirdBanner. bannerImage2%>" alt="Banner Image 2" id="image3rd2"></div>
+                <input type="file" name="bannerImage2" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput3rd2">
+            </div>
+            <div>
+                <div class="image-placeholder"><img src="<%=urlData.ThirdBanner. bannerImage3%>" alt="Banner Image 3" id="image3rd3"></div>
+                <input type="file" name="bannerImage3" class="form-control-file mt-3 mb-3 " accept="image/*" id="imageFileInput3rd3">
+            </div>
+            </div>
+            <!-- Add text for the banner -->
+            <h3>Update text for the banner</h3>
+            <div>
+                <label for="mainText">MAIN TEXT</label>
+                <input type="text" id="mainText" name="mainText" value="<%=urlData.ThirdBanner.MainTextContent%>">
+                <label for="subText">SUB TEXT</label>
+                <input type="text" id="subText" name="subText" value="<%=urlData.ThirdBanner.SubTextContent%>" >
+                <label for="introText">INTRODUCTION</label>
+                <input type="text" id="introText" name="introText" value="<%=urlData.ThirdBanner.introductionTextContent%>">
+                <label for="HeadingText">HEADING TEXT</label>
+                <input type="text" id="HeadingText" name="HeadingText" value="<%=urlData.ThirdBanner.heading%>">
+                <label for="subHeadingText">SUB HEADING</label>
+                <input type="text" id="subHeadingText" name="subHeadingText" value="<%=urlData.ThirdBanner.subHeading%>">
+            </div>
+            <!-- Save button -->
+            <button type="submit" class="btn-save">UPDATE THE BANNER</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .sectionOne, .sectionTwo, .sectionThree {
+        margin-bottom: 40px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .image-placeholder {
+        width: 200px;
+        height: 150px;
+        border: 1px solid black;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    
+      
+    }
+
+    .image-placeholder img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    const imageFileInput3a = document.getElementById('imageFileInput3rd1');
+    const imageElement3a = document.getElementById('image3rd1');
+    imageFileInput3a.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement3a .src = imageUrl;
+        } else {
+         
+            imageElement3a .src = '';
+        }
+    });
+
+
+
+
+    const imageFileInput3b = document.getElementById('imageFileInput3rd2');
+    const imageElement3b = document.getElementById('image3rd2');
+    imageFileInput3b.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement3b .src = imageUrl;
+        } else {
+         
+            imageElement3b .src = '';
+        }
+    });
+
+
+
+
+
+
+    const imageFileInput3c = document.getElementById('imageFileInput3rd3');
+    const imageElement3c = document.getElementById('image3rd3');
+    imageFileInput3c.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement3c .src = imageUrl;
+        } else {
+         
+            imageElement3c .src = '';
+        }
+    });
+
+
+
+
+
+    const imageFileInput2a = document.getElementById('imageFileInput2nd1');
+    const imageElement2a = document.getElementById('image2nd1');
+    imageFileInput2a.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement2a .src = imageUrl;
+        } else {
+         
+            imageElement2a .src = '';
+        }
+    });
+
+
+
+
+    const imageFileInput2b = document.getElementById('imageFileInput2nd2');
+    const imageElement2b = document.getElementById('image2nd2');
+    imageFileInput2b.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement2b .src = imageUrl;
+        } else {
+         
+            imageElement2b .src = '';
+        }
+    });
+
+
+
+
+
+
+    const imageFileInput2c = document.getElementById('imageFileInput2nd3');
+    const imageElement2c = document.getElementById('image2nd3');
+    imageFileInput2c.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement2c .src = imageUrl;
+        } else {
+         
+            imageElement2c .src = '';
+        }
+    });
+
+
+
+
+
+
+    const imageFileInput1a = document.getElementById('imageFileInput1st1');
+    const imageElement1a = document.getElementById('image1st1');
+    imageFileInput1a.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement1a .src = imageUrl;
+        } else {
+         
+            imageElement1a .src = '';
+        }
+    });
+
+
+
+
+    const imageFileInput1b = document.getElementById('imageFileInput1st2');
+    const imageElement1b = document.getElementById('image1st2');
+    imageFileInput1b.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement1b .src = imageUrl;
+        } else {
+         
+            imageElement1b .src = '';
+        }
+    });
+
+
+
+
+
+
+    const imageFileInput1c = document.getElementById('imageFileInput1st3');
+    const imageElement1c = document.getElementById('image1st3');
+    imageFileInput1c.addEventListener('change', function(event) {
+
+        if (event.target.files && event.target.files.length > 0) {
+            const selectedFile = event.target.files[0];
+            const imageUrl = URL.createObjectURL(selectedFile);
+            imageElement1c .src = imageUrl;
+        } else {
+         
+            imageElement1c .src = '';
+        }
+    });
+
+
+
+
+</script>
