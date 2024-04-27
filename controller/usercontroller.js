@@ -472,7 +472,7 @@ const logout = async (req, res) => {
     try {
         console.log("logout")
         res.clearCookie('usertoken');
-        res.redirect("/home.")
+        res.redirect("/")
     }
     catch (error) {
         console.log(error.message)
@@ -608,10 +608,10 @@ const resetpassword = async (req, res) => {
 
         if (isuser == null || isuser.verified == false) {
             res.locals.errorMessage = 'Invalid email or password';
-            res.render("user/forgotPassword");
+            res.render("user/forgotpassword");
         } else if (confirmpass != newpass) {
             res.locals.errorMessage = 'Invalid email or password';
-            res.render("user/forgotPassword");
+            res.render("user/forgotpassword");
         }
         else {
             await userData.updateOne({ email: userEmail }, { $set: { password: confirmpass } });
