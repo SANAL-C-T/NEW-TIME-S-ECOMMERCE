@@ -6,6 +6,7 @@ const session = require('express-session');
 const uuid = require('uuid');
 const secrettt = uuid.v4();
 const cookie = require("cookie-parser")
+const morgan = require('morgan')
 
 
 
@@ -16,6 +17,8 @@ server.use(express.static('uploadBanner'));
 server.set("view engine", "ejs")
 server.engine("html", require("ejs").renderFile)
 server.set("views", "views");
+server.use(morgan('tiny'));
+
 
 server.use(
     session({
