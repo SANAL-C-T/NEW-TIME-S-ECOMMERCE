@@ -18,11 +18,7 @@ const razSec = process.env.RAZORPAY_SECRET_KEY;
 const secret = process.env.jwt_user_secret;
 
 
-// var instance = new Razorpay({
-//     key_id: razKey,
-//     key_secret: razSec,
-// });
-//-------------------- logics from here-------------------------------------------
+
 
 
 
@@ -32,16 +28,13 @@ const cartadd = async (req, res) => {   // need to optmise this code, due to tim
         //----------------------------verify user--------
         const selectedProduct = req.params.prodid; //getting product id from front end
         const usersid = req.userid;//this is comming from jwt authentication
-
-
-
         const itemINcart = await cartData.findOne({ userid: usersid })
             .populate({
                 path: 'items.products',
                 model: 'products',
                 match: { isDeleted: false }
             });
-            console.log("The user has ==...",itemINcart)
+        console.log("The user has ==...", itemINcart)
 
 
         if (itemINcart?.couponApplied == true) {
@@ -54,14 +47,12 @@ const cartadd = async (req, res) => {   // need to optmise this code, due to tim
                 return res.status(404).json({ success: false, message: "Cart not found." });
             }
 
-
             const codeFromDatabase = inCart.CouponCode;
             const couponInDb = await couponData.findOne({ couponCode: codeFromDatabase });
             if (!couponInDb) {
                 console.log("Coupon not found in database.");
                 return res.status(404).json({ success: false, message: "Coupon not found in database." });
             }
-
 
             let couponRemovedPrice;
             if (couponInDb.offerType === "fixedPrice") {
@@ -72,7 +63,6 @@ const cartadd = async (req, res) => {   // need to optmise this code, due to tim
                 const coupValue = couponInDb.discount;
                 couponRemovedPrice = inCart.OrderTotalPrice / (1 - coupValue / 100);
             }
-
 
             await cartData.updateOne(
                 { userid: usersid },
@@ -413,8 +403,6 @@ const checkPrices = async (req, res) => {
     }
 }
 
-
-//------------------------------------------------------------------------
 //.............................cart quantity management ........................
 
 const qyt = async (req, res) => {
@@ -450,9 +438,6 @@ const qyt = async (req, res) => {
         const totalPrice = itemINcart.items.reduce((acc, item) => {
             return acc + item.price;
         }, 0);
-
-
-
         await cartData.updateOne({ userid: usersid }, { $set: { OrderTotalPrice: totalPrice } });
         res.status(200).json({ success: true, totalPrice: totalPrice, message: "Total price updated successfully" });
     }
@@ -461,8 +446,6 @@ const qyt = async (req, res) => {
     }
 }
 
-//----------------------------------------------------------------------------
-
 //stock update,, up
 const stockup = async (req, res) => {
     try {
@@ -470,7 +453,6 @@ const stockup = async (req, res) => {
         const UserId = req.userid; //from JWT AUTHENTICATION
         let cart = await cartData.findOne({ userid: UserId });
         let frontendData = req.body;
-
 
         console.log("frontendData:", frontendData)
         let updatedItem = cart.items[frontendData.index];
@@ -481,7 +463,6 @@ const stockup = async (req, res) => {
         let stockVal = avaliableSTock.stockCount;//5
         if (stockVal > 0 && stockVal >= frontendData.quantity) {
             stockVal = stockVal - 1;
-
             // await productDatas.updateOne({ _id: productID }, { $inc: { stockCount: -1 } });
             res.status(200).json({ success: true, message: "Stock count updated successfully." });
         } else {
@@ -521,9 +502,6 @@ const itemdel = async (req, res) => {
         const deleteIndex = req.body.deleteIndex;
         const id = req.body.id;
         const qyt = parseInt(req.body.currentQyt);
-
-        // console.log("+++++++******"    ,deleteIndex,   id,    qyt)
-
         const usersid = req.userid;//from JWT AUTHENTICATION
         const getQuantity = await cartData.findOne(
             { userid: usersid, "items.products": new mongoose.Types.ObjectId(id) },
@@ -558,20 +536,16 @@ const itemdel = async (req, res) => {
                 model: 'products', //name of other collection schema
             })
         //console.log("data coming ",itemINcart)
-
         let cartItem = {
             cart: itemINcart
         }
         // console.log("Product Name:", cartItem.cart.items[1].products.productName);
-
         //calculating the total price in the cart
         const totalPrice = itemINcart.items.reduce((acc, item) => {
             return acc + item.price;
         }, 0);
-
         //   console.log("del prod::::::::",totalPrice)
         await cartData.updateOne({ userid: usersid }, { $set: { OrderTotalPrice: totalPrice } });
-
         res.redirect("/cart")
 
 
@@ -581,25 +555,18 @@ const itemdel = async (req, res) => {
     }
 };
 
-
-//...........................................
 //display the checkout page
 const proceedToaddress = async (req, res) => {
     try {
         const usersid = req.userid;//from JWT AUTHENTICATION
         const user = await userData.findOne({ _id: usersid })
         // const cart = await cartData.findOne({ userid: usersid })
-
-
-
         const cart = await cartData.findOne({ userid: usersid })
             .populate({
                 path: 'items.products',
                 model: 'products',
                 match: { isDeleted: false, stockCount: { $gt: 0 } }
             });
-
-
         console.log("proceed to address   ....cart:::::::::", cart)
 
         if (cart == null) {
@@ -616,28 +583,21 @@ const proceedToaddress = async (req, res) => {
     }
 }
 
-
-
-//.................................................
 //storing the incoming data from checkout page
 var razOrderID;
 var deleiveryCHarge;
 const addAddressToPurchase = async (req, res) => {
-
     console.log(":::::add address to purchase in cart controller is runing now::::")
     try {
         var name;
         var email;
         var mob;
-
         const usingSavedAddress = req.body.Value;
         console.log("===savedAddress coming to try block of add address to purchase::", usingSavedAddress)
         deleiveryCHarge = req.body.deliveryCharge;
         var paymentMode = req.body.paymentMethod;
-
         // console.log("////paymentMode coming to try block of add address to purchase:::::", paymentMode)
         const toSaveAddressCheckbox = req.body.saveaddressCheckbox;
-
         // this is the typed address
 
         const phoneNumber = req.body.phoneNumber
@@ -692,20 +652,17 @@ const addAddressToPurchase = async (req, res) => {
 
         else if (typedAddress.phoneNo === undefined) { //this is because, when saved address is used there wont be any data in new address form.
             // console.log("%%%% user id using saved address from database  , now in else if block of add address to purchase")
-
             try {
                 const updatedCartData = await cartData.findOneAndUpdate(
                     { userid: usersid },
                     { $set: { Address: usingSavedAddress } },
                 );
-
                 //   console.log("Updated Cart Data:", updatedCartData);
             } catch (error) {
                 console.error(error);
             }
 
         }
-
         else {//we are not useing the saved data nor want it to save to saved address...
             //we are adding to cart, so it is not stored for future use.
             // console.log("***** user is typing the address  , now in else block of save address to purchase")
@@ -729,11 +686,7 @@ const addAddressToPurchase = async (req, res) => {
             );
         }
 
-
-
         //function to get deliveryCharge
-
-
 
         if (paymentMode == "COD") {
             const success = await cartEraseAccording("COD", deleiveryCHarge, usersid, req, res);
@@ -749,10 +702,7 @@ const addAddressToPurchase = async (req, res) => {
 
         else if (paymentMode == "Razorpay") {
             console.log("in raz pay")
-
             let inCart = await cartData.findOne({ userid: usersid })
-
-
             var instance = new Razorpay({ key_id: razKey, key_secret: razSec })
             let price = (inCart.OrderTotalPrice + Number(deleiveryCHarge))
             console.log(price)
@@ -786,7 +736,6 @@ const addAddressToPurchase = async (req, res) => {
         }
 
         else if (paymentMode == "MyWallet") {
-
             const balance = await walletData.findOne({ userId: usersid }, { avaliable: 1 })
             const netBalance = balance.avaliable;
             let inCart = await cartData.findOne({ userid: usersid })
@@ -822,7 +771,6 @@ const addAddressToPurchase = async (req, res) => {
 
         }
         //here we are adding all the data to the order history collection.
-
     }
     catch (error) {
         console.log(error.message)
@@ -841,7 +789,6 @@ const handlePaymentData = async (req, res) => {
         // console.log("usersid:::",usersid)
 
         let concatenatedParams = razOrderID + "|" + payment_id;
-
         const generateSignature = (data, Sec) => {
             const hmac = crypto.createHmac('sha256', Sec);
             hmac.update(data);
@@ -870,7 +817,6 @@ const handlePaymentData = async (req, res) => {
 }
 
 
-
 async function cartEraseAccording(PayMode, deleiveryCHarge, usersid, req, res) {
 
     try {
@@ -884,8 +830,6 @@ async function cartEraseAccording(PayMode, deleiveryCHarge, usersid, req, res) {
         var formatedDate = moment(date).format('D-MM-YYYY')
 
         // here we have to add the logic to find the quantity of each product in the array of items, then update the product quyntity.
-
-
         // console.log("DATEEEE:::",formatedDate)
         const includingDeliveryCharge = presentCart.OrderTotalPrice + Number(deleiveryCHarge);
         const purchaseHistory = new orderHistoryData({
@@ -906,7 +850,6 @@ async function cartEraseAccording(PayMode, deleiveryCHarge, usersid, req, res) {
         });
 
         await purchaseHistory.save(); //save the data.
-
 
 
         console.log("cartItems:", presentCart.items)
@@ -936,31 +879,8 @@ async function cartEraseAccording(PayMode, deleiveryCHarge, usersid, req, res) {
 
 }
 
-// async function userExtractionFromJwt(req, res) {
 
-//     try {
-//         const usersid = await new Promise((resolve, reject) => {
-//             const usertoken = req.cookies.usertoken;
-//             JWTtoken.verify(usertoken, secret, (err, decoded) => {
-//                 if (err) {
-//                     console.error('JWT verification failed:', err.message);
-//                     reject(err);
-//                 } else {
-//                     const userdetail = decoded._id;
-//                     resolve(userdetail);
-//                 }
-//             });
-//         });
-//         return usersid;
-//     }
-//     catch (error) {
-//         console.log(error.message)
-//     }
-
-// }
-
-
-//....................... logic to get user order history..........................................
+//..... logic to get user order history..................
 
 const history = async (req, res) => {
     try {
@@ -973,8 +893,6 @@ const history = async (req, res) => {
         console.log(error.message)
     }
 }
-
-
 
 //..........logic to cancel the order by the user.......................
 const cancelOrder = async (req, res) => {
@@ -1026,17 +944,6 @@ const cancelOrder = async (req, res) => {
                 { new: true }
             );
         }
-
-        // let statusFromDb=await orderHistoryData.findOne({ _id: orderId }).select("Status")
-
-        //   if(statusFromDb.Status=="User cancelled"){
-        //     let productItems = await orderData.findOne({ _id: orderId }).select('items');
-
-        //     for (const element of productItems.items) {
-        //         console.log(element.quantity, element.products);
-        //         await productData.updateOne({ _id: element.products }, { $inc: { stockCount: element.quantity } });
-        //     }
-        // }
         res.redirect("/orderHistory")
     }
     catch (error) {
@@ -1144,9 +1051,7 @@ const ReturnOrder = async (req, res) => {
 }
 
 
-
-
-//..........logic to delete the previously saved address.......................
+//..........logic to delete the previously saved address....
 
 const deleteAddress = async (req, res) => {
     try {
@@ -1201,8 +1106,6 @@ const getOrderInforamtion = async (req, res) => {
         const orderId = req.params.orderId;
         console.log("orderId::", orderId);
         console.log("in getInformation");
-
-
         const orderInformation = await orderData.find({ _id: orderId });
 
         if (orderInformation.length > 0) {
@@ -1224,15 +1127,11 @@ const couponAdd = async (req, res) => {
     try {
         const code = req.body.code;
         const userId = req.userid; // Obtaining user ID from JWT authentication
-
-
         const couponInDb = await couponData.findOne({ couponCode: code });
         if (!couponInDb) {
             console.log("Coupon not found.");
             return res.status(404).json({ success: false, message: "Coupon does not exist." });
         }
-
-
         const inCart = await cartData.findOne({ userid: userId });
         if (!inCart) {
             console.log("Cart not found.");
@@ -1288,15 +1187,11 @@ const couponAdd = async (req, res) => {
 const couponremove = async (req, res) => {
     try {
         const userId = req.userid;
-
-
         const inCart = await cartData.findOne({ userid: userId });
         if (!inCart) {
             console.log("Cart not found.");
             return res.status(404).json({ success: false, message: "Cart not found." });
         }
-
-
         const codeFromDatabase = inCart.CouponCode;
         const couponInDb = await couponData.findOne({ couponCode: codeFromDatabase });
         if (!couponInDb) {
@@ -1359,8 +1254,6 @@ const sendfailed = async (req, res) => {
         console.log(error.message)
     }
 }
-
-
 
 //.................. exports ...........................................................................
 module.exports = {

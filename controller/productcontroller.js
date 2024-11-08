@@ -1,7 +1,6 @@
 const productData = require("../model/productSchema");
 const categData = require("../model/categorySchema")
 
-//...........................................................................................................
 //Adding product to database.
 const addproduct = async (req, res) => {
 
@@ -33,7 +32,7 @@ const addproduct = async (req, res) => {
         // console.log("incoming:",req.body.productCategory)
         const category = await categData.findOne({ _id: req.body.productCategory });
         // console.log("category data in addproduct::::", category)
-console.log(req.body)
+        console.log(req.body)
 
         const addproductDetails = new productData({
             productName: req.body.productName,
@@ -43,19 +42,19 @@ console.log(req.body)
             variant: vari,
             productImage: productImageObject,
             stockCount: req.body.stockCount,
-            dialShape:req.body.productDialShape,
-            MadeIn:req.body.productMadeIn,
-            StrapMaterial:req.body.strapmaterial,
-            waterResistant:req.body.waterresistant,
-            display:req.body.productdisplay,
-            fastCharge:req.body.productfastCharge, 
+            dialShape: req.body.productDialShape,
+            MadeIn: req.body.productMadeIn,
+            StrapMaterial: req.body.strapmaterial,
+            waterResistant: req.body.waterresistant,
+            display: req.body.productdisplay,
+            fastCharge: req.body.productfastCharge,
             battery: req.body.productbattery,
             weight: req.body.weight,
             call: req.body.calling,
             bluetooth: req.body.productbluetooth,
             wifi: req.body.wifi,
-            StrapColour:req.body.productStrapColour,
-            Warranty:req.body.Warranty
+            StrapColour: req.body.productStrapColour,
+            Warranty: req.body.Warranty
         })
         await addproductDetails.save()
 
@@ -69,7 +68,6 @@ console.log(req.body)
     }
 }
 
-//...........................................................................................................
 //listing of product
 const listProducts = async (req, res) => {
     try {
@@ -92,7 +90,6 @@ const listProducts = async (req, res) => {
     }
 };
 
-//...........................................................................................................
 //for editing of the added product, listing to the edit field.
 const edit = async (req, res) => {
     try {
@@ -101,7 +98,7 @@ const edit = async (req, res) => {
         // console.log(dbd)
         const categorySatuss = await categData.find({ Categorystatus: true })
         const selectedProductToEdit = await productData.findById(productToEdit);
-        
+
         const pageH = "EDIT ADDED PRODUCT"
         const urlData = {
             proData: selectedProductToEdit,
@@ -117,9 +114,8 @@ const edit = async (req, res) => {
 }
 
 
-//...........................................................................................................
 const saveedit = async (req, res) => {
-     console.log("product edit data coming to saveedit in productController...");
+    console.log("product edit data coming to saveedit in productController...");
     // console.log("product id:", req.params.id);
     // console.log("body:", req.body);
 
@@ -168,7 +164,7 @@ const saveedit = async (req, res) => {
             }
 
             // console.log(editarry);
-    
+
             const productImageObject1 = {
                 image1: editarry[0],
                 image2: editarry[1],
@@ -250,13 +246,13 @@ const saveedit = async (req, res) => {
 };
 
 
-//...........................................................................................................
+
 const Deleteproduct = async (req, res) => {
     try {
         const item = req.params.id;
 
         await productData.updateOne({ _id: item }, { $set: { isDeleted: true } });
-        
+
         console.log("deleted")
         res.redirect("/admin/listProduct")
     } catch (error) {
@@ -265,7 +261,7 @@ const Deleteproduct = async (req, res) => {
     }
 };
 
-//...........................................................................................................
+
 const restoreproduct = async (req, res) => {
     try {
         let id = req.params.id;
@@ -276,12 +272,8 @@ const restoreproduct = async (req, res) => {
         console.log(error.message)
     }
 }
-//...........................................................................................................
 
 
-
-
-//...........................................................................................................
 module.exports = {
     addproduct,
     listProducts,
@@ -290,4 +282,3 @@ module.exports = {
     Deleteproduct,
     restoreproduct
 }
-//...........................................................................................................

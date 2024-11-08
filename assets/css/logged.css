@@ -24,12 +24,11 @@
   display: flex;
 }
 
-/* parent */
 #imageSection {
   display: flex;
   flex-direction: column;
 }
-/* child */
+
 #mainImage img {
   width: 350px;
   height: 350px;
@@ -39,12 +38,10 @@
   z-index: 1;
 }
 
-#largeimg{
+#largeimg {
   object-fit: contain;
   padding: 25px;
 }
-
-
 
 /* child */
 #smallImage img {
@@ -72,7 +69,7 @@
 
 @media only screen and (max-width: 768px) {
   #page {
-    display: block; /* Change to block for small screens */
+    display: block;
   }
   #imageSection {
     justify-content: center;
@@ -105,7 +102,6 @@
 #txtcrd {
   height: 50px;
   text-decoration: none;
-  
 }
 
 .bg-image {
@@ -116,10 +112,10 @@
   transform: scale(1.2);
 }
 
-.bodyimg{
+.bodyimg {
   transition: transform 0.3s ease-in-out;
 }
 
-.bodyimg:hover{
+.bodyimg:hover {
   transform: scale(1.1);
 }

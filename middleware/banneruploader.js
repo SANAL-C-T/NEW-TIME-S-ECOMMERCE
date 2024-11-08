@@ -1,13 +1,11 @@
 const multer = require("multer");
 
 const storeBanner = multer.diskStorage({
-    
     destination: function (req, file, callback) {
-
         callback(null, "uploadBanner");
     },
     filename: function (req, file, callback) {
-        
+
         var ext = file.originalname.substring(file.originalname.lastIndexOf("."));
         callback(null, file.originalname + "-" + Date.now() + ext);
     }

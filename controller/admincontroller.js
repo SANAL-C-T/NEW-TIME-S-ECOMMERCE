@@ -21,7 +21,6 @@ const { finished } = require("nodemailer/lib/xoauth2")
 const jwtsecret = process.env.jwt_admin_secret
 
 
-/* ---------------------------------------------------- */
 const adminlogin = async (req, res) => {
     try {
         const urlData = {
@@ -33,7 +32,7 @@ const adminlogin = async (req, res) => {
         console.log(error.message)
     }
 }
-/* ------------------------------------------------------ */
+
 const hashpass = async (pass) => {
     try {
         const codedpass = await bcrypt.hash(pass, 10);
@@ -46,9 +45,9 @@ const hashpass = async (pass) => {
 
 
 //logic to add extradetails of admin,connection to schema
-/* ---------------------------------------------------- */
+
 const adminDataStore = async (req, res) => {
-     console.log(req.body)
+    console.log(req.body)
     const secret = await hashpass(req.body.password)
     try {
         const adminDetails = new adminData({
@@ -70,22 +69,13 @@ const adminDataStore = async (req, res) => {
 
 
 
-const adminSignUP=async (req, res) => {
+const adminSignUP = async (req, res) => {
     try {
-      
-   
         res.render("admin/adminsignup.ejs")
     } catch (error) {
         console.log(error.message)
     }
 }
-
-
-
-
-
-
-/* ============================================================ */
 
 
 //logic for authentication
@@ -127,10 +117,9 @@ const adminVerification = async (req, res) => {
     }
 }
 
-/* ------------------------------------------------- */
+
 const adminDashboard = async (req, res) => {
     try {
-
         const salesPaymentMethod = await orderData.aggregate([
             { $group: { _id: "$paymentMethod", count: { $sum: 1 } } }
         ]);
@@ -239,10 +228,7 @@ const adminDashboard = async (req, res) => {
             { $sort: { totalQuantity: -1 } } // Sort by total quantity in descending order
         ]);
 
-// console.log("bestSellerCategory::",bestSellerCategory)
-
-
-
+        // console.log("bestSellerCategory::",bestSellerCategory)
 
         const urlData = {
             pageTitle: 'ADMIN DASHBOARD',
@@ -253,7 +239,7 @@ const adminDashboard = async (req, res) => {
             daywiseSoldItems: reduceQyt,
             order: orderCount,
             bestseller: bestSellingProduct,
-            bestSellercategory:bestSellerCategory
+            bestSellercategory: bestSellerCategory
         };
 
         res.render("admin/admindashboard", { urlData })
@@ -265,7 +251,6 @@ const adminDashboard = async (req, res) => {
 //dashboard graph functions for fetch API.................
 const renderDashboard = async (req, res) => {
     try {
-
         const dataOfChoice = req.body.selectedValue;
         //for daywise data to dashboard................................
         if (dataOfChoice == "daywise") {
@@ -325,8 +310,6 @@ const renderDashboard = async (req, res) => {
 
             const orderCount = await orderData.find({}).count()
             // console.log(" order::", orderCount)
-
-
 
             const bestSellingProduct = await orderData.aggregate([
                 { $match: { OrderDate: { $eq: todaysDate } } },
@@ -427,17 +410,6 @@ const renderDashboard = async (req, res) => {
             }, {});
 
             //   console.log(statusAndCountObject);
-
-            //.........................................................................
-            // const salesRevenue = await orderData.aggregate([
-            //     {$match:{OrderDate: { $eq: todaysDate }}},
-            //     { $group: { _id: null, totalAmount: { $sum: "$OrderTotalPrice" } } }
-            // ]);
-
-            // console.log("sales revenue:",salesRevenue[0].totalAmount)
-
-
-
             // this will give the count of sold items, it maybe higher than the order history, as a single order contain many item.
             const MonthWiseSaleGraph = await orderData.aggregate([
 
@@ -459,14 +431,8 @@ const renderDashboard = async (req, res) => {
             }, {});
 
             console.log("MonthWiseSaleGraph reduceQyt:::", MonthWiseSaleGraphReduceQyt)
-
-
-
             const orderCount = await orderData.find({}).count()
             // console.log(" order::", orderCount)
-
-
-
             // const bestSellingProductperMonth = await orderData.aggregate([
             //     { $unwind: "$items" }, // Unwind the items array
             //     { $group: { _id:"$OrderDateGraph", "$items.productName",totalQuantity: { $sum: "$items.quantity" }} },
@@ -491,10 +457,7 @@ const renderDashboard = async (req, res) => {
         //...........................................
         else if (dataOfChoice == "yearwise") {
             console.log(dataOfChoice)
-
-
             //THIS GETS PAYMENT METHODE RELATED DATA............
-
             const salesPaymentMethodYearwise = await orderData.aggregate([
                 {
                     $group: {
@@ -572,8 +535,6 @@ const renderDashboard = async (req, res) => {
 
             //             // console.log("sales revenue:",salesRevenue[0].totalAmount)
 
-
-
             //             // this will give the count of sold items, it maybe higher than the order history, as a single order contain many item.
             const YearWiseSaleGraph = await orderData.aggregate([
 
@@ -596,12 +557,8 @@ const renderDashboard = async (req, res) => {
 
             console.log("YearWiseSaleGraphReduceQyt reduceQyt:::", YearWiseSaleGraphReduceQyt)
 
-
-
             //             const orderCount = await orderData.find({}).count()
             // console.log(" order::", orderCount)
-
-
 
             // const bestSellingProductperMonth = await orderData.aggregate([
             //     { $unwind: "$items" }, // Unwind the items array
@@ -623,26 +580,16 @@ const renderDashboard = async (req, res) => {
 
             // console.log(JSON.stringify(todaysData))
             res.status(200).json(monthwiseData)
-
-
         }
         else if (dataOfChoice == "overall") {
             console.log(dataOfChoice)
         }
-
-
-
-
         res.status(200)
     }
     catch (error) {
         console.log(error.message)
     }
 }
-
-
-
-
 
 
 /* ------------------------------------------------------------ */
@@ -858,22 +805,20 @@ const editedCategory = async (req, res) => {
         let newstatus = req.body.Categorystatus;
         const ids = req.params.id;
 
-const alreadyExist=await categoryData.findOne({categoryName:newcategoryname})
+        const alreadyExist = await categoryData.findOne({ categoryName: newcategoryname })
 
-if(alreadyExist==null){
-    await categoryData.updateOne({ _id: ids }, { $set: { categoryName: newcategoryname, Categorystatus: newstatus } })
-    res.redirect("/admin/category")
-}else{
-  
-    let catedata = await categoryData.findOne({ _id: ids })
-        const toEjs = {
-            catsdata: catedata
+        if (alreadyExist == null) {
+            await categoryData.updateOne({ _id: ids }, { $set: { categoryName: newcategoryname, Categorystatus: newstatus } })
+            res.redirect("/admin/category")
+        } else {
+
+            let catedata = await categoryData.findOne({ _id: ids })
+            const toEjs = {
+                catsdata: catedata
+            }
+            res.locals.errorMessage = 'Name already exist';
+            res.render("admin/admineditcategory.ejs", { toEjs })
         }
-        res.locals.errorMessage = 'Name already exist';
-        res.render("admin/admineditcategory.ejs", { toEjs })
-}
-
-      
     }
     catch (error) {
         console.log(error.message)
@@ -978,8 +923,6 @@ const addcoupons = async (req, res) => {
         // console.log("offerType:",offerType)
         // console.log("code:",code)
         // console.log("value:",value)
-
-
         const alreadyCode = await couponData.findOne({ couponCode: code });
 
         if (alreadyCode == null) {
@@ -1000,10 +943,6 @@ const addcoupons = async (req, res) => {
             res.locals.errorMessage = 'THE CODE ALREADY EXISTS';
             res.render("admin/couponpage.ejs", { urlData });
         }
-
-
-
-
     }
     catch (error) {
         console.log(error.message)
@@ -1168,14 +1107,13 @@ const downloadoption = async (req, res) => {
             }
         });
 
-
-let actualAmount=generated-totalReturnedSum;
+        let actualAmount = generated - totalReturnedSum;
 
         const urlData = {
             pageTitle: 'SALES REPORT',
             salesData: orders,
             total: generated,
-            actual:actualAmount,
+            actual: actualAmount,
             CODtotal: CODtotal,
             razorpayTotal: razorpayTotal,
             count: totalcounts,
@@ -1202,14 +1140,6 @@ let actualAmount=generated-totalReturnedSum;
         res.render("admin/warning.ejs");
     }
 };
-
-
-
-
-
-
-
-
 
 const daywisereport = async (req, res) => {
     try {
@@ -1267,7 +1197,6 @@ const downloadrevenuepdf = async (req, res) => {
     try {
 
         const currentDate = moment().format('DD/MM/YYYY, hh:mm:ss');
-
 
         const data = [
             ['GENERATED AMOUNT', 'AMOUNT TO ACCOUNT', 'COD', 'ONLINE PAYMENT', 'AMOUNT RETURNED', 'AMOUNT DISCOUNTED'],
@@ -1425,7 +1354,6 @@ const addReferalOffer = async (req, res) => {
         const createdDate = req.body.refferCreatedDate;
         const expiryDate = req.body.refferExpiryDate;
 
-
         const referCodeAdd = new referData({
             bonusAmount: bonusAmount,
             expiryDate: expiryDate,
@@ -1436,7 +1364,6 @@ const addReferalOffer = async (req, res) => {
 
         const urlData = {
             pageTitle: 'ADD REFERAL OFFER',
-
         }
 
         const bonusIs = await referData.find({})
@@ -1457,7 +1384,6 @@ const updateReferalOffer = async (req, res) => {
         const createdDate = req.body.refferCreatedDate;
         const expiryDate = req.body.refferExpiryDate;
 
-
         await referData.findOneAndUpdate({}, {
             $set: {
                 bonusAmount: bonusAmounts, expiryDate: expiryDate,
@@ -1465,10 +1391,8 @@ const updateReferalOffer = async (req, res) => {
             }
         })
 
-
         const urlData = {
             pageTitle: 'ADD REFERAL OFFER',
-
         }
 
         const bonusIs = await referData.find({})
@@ -1481,8 +1405,6 @@ const updateReferalOffer = async (req, res) => {
         console.log(error.message)
     }
 }
-
-
 
 //adding offer of category to db.
 const offercategorywise = async (req, res) => {
@@ -1500,11 +1422,8 @@ const offercategorywise = async (req, res) => {
             startDate: offerCreatedDate,
             endDate: offerEndDate,
         }
-
         await categoryData.findOneAndUpdate({ _id: selectedCategory }, { $set: { catOffer: addedOffer, hasCatOffer: true } })
-
         res.redirect("/admin/Offercategory")
-
     }
     catch (error) {
         console.log(error.message)
@@ -1554,16 +1473,12 @@ const removeproductOffer = async (req, res) => {
 //adding product based offer to data base.....
 const offerproductwise = async (req, res) => {
     try {
-
         console.log("data coming to offer caterogrywise in admin controller");
-
         let selectedProduct = req.body.productId;
         let discountValue = req.body.discount;
         let offerCreatedDate = req.body.createdDate;
         let offerEndDate = req.body.expiryDate;
         console.log("offerproductwise:::", selectedProduct, discountValue, offerCreatedDate, offerEndDate)
-
-
         let addedOffer = {
             Discountvalue: discountValue,
             StartDate: offerCreatedDate,
@@ -1583,12 +1498,11 @@ async function checkDate() {
     try {
         let todayDate = Date.now() // Get today's date
         console.log("CHECKING OFFER AND COUPON EXPIRED ?");
-
         // Removing expired product offers
         const productsWithOffers = await productData.find({ offer: { $exists: true, $not: { $size: 0 } } });
         for (const product of productsWithOffers) {
             for (const offer of product.offer) {
-                if ((offer.endDate)<(todayDate)) {
+                if ((offer.endDate) < (todayDate)) {
                     await productData.updateOne(
                         { _id: product._id },
                         { $pull: { offer: { endDate: offer.endDate } }, $set: { haveProductOffer: false } }
@@ -1601,12 +1515,9 @@ async function checkDate() {
         // Removing expired coupons
         const couponExpire = await couponData.find({});
         for (const coupon of couponExpire) {
-            if ((coupon.expiryDate)<(todayDate)) {
+            if ((coupon.expiryDate) < (todayDate)) {
                 await couponData.deleteOne({ _id: coupon._id });
-                
             }
-        
-        
         }
     } catch (error) {
         console.error("Error:", error.message);
@@ -1618,8 +1529,6 @@ cron.schedule('*/10 * * * * *', () => {
 });
 
 
-
-
 //for datewise sales report 
 const postbydate = async (req, res) => {
     try {
@@ -1629,7 +1538,6 @@ const postbydate = async (req, res) => {
         const eDate = moment(endd).format('D-MM-YYYY');
         console.log(sDate, eDate)
 
-
         const orders = await orderData.find({
             OrderDate: { $gte: (sDate), $lte: (eDate) }
         }).populate({
@@ -1637,7 +1545,6 @@ const postbydate = async (req, res) => {
             model: "user"
         });
         console.log("datewise:::::::", orders)
-
 
         const totalgenerated = await orderData.aggregate([
             { $match: { OrderDate: { $gte: sDate, $lte: eDate } } },
@@ -1659,8 +1566,6 @@ const postbydate = async (req, res) => {
             { $group: { _id: "$paymentMethod", total: { $sum: "$OrderTotalPrice" } } }
         ]).exec();
 
-
-
         let walletAmountSum = await orderData.aggregate([
             { $match: { OrderDate: { $gte: sDate, $lte: eDate }, paymentMethod: "MyWallet" } },
             { $group: { _id: "$paymentMethod", total: { $sum: "$OrderTotalPrice" } } }
@@ -1673,8 +1578,6 @@ const postbydate = async (req, res) => {
         const raz = razerpayAmountSum[0]?.total;
         const cod = codAmountSum[0]?.total;
         const walletss = walletAmountSum[0]?.total;
-
-
 
         let totalReturnedamount = await orderData.aggregate([
             { $match: { OrderDate: { $gte: sDate, $lte: eDate }, Status: "Returned" } },
@@ -1694,7 +1597,6 @@ const postbydate = async (req, res) => {
 
         const returned = totalReturnedamount[0]?.total;
         console.log("totalReturnedamount::", returned)
-
         let totalcouponDiscount = await orderData.aggregate([
             { $match: { OrderDate: { $gte: sDate, $lte: eDate }, discountedByCoupon: true } },
             { $group: { _id: null, total: { $sum: "$discountgiven" } } }
@@ -1707,15 +1609,10 @@ const postbydate = async (req, res) => {
             // Extract the total from the result
             totalcouponDiscount = totalcouponDiscount[0]?.total;
         }
-
-
         console.log("totalcouponDiscount::", totalcouponDiscount)
-
         const urlData = {
             pageTitle: 'SALES REPORT BY DATE',
         }
-
-
         res.render("admin/bydate.ejs", { urlData, orders, revenue, raz, cod, walletss, returned, totalcouponDiscount })
     }
     catch (error) {
@@ -1723,8 +1620,6 @@ const postbydate = async (req, res) => {
         res.render("admin/warning.ejs");
     }
 }
-
-
 
 //RENDERING THE PAGE WITH DATEWISE SALES REPORT....
 const bydate = async (req, res) => {
@@ -1742,10 +1637,7 @@ const downloadDetailPdf = async (req, res) => {
     try {
         const tableData = req.body.tableData;
         const currentDate = new Date().toDateString();
-
         const pdfDoc = new PDF();
-
-
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="table_data.pdf"');
         const title = "TIME S  SALES REPORT"
@@ -1793,16 +1685,12 @@ const downloadDetailPdf = async (req, res) => {
 
             // Move down to the next row
         });
-
-
         pdfDoc.end();
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
 }
-
-
 
 const downloadDetailExcel = async (req, res) => {
     try {
@@ -1902,11 +1790,7 @@ const bannerdatabse = async (req, res) => {
     }
 };
 
-
-
 //this is the working code to initiate the banner......
-
-
 const storebanner = async (req, res) => {
     try {
         const imgId = req.params.section;
@@ -1939,9 +1823,6 @@ const storebanner = async (req, res) => {
     }
 }
 
-
-
-
 const updateBanner = async (req, res) => {
     try {
         console.log("in update")
@@ -1953,8 +1834,8 @@ const updateBanner = async (req, res) => {
         const subHeadingText = req.body.subHeadingText;
         const HeadingText = req.body.HeadingText;
         // console.log("updateImage::::", imgfile)
-         console.log("updateData::::", HeadingText )
-         console.log("updateData::::", sections)
+        console.log("updateData::::", HeadingText)
+        console.log("updateData::::", sections)
         // console.log("section:", sections)
 
         if (sections == "sectionOne") {
@@ -1999,7 +1880,7 @@ const updateBanner = async (req, res) => {
                             MainTextContent: mainText,
                             SubTextContent: subText,
                             introductionTextContent: introText,
-                            heading:  HeadingText,
+                            heading: HeadingText,
                             subHeading: subHeadingText
                         }
                     }
@@ -2025,7 +1906,7 @@ const updateBanner = async (req, res) => {
                             MainTextContent: mainText,
                             SubTextContent: subText,
                             introductionTextContent: introText,
-                            heading:  HeadingText,
+                            heading: HeadingText,
                             subHeading: subHeadingText
                         }
                     }
@@ -2040,7 +1921,7 @@ const updateBanner = async (req, res) => {
                             MainTextContent: mainText,
                             SubTextContent: subText,
                             introductionTextContent: introText,
-                            heading:  HeadingText,
+                            heading: HeadingText,
                             subHeading: subHeadingText
                         }
                     }
@@ -2048,9 +1929,6 @@ const updateBanner = async (req, res) => {
             }
 
         }
-
-
-
 
         else if (sections == "sectionTwo") {
 
@@ -2101,9 +1979,6 @@ const updateBanner = async (req, res) => {
                     }
                 )
             } { }
-
-
-
             let img3;
             if (imgfile.bannerImage3 && imgfile.bannerImage3.length > 0) {
                 img3 = imgfile.bannerImage3[0].path.substring(imgfile.bannerImage3[0].path.indexOf('\\') + 1);
@@ -2175,7 +2050,6 @@ const updateBanner = async (req, res) => {
 
                 img2 = "";
             }
-
             if (img2 != "") {
                 await bannerData.findOneAndUpdate(
                     { sectionName: "sectionThree" },
@@ -2192,8 +2066,6 @@ const updateBanner = async (req, res) => {
                     }
                 )
             } { }
-
-
 
             let img3;
             if (imgfile.bannerImage3 && imgfile.bannerImage3.length > 0) {
@@ -2240,26 +2112,6 @@ const updateBanner = async (req, res) => {
         console.log(error.message)
     }
 }
-
-
-
-
-
-
-
-//banner change function......
-// const chartData = async (req, res) => {
-//     try {
-
-//     }
-//     catch (error) {
-//         console.log(error.message)
-//     }
-// }
-
-
-
-/* ---------------------------------------------------- */
 
 module.exports = {
     adminlogin,
@@ -2311,8 +2163,4 @@ module.exports = {
     updateReferalOffer,
     renderDashboard,
     updateBanner,
-    // chartData,
-
-
 }
-/* ---------------------------------------------------- */

@@ -105,14 +105,14 @@ function validateLogin() {
 
 function checkStrong() {
     let password = document.getElementById('password').value;
-   
+
     let passwordMessage = document.getElementById('passwordMessage');
     let s1Message = document.getElementById('S1Message');
     let s2Message = document.getElementById('S2Message');
     let s3Message = document.getElementById('S3Message');
     let s4Message = document.getElementById('S4Message');
 
-    
+
     passwordMessage.innerHTML = '';
 
     // Reset check marks

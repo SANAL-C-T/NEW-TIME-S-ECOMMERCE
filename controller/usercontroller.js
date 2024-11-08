@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt")
 const moment = require("moment");
 const axios = require("axios");
 const { render } = require("ejs")
-// const session = require("express-session")
+
 const JWTtoken = require("jsonwebtoken")
 const walletData = require("../model/walletSchema")
 const { y } = require("pdfkit")
@@ -29,7 +29,7 @@ const homeNotLog = async (req, res) => {
         let loadProductA = 0;
 
         const samsungProduct = await productDatas.find({
-            productCategory: '662b470beb7e16a0efe66945', // Replace with the actual category ID
+            productCategory: '662b470beb7e16a0efe66945',
             isDeleted: false,
         })
             .populate({
@@ -46,7 +46,7 @@ const homeNotLog = async (req, res) => {
         }
 
         const appleProduct = await productDatas.find({
-            productCategory: '662b7ddbeb7e16a0efe66ed8', // Replace with the actual category ID
+            productCategory: '662b7ddbeb7e16a0efe66ed8',
             isDeleted: false,
         })
             .populate({
@@ -63,7 +63,7 @@ const homeNotLog = async (req, res) => {
         }
 
         const garminProduct = await productDatas.find({
-            productCategory: '662b7ddeeb7e16a0efe66ede', // Replace with the actual category ID
+            productCategory: '662b7ddeeb7e16a0efe66ede',
             isDeleted: false,
         })
             .populate({
@@ -102,13 +102,13 @@ const home = async (req, res) => {
         let loadProductA = 0;
 
         const HavesamsungProduct = await productDatas.find({
-            productCategory: '662b470beb7e16a0efe66945', // Replace with the actual category ID
+            productCategory: '662b470beb7e16a0efe66945',
             isDeleted: false,
         })
 
         if (HavesamsungProduct.length > 0) {
             const samsungProduct = await productDatas.find({
-                productCategory: '662b470beb7e16a0efe66945', // Replace with the actual category ID
+                productCategory: '662b470beb7e16a0efe66945',
                 isDeleted: false,
             })
                 .populate({
@@ -116,9 +116,7 @@ const home = async (req, res) => {
                     match: { Categorystatus: true } // Only include categories with Categorystatus set to true
                 })
                 .exec();
-
             console.log("samsungProduct::::", samsungProduct)
-
             if (samsungProduct[0].productCategory && samsungProduct[0].productCategory.Categorystatus === true) {
                 console.log("Samsung product loaded");
                 loadProduct = samsungProduct;
@@ -129,15 +127,14 @@ const home = async (req, res) => {
         else {
             loadProduct = 0
         }
-
         const HaveappleProduct = await productDatas.find({
-            productCategory: '662b7ddbeb7e16a0efe66ed8', // Replace with the actual category ID
+            productCategory: '662b7ddbeb7e16a0efe66ed8',
             isDeleted: false,
         })
 
         if (HaveappleProduct.length > 0) {
             const appleProduct = await productDatas.find({
-                productCategory: '662b7ddbeb7e16a0efe66ed8', // Replace with the actual category ID
+                productCategory: '662b7ddbeb7e16a0efe66ed8',
                 isDeleted: false,
             })
                 .populate({
@@ -145,7 +142,6 @@ const home = async (req, res) => {
                     match: { Categorystatus: true } // Only include categories with Categorystatus set to true
                 })
                 .exec();
-
             if (appleProduct[0].productCategory && appleProduct[0].productCategory.Categorystatus === true) {
                 console.log("Apple product loaded");
                 loadProductA = appleProduct;
@@ -156,16 +152,14 @@ const home = async (req, res) => {
         else {
             loadProductA = 0
         }
-
         const HavegarminProduct = await productDatas.find({
-            productCategory: '662b7ddeeb7e16a0efe66ede', // Replace with the actual category ID
+            productCategory: '662b7ddeeb7e16a0efe66ede',
             isDeleted: false,
         })
 
         if (HavegarminProduct.length > 0) {
-
             const garminProduct = await productDatas.find({
-                productCategory: '662b7ddeeb7e16a0efe66ede', // Replace with the actual category ID
+                productCategory: '662b7ddeeb7e16a0efe66ede',
                 isDeleted: false,
             })
                 .populate({
@@ -184,18 +178,14 @@ const home = async (req, res) => {
         else {
             loadProductG = 0
         }
-
-        console.log("AAAAAA::::", loadProduct, loadProductA, loadProductG)
-
+        console.log("Testbanner::::", loadProduct, loadProductA, loadProductG)
         const bannerImage = await bannerData.find({})
         console.log("bannerImage:", bannerImage)
         const Banner1 = bannerImage[0];
         const Banner2 = bannerImage[1];
         const Banner3 = bannerImage[2];
         console.log("Banner1:", Banner1)
-
         res.render("user/userhomepage.ejs", { loadProduct, loadProductA, loadProductG, Banner1, Banner2, Banner3 });
-
     } catch (error) {
         console.log(error.message)
     }
@@ -219,15 +209,12 @@ const loginVerify = async (req, res) => {
 
         // Query for user details including username, password, and status
         const userRecord = await userData.findOne({ username: user }).select('username password status');
-
         if (!userRecord) {
             res.locals.errorMessage = 'Invalid email or password';
             return res.render("user/userlogin.ejs");
         }
-
         const isBlocked = userRecord.status === false;
         const isPasswordValid = await bcrypt.compare(pass, userRecord.password);
-
         if (isBlocked) {
             res.locals.errorMessage = 'You are blocked by admin';
             return res.render("user/userlogin.ejs");
@@ -235,14 +222,13 @@ const loginVerify = async (req, res) => {
 
         if (isPasswordValid) {
             const usertoken = JWTtoken.sign({ id: userRecord.username, _id: userRecord._id }, jwtcode, { expiresIn: "28800000" });
-
             const options = {
                 expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
                 httpOnly: true
             };
-
             res.cookie("usertoken", usertoken, options);
             console.log("Token created");
+
             return res.redirect("/home");
         } else {
             res.locals.errorMessage = 'Invalid email or password';
@@ -250,7 +236,7 @@ const loginVerify = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        // Handle the error appropriately, e.g., send an error response to the client
+
     }
 }
 
@@ -285,8 +271,6 @@ const storeData = async (req, res) => {
         const emailIndb = await userData.findOne({ email: userEmail })
         const referCode = req.session.referralCode;
         const usedReferenceCode = await userData.findOne({ My_promotionalCode: referCode })
-
-
         let userUsedReferCode;
         if (usedReferenceCode == null) {
             userUsedReferCode = false;
@@ -294,8 +278,6 @@ const storeData = async (req, res) => {
             userUsedReferCode = true;
         }
         const promoCode = promoCodeGenerator.generate(10, { upperCaseAlphabets: true, lowerCaseAlphabets: true, specialChars: false });
-
-        // console.log("1:::", emailIndb)
         if (emailIndb == null) {//save only if email doesnot exist in db
             const userdetails = new userData({
                 username: req.session.username,
@@ -338,39 +320,37 @@ const storeData = async (req, res) => {
         const walle = await walletData.findOne({ userId: userdetails._id })
         // console.log("walle::",walle.avaliable)
 
-
         const promotedPersonsWallet = await walletData.findOne({ userId: usedReferenceCode._id })
         // console.log("promotedPersonsWallet:::",promotedPersonsWallet)
 
         if (usedReferenceCode != null) {
 
             const newbalance = promotedPersonsWallet.avaliable + referBonus[0].bonusAmount
-
             await walletData.findOneAndUpdate(
                 { userId: usedReferenceCode._id },
-                { 
-                    $set: { 
+                {
+                    $set: {
                         avaliable: newbalance
-                    },  
-                    $push: { 
-                        Transaction: { 
+                    },
+                    $push: {
+                        Transaction: {
                             remark: "Referral Bonus",
                             creditAmount: referBonus[0].bonusAmount,
-                            CreditDate: moment(Date.now()).format('DD/MM/YYYY HH:mm:ss') 
+                            CreditDate: moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')
                         }
                     }
                 }
             );
-            
+
             if (referBonus[0].block_promotion == false) {
                 await walletData.findOneAndUpdate(
                     { userId: userdetails._id },
-                    { 
-                        $set: { 
+                    {
+                        $set: {
                             avaliable: referBonus[0].bonusAmount
-                        },  
-                        $push: { 
-                            Transaction: { 
+                        },
+                        $push: {
+                            Transaction: {
                                 remark: "Join Bonus",
                                 creditAmount: referBonus[0].bonusAmount,
                                 CreditDate: moment(Date.now()).format('DD/MM/YYYY HH:mm:ss')
@@ -378,7 +358,7 @@ const storeData = async (req, res) => {
                         }
                     }
                 );
-                
+
             } else {
             }
         }
@@ -392,7 +372,6 @@ const storeData = async (req, res) => {
 
 const allproductPage = async (req, res) => {
     try {
-        // console.log("test")
         const allproduct = await productDatas.find({ isDeleted: false })
         res.render("user/productdisplay.ejs", { allproduct })
     }
@@ -461,7 +440,6 @@ const buyProduct = async (req, res) => {
 const notfound = async (req, res) => {
     try {
         console.log("IN USER CONTROLLER if no page is found in function notfound")
-        console.log("------------------------------------------------------------")
         res.render("user/404.ejs")
     } catch (error) {
         console.log(error.message)
@@ -516,31 +494,6 @@ const contactb = async (req, res) => {
         console.log(error.message)
     }
 }
-
-
-// const categoryWiseProduct = async (req, res) => {
-//     try {
-//         const qid = req.params.proid;
-//         console.log(qid)
-//         const catwise = await productDatas.findOne({ _id: qid })
-//             .populate({
-//                 path: 'productCategory',
-//                 model: 'category',
-//                 select: 'categoryName',
-//             })
-//             .exec();
-//         const catlist = await productDatas.find({ productCategory: catwise.productCategory })
-//         // console.log(catlist)
-
-
-//         res.render("user/categoryWiseProduct.ejs", { catlist, catwise });
-
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// }
-//...........................................................................................................
-
 
 //need to add pagination logics.... to this section,  based on product category, i will have to paginate 
 //this page is rendered when the buy product is clicked ,
@@ -615,11 +568,8 @@ const resetpassword = async (req, res) => {
         }
         else {
             await userData.updateOne({ email: userEmail }, { $set: { password: confirmpass } });
-
-
             res.redirect("/login")
         }
-
     }
     catch (error) {
         console.log(error.message)
@@ -673,7 +623,7 @@ const filter = async (req, res) => {
                 .exec();
 
             if (pricesort === "Hightolow") {
-                console.log("=====sorting from Hightolow===")
+                //console.log("==sorting from Hightolow==")
                 SortByPrice = await productDatas.find({ 'productCategory': { $in: category }, isDeleted: false })
                     .populate({
                         path: 'productCategory',
@@ -686,8 +636,7 @@ const filter = async (req, res) => {
                 products = SortByPrice;
 
             } else if (pricesort === "lowtohigh") {
-                console.log("=====sorting from low to high:::")
-                // 
+                //console.log("=====sorting from low to high:::")
                 SortByPrice = await productDatas.find({ 'productCategory': { $in: category }, isDeleted: false })
                     .populate({
                         path: 'productCategory',
@@ -696,7 +645,6 @@ const filter = async (req, res) => {
                     .skip((pageNumber - 1) * itemsPerPage)
                     .limit(itemsPerPage)
                     .exec();
-                ;
                 products = SortByPrice;
             }
             // console.log("::::sort data::::", SortByPrice)
@@ -713,8 +661,6 @@ const filter = async (req, res) => {
                 console.log(':::user search query::::', serc);//is working and getting data.
             }
         }
-
-
         catch (error) {
             console.log("try inside")
             console.error('Error fetching products:', error);
@@ -726,14 +672,14 @@ const filter = async (req, res) => {
 
         let pageStartindex = (pageNumber - 1) * itemsPerPage;
         //sending a response body to the frontend as a part of post fetch.
-        console.log("___________________________________________________")
+        // console.log("___________________________________________________")
         // console.log(" ::::products::", products)
-        console.log(" :::pageStartindex:::", pageStartindex)
-        console.log(" :::docCount::", docCount)
-        console.log(":::userFilte::", userFilter)
-        console.log(" :::search::", serc)
+        // console.log(" :::pageStartindex:::", pageStartindex)
+        // console.log(" :::docCount::", docCount)
+        // console.log(":::userFilte::", userFilter)
+        // console.log(" :::search::", serc)
         // console.log(" :::sort::", SortByPrice)
-        console.log(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        // console.log(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
         res.json({
             products,
@@ -760,17 +706,15 @@ const editprofile = async (req, res) => {
         // console.log(":::test:::");
         const user = req.userid;//this is comming from jwt authentication
         const hasUserAddedDetails = await userData.findOne({ _id: user, first_name: { $exists: true } });
-    //    console.log("userProfile::",hasUserAddedDetails);
+        //    console.log("userProfile::",hasUserAddedDetails);
 
-if(hasUserAddedDetails==null){
-    res.render("user/userprofileedit.ejs",{hasUserAddedDetails});
-}else{
-    const hasUserAddedDetails = await userData.findOne({ _id: user, });
-    res.render("user/userprofileedit.ejs",{hasUserAddedDetails});
-}
-      
-      
-  
+        if (hasUserAddedDetails == null) {
+            res.render("user/userprofileedit.ejs", { hasUserAddedDetails });
+        } else {
+            const hasUserAddedDetails = await userData.findOne({ _id: user, });
+            res.render("user/userprofileedit.ejs", { hasUserAddedDetails });
+        }
+
     }
     catch (error) {
         console.log(error.message)
@@ -778,10 +722,9 @@ if(hasUserAddedDetails==null){
 }
 
 
-//...............................................
 const saveEditProfile = async (req, res) => {
     try {
-      
+
         const user = req.userid; // This is coming from JWT authentication
         const profilePic = req.file ? `/${req.file.filename}` : undefined;
         const address = {
@@ -795,189 +738,90 @@ const saveEditProfile = async (req, res) => {
             pincode: req.body.pincode,
         };
 
+        if (profilePic === undefined && (
+            address.houseNo === undefined ||
+            address.street === undefined ||
+            address.location === undefined ||
+            address.landmark === undefined ||
+            address.city === undefined ||
+            address.state === undefined ||
+            address.country === undefined ||
+            address.pincode === undefined
+        )) {
+            await userData.updateOne({ _id: user }, {
+                $set: {
+                    first_name: req.body.username1,
+                    Last_name: req.body.username2,
+                }
+            });
 
 
-//case if first name and last name is only comming..
-    //     if (profilePic === undefined && (
-    //         address.houseNo === undefined || 
-    //         address.street === undefined ||
-    //         address.location === undefined ||
-    //         address.landmark === undefined ||
-    //         address.city === undefined ||
-    //         address.state === undefined ||
-    //         address.country === undefined ||
-    //         address.pincode === undefined
-    //     )) {
-    //         await userData.updateOne({ _id: user }, {
-    //             $set: {
-    //                 first_name: req.body.username1,
-    //                 Last_name: req.body.username2,
-    //             }
-    //         });
-
-         
-    //     }
-    //     else{}
-     
-    //     //case  if only profile image is added or updated.
-    //     if (
-    //         req.body.username1 === undefined ||
-    //         req.body.username2 === undefined ||
-    //         (
-    //             address.houseNo === undefined || 
-    //             address.street === undefined ||
-    //             address.location === undefined ||
-    //             address.landmark === undefined ||
-    //             address.city === undefined ||
-    //             address.state === undefined ||
-    //             address.country === undefined ||
-    //             address.pincode === undefined
-    //         )
-    //     ) {
-    //         await userData.updateOne({ _id: user }, {
-    //             $set: {
-    //                 profileImage: `/${req.file.filename}`,
-    //             }
-    //         });
-    //     }else{}
-
-    //  //case if both image and firstname and lastname is present.
-    //     if (
-    //         address.houseNo === undefined || 
-    //         address.street === undefined ||
-    //         address.location === undefined ||
-    //         address.landmark === undefined ||
-    //         address.city === undefined ||
-    //         address.state === undefined ||
-    //         address.country === undefined ||
-    //         address.pincode === undefined
-    //     ) {
-    //         await userData.updateOne({ _id: user }, {
-    //             $set: {
-    //                 first_name: req.body.username1,
-    //                 Last_name: req.body.username2,
-    //                 profileImage: profilePic,
-    //             }
-    //         });
-    //     } 
-    //     //case if everything is present.
-    //     else {
-    //         await userData.updateOne({ _id: user }, {
-    //             $set: {
-    //                 first_name: req.body.username1,
-    //                 Last_name: req.body.username2,
-    //                 phone: req.body.phonenumber,
-    //                 profileImage: profilePic,
-    //                 Address: address,
-    //             }
-    //         });
-    //     }
-    
-    //     console.log("Data saved");
-
-    //     const hasUserAddedDetails = await userData.findOne({ _id: user, });
-    //     res.render("user/userprofileedit.ejs",{hasUserAddedDetails});
-    // } catch (error) {
-    //     console.error(error.message);
-    // }
-
-    if (profilePic === undefined && (
-                address.houseNo === undefined || 
-                address.street === undefined ||
-                address.location === undefined ||
-                address.landmark === undefined ||
-                address.city === undefined ||
-                address.state === undefined ||
-                address.country === undefined ||
-                address.pincode === undefined
-            )) {
-                await userData.updateOne({ _id: user }, {
-                    $set: {
-                        first_name: req.body.username1,
-                        Last_name: req.body.username2,
-                    }
-                });
-    
-             
-            }
-            
-         
-            //case  if only profile image is added or updated.
-            else if (
-                req.body.username1 === undefined ||
-                req.body.username2 === undefined ||
-                (
-                    address.houseNo === undefined || 
-                    address.street === undefined ||
-                    address.location === undefined ||
-                    address.landmark === undefined ||
-                    address.city === undefined ||
-                    address.state === undefined ||
-                    address.country === undefined ||
-                    address.pincode === undefined
-                )
-            ) {
-                await userData.updateOne({ _id: user }, {
-                    $set: {
-                        profileImage: `/${req.file.filename}`,
-                    }
-                });
-            }
-    
-         //case if both image and firstname and lastname is present.
-          else if (
-                address.houseNo === undefined || 
-                address.street === undefined ||
-                address.location === undefined ||
-                address.landmark === undefined ||
-                address.city === undefined ||
-                address.state === undefined ||
-                address.country === undefined ||
-                address.pincode === undefined
-            ) {
-                await userData.updateOne({ _id: user }, {
-                    $set: {
-                        first_name: req.body.username1,
-                        Last_name: req.body.username2,
-                        profileImage: profilePic,
-                    }
-                });
-            } 
-            //case if everything is present.
-            else {
-                await userData.updateOne({ _id: user }, {
-                    $set: {
-                        first_name: req.body.username1,
-                        Last_name: req.body.username2,
-                        phone: req.body.phonenumber,
-                        profileImage: profilePic,
-                        Address: address,
-                    }
-                });
-            }
-        
-            console.log("Data saved");
-    
-            const hasUserAddedDetails = await userData.findOne({ _id: user, });
-            res.render("user/userprofileedit.ejs",{hasUserAddedDetails});
-        } catch (error) {
-            console.error(error.message);
         }
-    
-    
-    
 
 
+        //case  if only profile image is added or updated.
+        else if (
+            req.body.username1 === undefined ||
+            req.body.username2 === undefined ||
+            (
+                address.houseNo === undefined ||
+                address.street === undefined ||
+                address.location === undefined ||
+                address.landmark === undefined ||
+                address.city === undefined ||
+                address.state === undefined ||
+                address.country === undefined ||
+                address.pincode === undefined
+            )
+        ) {
+            await userData.updateOne({ _id: user }, {
+                $set: {
+                    profileImage: `/${req.file.filename}`,
+                }
+            });
+        }
 
+        //case if both image and firstname and lastname is present.
+        else if (
+            address.houseNo === undefined ||
+            address.street === undefined ||
+            address.location === undefined ||
+            address.landmark === undefined ||
+            address.city === undefined ||
+            address.state === undefined ||
+            address.country === undefined ||
+            address.pincode === undefined
+        ) {
+            await userData.updateOne({ _id: user }, {
+                $set: {
+                    first_name: req.body.username1,
+                    Last_name: req.body.username2,
+                    profileImage: profilePic,
+                }
+            });
+        }
+        //case if everything is present.
+        else {
+            await userData.updateOne({ _id: user }, {
+                $set: {
+                    first_name: req.body.username1,
+                    Last_name: req.body.username2,
+                    phone: req.body.phonenumber,
+                    profileImage: profilePic,
+                    Address: address,
+                }
+            });
+        }
 
+        console.log("Data saved");
 
-
+        const hasUserAddedDetails = await userData.findOne({ _id: user, });
+        res.render("user/userprofileedit.ejs", { hasUserAddedDetails });
+    } catch (error) {
+        console.error(error.message);
+    }
 
 };
-
-
-
-//.........................................................
 
 const profile = async (req, res) => {
     try {
@@ -1005,12 +849,9 @@ const changepassword = async (req, res) => {
 const showWishlist = async (req, res) => {
     try {
         const usersid = req.userid;//this is comming from jwt authentication
-
         const totalCount = await wishData.findOne({ userId: usersid }).countDocuments();
         const page = parseInt(req.query.page) || 1;
         const limit = 5;
-
-
         const startIndex = (page - 1) * limit;
         const wishList = await wishData.findOne({ userId: usersid })
             .populate({
@@ -1134,10 +975,8 @@ const viewAllReview = async (req, res) => {
 
 const sortNewReview = async (req, res) => {
     try {
-
         const productIdNow = req.params.selectedProduct;
         console.log("productIdNow:", productIdNow);
-
         let viewRev = await reviewData.find({ product: productIdNow }).sort({ Time: -1 });
         viewRev.forEach(review => {
             review.formattedTime = moment(review.Time).format('MMMM Do YYYY, h:mm:ss a');
@@ -1176,7 +1015,6 @@ const sortLowestStar = async (req, res) => {
         console.log("hello sortLowestStar");
         const productIdNow = req.params.selectedProduct;
         console.log("productIdNow:", productIdNow);
-
         let viewRev = await reviewData.find({ product: productIdNow }).sort({ rating: -1 });
         viewRev.forEach(review => {
             review.formattedTime = moment(review.Time).format('MMMM Do YYYY, h:mm:ss a');
@@ -1201,7 +1039,6 @@ const wallet = async (req, res) => {
             res.render("user/emptywallet.ejs")
         }
         // console.log("getWWallet", getWWallet)
-       
         res.render("user/wallet.ejs", { getWWallet })
     }
     catch (error) {
@@ -1217,10 +1054,7 @@ const wishtoadd = async (req, res) => {
         const usersid = req.userid;//from JWT AUTHENTICATION
         const alreadyIn = await wishData.findOne({ userId: usersid, list: { $in: [productId] } });
         if (alreadyIn == null) {
-
             const selectedProduct = await productData.findById(productId);
-
-
             if (!selectedProduct) {
                 console.log("Selected product not found");
                 return res.status(404).json({ error: "Selected product not found" });
@@ -1231,13 +1065,10 @@ const wishtoadd = async (req, res) => {
                 { $push: { list: selectedProduct._id } }, // Push only the ObjectId of the selected product
                 { new: true }
             );
-
-
             res.status(200).json({ message: "Product added to wishlist successfully" });
         }
         else {
             return res.status(200).json({ message: "Product is already in the wishlist" });
-
         }
 
     } catch (error) {
@@ -1261,7 +1092,7 @@ const wishtoremove = async (req, res) => {
 const addtocartAndDeleteWishlist = async (req, res) => {
     try {
         let itemToDeleteFromWishList = req.body.productId;
-        // console.log("itemto remove from wishlist::::::::::::::::::", itemToDeleteFromWishList)
+        // console.log("itemto remove from wishlist:", itemToDeleteFromWishList)
         const usersid = req.userid;//from JWT AUTHENTICATION
         await wishData.findOneAndUpdate({ userId: usersid },
             { $pull: { list: itemToDeleteFromWishList } }
@@ -1273,27 +1104,22 @@ const addtocartAndDeleteWishlist = async (req, res) => {
     }
 }
 
-//............................fFUNCTION TO GET DISTANCE USING POSTAL LOCATION API.......................
+//.....fFUNCTION TO GET DISTANCE USING POSTAL LOCATION API......
 const getTransportationCost = async (req, res) => {
     try {
         const pincodes = req.body.pin;
-
         const chargePerKm = 0.50;
-
         console.log("in coming pincode::", Number(pincodes))
-
         const params = {
             "code": "673001",//fixed code of hub.
             "compare": pincodes,
             "country": "IN",
             "unit": "km"
         };
-
         const headers = {
             "apikey": zipPinCodeKey,
             "Accept": "application/json"
         };
-
         axios.get("https://api.zipcodestack.com/v1/distance", {//going to another server
             params: params,
             headers: headers
@@ -1302,7 +1128,6 @@ const getTransportationCost = async (req, res) => {
                 const responseData = response.data;
                 const results = responseData.results;
                 const distances = Object.values(results);
-
                 console.log("Distances:", distances[0]);
                 const DeliveryCharge = distances * chargePerKm;
                 console.log("DeliveryCharge:", Math.ceil(DeliveryCharge))
@@ -1317,8 +1142,7 @@ const getTransportationCost = async (req, res) => {
     }
 }
 
-
-//...........exports..................................................................................................
+//...........exports..
 module.exports = {
     home,
     notfound,
